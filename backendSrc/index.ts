@@ -17,12 +17,12 @@ function handleCors(request: Request) {
 
   const allowedOrigins = [
     "http://localhost:5173",
-    
+    "https://shuffledstok-app.vercel.app"
   ];
 
   const isAllowed =
     allowedOrigins.includes(origin) ||
-    (origin.startsWith("https://") && origin.endsWith(".vercel.app"));
+    (origin.startsWith("https://shuffledstok-") && origin.endsWith(".vercel.app"));
 
   const headers = {
     "Access-Control-Allow-Origin": isAllowed ? origin : "null",
