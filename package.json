@@ -10,10 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "chanfana": "^2.8.3",
     "drizzle-kit": "^0.31.7",
     "drizzle-orm": "^0.44.7",
+    "itty-router": "^5.0.22",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "react-error-boundary": "^6.0.0",
+    "react-redux": "^9.2.0",
+    "react-router-dom": "^7.10.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.16.1",
