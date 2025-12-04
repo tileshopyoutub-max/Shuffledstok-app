@@ -7,13 +7,17 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "tsc -b && vite build && wrangler deploy && wrangler d1 migrations apply test --remote",
+    "dev:api": "wrangler dev",
+    "start": "concurrently \"npm run dev\" \"npm run dev:api\""
   },
   "dependencies": {
     "chanfana": "^2.8.3",
     "drizzle-kit": "^0.31.7",
     "drizzle-orm": "^0.44.7",
     "itty-router": "^5.0.22",
+    "next": "^16.0.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-error-boundary": "^6.0.0",
@@ -29,6 +33,7 @@
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",

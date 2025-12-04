@@ -1,61 +1,52 @@
-import { registerAllRoutes } from "./appReg";
-import { router } from "./router";
-import type {
-  Fetcher,
-  D1Database,
-  ExecutionContext,
-  Request,
-} from "@cloudflare/workers-types";
+import { registerAllRoutes } from './appReg'
+import { router } from './router'
+import type { Fetcher, D1Database, ExecutionContext, Request } from '@cloudflare/workers-types'
 
 export type Env = {
-  DB: D1Database;
-  ASSETS: Fetcher;
-};
+  DB: D1Database
+  ASSETS: Fetcher
+}
 
 function handleCors(request: Request) {
-  const origin = request.headers.get("Origin") || "";
+  const origin = request.headers.get('Origin') || ''
 
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "https://shuffledstok-app.vercel.app"
-  ];
+  const allowedOrigins = ['http://localhost:5173', 'https://shuffledstok-app.vercel.app']
 
   const isAllowed =
-    allowedOrigins.includes(origin) ||
-    (origin.startsWith("https://shuffledstok-") && origin.endsWith(".vercel.app"));
+    allowedOrigins.includes(origin) || (origin.startsWith('https://shuffledstok-') && origin.endsWith('.vercel.app'))
 
   const headers = {
-    "Access-Control-Allow-Origin": isAllowed ? origin : "null",
-    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  };
-
-  if (request.method === "OPTIONS") {
-    return new Response(null, { headers });
+    'Access-Control-Allow-Origin': isAllowed ? origin : 'null',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   }
 
-  return headers;
+  if (request.method === 'OPTIONS') {
+    return new Response(null, { headers })
+  }
+
+  return headers
 }
 
 // Register all routes
-registerAllRoutes(router);
+registerAllRoutes(router)
 // Static assets fallback
-router.all("*", (request: Request, env: Env) => env.ASSETS.fetch(request));
+router.all('*', (request: Request, env: Env) => env.ASSETS.fetch(request))
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-    if (request.method === "OPTIONS") {
-      return handleCors(request);
+    if (request.method === 'OPTIONS') {
+      return handleCors(request)
     }
 
-    const response = await router.fetch(request, env, ctx);
+    const response = await router.fetch(request, env, ctx)
 
-    const corsHeaders = handleCors(request);
-    const finalResponse = new Response(response.body, response);
+    const corsHeaders = handleCors(request)
+    const finalResponse = new Response(response.body, response)
     Object.entries(corsHeaders).forEach(([key, value]) => {
-      finalResponse.headers.set(key, value);
-    });
+      finalResponse.headers.set(key, value)
+    })
 
-    return finalResponse;
+    return finalResponse
   },
-};
+}

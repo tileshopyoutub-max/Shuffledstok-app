@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "shuffledstok-app",
   "main": "backendSrc/index.ts",
-  "compatibility_date": "2024-12-30",
+  "compatibility_date": "2025-12-03",
   "compatibility_flags": ["nodejs_compat"],
   "minify": true,
   "assets": {
@@ -10,40 +10,40 @@
     "binding": "ASSETS",
     "not_found_handling": "single-page-application"
   },
-  // "observability": {
-  //   "enabled": true
-  // },
-  // "placement": {
-  //   "mode": "smart"
-  // },
-  // "d1_databases": [
-  //   {
-  //     "binding": "DB",
-  //     "database_name": "lingua-db",
-  //     "database_id": "f240ea72-7aa7-449a-a70f-66d1457645e4",
-  //     "migrations_dir": "backendSrc/migrations"
-  //   }
-  // ],
-  // "env": {
-  //   "dev": {
-  //     "d1_databases": [
-  //       {
-  //         "binding": "DB",
-  //         "database_name": "lingua-db",
-  //         "database_id": "f240ea72-7aa7-449a-a70f-66d1457645e4",
-  //         "migrations_dir": "backendSrc/migrations"
-  //       }
-  //     ]
-  //   },
-  //   "test": {
-  //     "d1_databases": [
-  //       {
-  //         "binding": "DB",
-  //         "database_name": "lingua-db",
-  //         "database_id": "f240ea72-7aa7-449a-a70f-66d1457645e4",
-  //         "migrations_dir": "backendSrc/migrations"
-  //       }
-  //     ]
-  //   }
-  // }
+  "observability": {
+    "enabled": true
+  },
+  "placement": {
+    "mode": "smart"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "shuffledstok-db",
+      "database_id": "4ea33225-5788-498d-b5b5-2c18f7fe4211",
+      "migrations_dir": "backendSrc/migrations"
+    }
+  ],
+  "env": {
+    "dev": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "shuffledstok-db",
+          "database_id": "4ea33225-5788-498d-b5b5-2c18f7fe4211",
+          "migrations_dir": "backendSrc/migrations"
+        }
+      ]
+    },
+    "test": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "shuffledstok-db",
+          "database_id": "4ea33225-5788-498d-b5b5-2c18f7fe4211",
+          "migrations_dir": "backendSrc/migrations"
+        }
+      ]
+    }
+  }
 }
