@@ -1,10 +1,12 @@
 import { registerAllRoutes } from './appReg'
 import { router } from './router'
-import type { Fetcher, D1Database, ExecutionContext, Request } from '@cloudflare/workers-types'
+import type { Fetcher, D1Database, ExecutionContext, Request, R2Bucket } from '@cloudflare/workers-types'
 
 export type Env = {
   DB: D1Database
   ASSETS: Fetcher
+  PUBLIC_WATERMARKED_BUCKET: R2Bucket
+  PRIVATE_BUCKET: R2Bucket
 }
 
 function handleCors(request: Request) {
