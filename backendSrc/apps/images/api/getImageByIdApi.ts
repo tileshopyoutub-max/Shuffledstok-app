@@ -1,5 +1,5 @@
 import type { Env } from "../../..";
-import { addWatermark } from "../addWatermark";
+import { addWatermark } from "../../../../src/shared/addWatermark";
 
 export async function getImageByIdApi(request: Request, env: Env) {
     const key = request.url.split('/image/')[1]
