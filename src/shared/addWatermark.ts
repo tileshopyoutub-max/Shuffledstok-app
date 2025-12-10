@@ -1,6 +1,5 @@
-import sharp from "sharp"
-
 export async function addWatermark(buffer: ArrayBuffer): Promise<Buffer> {
+  const sharp = (await import("sharp")).default;
   const inputBuffer = Buffer.from(buffer)
 
   // Создаём водяной знак поверх картинки
