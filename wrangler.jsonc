@@ -5,11 +5,11 @@
   "compatibility_date": "2025-12-03",
   "compatibility_flags": ["nodejs_compat"],
   "minify": true,
-  "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS",
-    "not_found_handling": "single-page-application"
-  },
+  // "assets": {
+  //   "directory": "./dist",
+  //   "binding": "ASSETS",
+  //   "not_found_handling": "single-page-application"
+  // },
   "observability": {
     "enabled": true
   },
@@ -23,6 +23,10 @@
       "database_id": "4ea33225-5788-498d-b5b5-2c18f7fe4211",
       "migrations_dir": "backendSrc/migrations"
     }
+  ],
+  "r2_buckets": [
+  { "binding": "PUBLIC_WATERMARKED_BUCKET", "bucket_name": "previews", "preview_bucket_name": "previews" },
+  { "binding": "PRIVATE_BUCKET", "bucket_name": "customer-data", "preview_bucket_name": "customer-data" }
   ],
   "env": {
     "dev": {
