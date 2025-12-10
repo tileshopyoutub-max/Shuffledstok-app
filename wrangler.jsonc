@@ -24,6 +24,10 @@
       "migrations_dir": "backendSrc/migrations"
     }
   ],
+  "r2_buckets": [
+  { "binding": "PUBLIC_WATERMARKED_BUCKET", "bucket_name": "previews", "preview_bucket_name": "previews" },
+  { "binding": "PRIVATE_BUCKET", "bucket_name": "customer-data", "preview_bucket_name": "customer-data" }
+  ],
   "env": {
     "dev": {
       "d1_databases": [
