@@ -12,16 +12,14 @@ export const imagesApi = createApi({
       query: () => "/api/images/",
       providesTags: ["Images"],
     }),
-    uploadImage: builder.mutation<{ success: boolean; key: string }, File>({
-      query: (file) => {
-        const formData = new FormData()
-        formData.append("file", file)
-        return {
-          url: "/api/images/upload",
-          method: "POST",
-          body: formData,
-        }
-      },
+    uploadImage: builder.mutation<{ success: boolean; key: string }, FormData>({
+      query: (formData) => ({
+
+        url: "/api/images/upload",
+        method: "POST",
+        body: formData,
+        
+      }),
       invalidatesTags: ["Images"],
     }),
     downloadFile: builder.mutation<Blob, string>({

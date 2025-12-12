@@ -1,32 +1,40 @@
 import type { Env } from "../../..";
-import { addWatermark } from "../../../../src/shared/addWatermark";
 
-export async function PostImageApi (request: Request, env: Env) {
+export async function PostImageApi(request: Request, env: Env) {
   try {
     // Получаем FormData
     const formData = await request.formData()
-    const file = formData.get("file") as File | null
 
-    if (!file) return new Response("No file uploaded", { status: 400 })
+    //получаем оригинальный файл
+    const originalFile = formData.get("file") as File | null;
+    //получаем файл с ватермаркой
+    const watermarkedFile = formData.get("watermarkFile") as File | null;
 
-    const arrayBuffer = await file.arrayBuffer()
-    const key = file.name // или сгенерировать уникальное имя
+    if (!originalFile) return new Response("No file uploaded", { status: 400 })
+
+    const originalArrayBuffer = await originalFile.arrayBuffer()
 
     // Сохраняем файл в приватный R2
-    console.log("PRIVATE_BUCKET: собираемся сохранять файл", key, 'Размер: ', arrayBuffer.byteLength)
-    // await env.PRIVATE_BUCKET.put(key, arrayBuffer, {
-    //   httpMetadata: { contentType: file.type },
-    // })
+    console.log("PRIVATE_BUCKET: собираемся сохранять файл", originalFile.name, 'Размер: ', originalArrayBuffer.byteLength)
+    await env.PRIVATE_BUCKET.put(originalFile.name, originalArrayBuffer, {
+      httpMetadata: { contentType: "image/png" },
+    })
 
-    //Версия с watermarked в публичный R2
-    const watermarkedBuffer = await addWatermark(arrayBuffer);
-    console.log("PUBLIC_WATERMARKED_BUCKET: собираемся сохранять с вотермаркой", key, "размер:", watermarkedBuffer.byteLength);
+    //Сохраняем файл в публичный
+    if (watermarkedFile) {
+      const watermarkedArrayBuffer = await watermarkedFile.arrayBuffer();
+      console.log("PUBLICK: Сохраняем с вотермаркой", watermarkedFile.name, 'Размер: ', watermarkedArrayBuffer.byteLength);
+      await env.PUBLIC_WATERMARKED_BUCKET.put(watermarkedFile.name, watermarkedArrayBuffer, {
+        httpMetadata: { contentType: "image/png" },
+      })
+    } else {
+      console.log("PUBLIC_WATERMARKED_BUCKET: водяной файл не предоставлен, сохраняем оригинал. Размер: ", originalArrayBuffer.byteLength);
+      await env.PUBLIC_WATERMARKED_BUCKET.put(originalFile.name, originalArrayBuffer, {
+        httpMetadata: { contentType: "image/png" },
+      })
+    }
 
-    // await env.PUBLIC_WATERMARKED_BUCKET.put(key, watermarkedBuffer, {
-    //   httpMetadata: { contentType: "image/png" },
-    // })
-
-    return new Response(JSON.stringify({ success: true, key }), {
+    return new Response(JSON.stringify({ success: true, originalFile: originalFile.name, watermarkedFile: watermarkedFile?.name || null}), {
       headers: { "Content-Type": "application/json" },
     })
   } catch (err) {
