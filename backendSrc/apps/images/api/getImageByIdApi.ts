@@ -1,5 +1,4 @@
 import type { Env } from "../../..";
-import { addWatermark } from "../../../../src/shared/addWatermark";
 
 export async function getImageByIdApi(request: Request, env: Env) {
     const key = request.url.split('/image/')[1]
@@ -9,9 +8,9 @@ export async function getImageByIdApi(request: Request, env: Env) {
     if (!object) return new Response("Not found", { status: 404 })
 
     const arrayBuffer = await object.arrayBuffer()
-    const watermarkedBuffer = await addWatermark(arrayBuffer)
+     const contentType = object.httpMetadata?.contentType || "application/octet-stream"
 
-    return new Response(new Uint8Array(watermarkedBuffer), {
-      headers: { 'Content-Type': 'image/png' }
+    return new Response(new Uint8Array(arrayBuffer), {
+      headers: { 'Content-Type': contentType }
     })
   }

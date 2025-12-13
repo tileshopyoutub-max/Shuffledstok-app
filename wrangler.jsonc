@@ -10,6 +10,9 @@
     "binding": "ASSETS",
     "not_found_handling": "single-page-application"
   },
+  "vars": {
+    "CANVAS_BACKEND": "skia"
+  },
   "observability": {
     "enabled": true
   },

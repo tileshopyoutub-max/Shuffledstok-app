@@ -15,7 +15,6 @@ export async function PostImageApi(request: Request, env: Env) {
     const originalArrayBuffer = await originalFile.arrayBuffer()
 
     // Сохраняем файл в приватный R2
-    console.log("PRIVATE_BUCKET: собираемся сохранять файл", originalFile.name, 'Размер: ', originalArrayBuffer.byteLength)
     await env.PRIVATE_BUCKET.put(originalFile.name, originalArrayBuffer, {
       httpMetadata: { contentType: "image/png" },
     })
@@ -23,12 +22,10 @@ export async function PostImageApi(request: Request, env: Env) {
     //Сохраняем файл в публичный
     if (watermarkedFile) {
       const watermarkedArrayBuffer = await watermarkedFile.arrayBuffer();
-      console.log("PUBLICK: Сохраняем с вотермаркой", watermarkedFile.name, 'Размер: ', watermarkedArrayBuffer.byteLength);
       await env.PUBLIC_WATERMARKED_BUCKET.put(watermarkedFile.name, watermarkedArrayBuffer, {
         httpMetadata: { contentType: "image/png" },
       })
     } else {
-      console.log("PUBLIC_WATERMARKED_BUCKET: водяной файл не предоставлен, сохраняем оригинал. Размер: ", originalArrayBuffer.byteLength);
       await env.PUBLIC_WATERMARKED_BUCKET.put(originalFile.name, originalArrayBuffer, {
         httpMetadata: { contentType: "image/png" },
       })

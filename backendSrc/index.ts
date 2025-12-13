@@ -12,7 +12,7 @@ export type Env = {
 function handleCors(request: Request) {
   const origin = request.headers.get('Origin') || ''
 
-  const allowedOrigins = ['http://localhost:5173', 'https://shuffledstok-app.vercel.app']
+  const allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:8787', 'https://shuffledstok-app.vercel.app']
 
   const isAllowed =
     allowedOrigins.includes(origin) || (origin.startsWith('https://shuffledstok-') && origin.endsWith('.vercel.app'))
@@ -21,10 +21,6 @@ function handleCors(request: Request) {
     'Access-Control-Allow-Origin': isAllowed ? origin : 'null',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  }
-
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { headers })
   }
 
   return headers
@@ -37,18 +33,24 @@ router.all('*', (request: Request, env: Env) => env.ASSETS.fetch(request))
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-    if (request.method === 'OPTIONS') {
-      return handleCors(request)
+    const corsHeaders = handleCors(request);
+
+    // OPTIONS (preflight)
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
+      });
     }
 
-    const response = await router.fetch(request, env, ctx)
+    const response = await router.fetch(request, env, ctx);
 
-    const corsHeaders = handleCors(request)
-    const finalResponse = new Response(response.body, response)
-    Object.entries(corsHeaders).forEach(([key, value]) => {
-      finalResponse.headers.set(key, value)
-    })
+    // Добавляем CORS к реальному ответу
+    const finalResponse = new Response(response.body, response);
+    for (const [key, value] of Object.entries(corsHeaders)) {
+      finalResponse.headers.set(key, value);
+    }
 
-    return finalResponse
+    return finalResponse;
   },
-}
+};

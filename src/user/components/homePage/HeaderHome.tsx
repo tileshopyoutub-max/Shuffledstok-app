@@ -29,9 +29,9 @@ export const HeaderHomePage = () => {
           <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
             Instagram Icons
           </a>
-          <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
+          <Link className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" to="stickers">
             Stickers
-          </a>
+          </Link>
           <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
             Collections
           </a>
@@ -39,14 +39,14 @@ export const HeaderHomePage = () => {
       </div>
       <div className="flex flex-1 justify-end items-center gap-4">
         <label className="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
-          <div className="flex w-full flex-1 items-stretch rounded-lg h-full border border-gray-700 border-r-0">
-            <div className="text-gray-400 flex bg-background-dark/50 items-center justify-center pl-3 rounded-l-lg">
+          <div className="flex w-full flex-1 items-stretch h-full">
+            <div className="text-gray-400 flex bg-background-dark/50 items-center justify-center pl-3 rounded-l-lg border border-gray-700 border-r-0">
               <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
                 search
               </span>
             </div>
             <input
-              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 ring-inset border-gray-700 bg-background-dark/50 h-full placeholder:text-gray-400 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal"
+              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg border border-gray-700 border-l-0 text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 ring-inset bg-background-dark/50 h-full placeholder:text-gray-400 px-4 pl-2 text-sm font-normal leading-normal"
               placeholder="Search"
               value={search}
               onChange={handleChange}
