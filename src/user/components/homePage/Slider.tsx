@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useSwipeable } from 'react-swipeable'
+import type { ImageItems } from '../../../shared/types/images'
 
 interface Slider {
-  images: string[]
+  images: ImageItems[]
 }
 
 export const Slider: React.FC<Slider> = ({ images }) => {
@@ -30,7 +31,7 @@ export const Slider: React.FC<Slider> = ({ images }) => {
 
       {/* СЛАЙДЫ */}
       <div className="relative flex items-center justify-center w-full h-full" style={{ perspective: '1200px' }}>
-        {images.map((img, i) => {
+        {images?.map((img, i) => {
           const total = images.length
           const offset = i - index
 
@@ -63,7 +64,7 @@ export const Slider: React.FC<Slider> = ({ images }) => {
                 opacity: wrapped > 3 || wrapped < -3 ? 0 : 1,
               }}>
               <div className="relative w-[280px] h-[560px] bg-gray-900 rounded-[40px] border-4 border-gray-700 shadow-xl overflow-hidden overflow-hidden">
-                <img src={img} className="w-full h-full object-cover" draggable={false} />
+                <img src={img.url} className="w-full h-full object-cover" draggable={false} />
               </div>
             </div>
           )
