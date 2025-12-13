@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { imagesApi } from '../shared/api/imagesApi'
+import watermarkReducer from './slices/watermarkSlice'
 
 const rootReducer = combineReducers({
   [imagesApi.reducerPath]: imagesApi.reducer,
+  watermark: watermarkReducer,
 })
 
 export const setupStore = () => {

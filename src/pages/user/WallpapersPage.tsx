@@ -1,4 +1,4 @@
-import HeaderWallpapersPage from '../../user/components/WallpapersPage.tsx/HeaderWallpapersPage'
+import HeaderWallpapersPage from '../../user/components/wallpapersPage.tsx/HeaderWallpapers'
 
 export function WallpapersPage() {
   return (

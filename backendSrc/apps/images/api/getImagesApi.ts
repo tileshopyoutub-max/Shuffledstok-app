@@ -7,7 +7,7 @@ export async function GetImagesApi(request: Request, env: Env) {
     const images = list.objects.map(obj => ({
       key: obj.key,
       url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${obj.key}`
-    }))
+    })) 
 
     return new Response(JSON.stringify(images), {
       headers: { 'Content-Type': 'application/json' }

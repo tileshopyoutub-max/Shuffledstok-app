@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 const HeaderWallpapersPage = () => {
   return (
     <header className="sticky top-0 z-50 flex justify-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
@@ -13,7 +15,7 @@ const HeaderWallpapersPage = () => {
             </svg>
           </div>
           <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">
-            ShuffledStock
+            <Link to="/">ShuffledStock</Link>
           </h2>
         </div>
         <div className="flex flex-1 justify-end items-center gap-8">
@@ -36,11 +38,11 @@ const HeaderWallpapersPage = () => {
               href="#">
               Icons
             </a>
-            <a
+            <Link
               className="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal"
-              href="#">
+              to="/stickers">
               Stickers
-            </a>
+            </Link>
           </div>
           <div className="flex gap-2">
             <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">

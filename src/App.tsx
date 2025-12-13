@@ -9,6 +9,8 @@ import './App.css'
 import HomePage from './pages/user/HomePage'
 import Auth0ProviderWithNavigate from './user/auth0/auth0-provider'
 import { WallpapersPage } from './pages/user/WallpapersPage'
+import { StickersPage } from './pages/user/StickersPage'
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/wallpapers" element={<WallpapersPage />} />
+        <Route path="/stickers" element={<StickersPage />} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
