@@ -23,7 +23,11 @@ const watermarkSlice = createSlice({
     initialState,
     reducers: {
         setSettingsWatermark(state, action: PayloadAction<WatermarkSettings>){
-            return action.payload;
+            state.enabled = action.payload.enabled;
+            state.text = action.payload.text;
+            state.opacity = action.payload.opacity;
+            state.fontSize = action.payload.fontSize;
+            state.position = action.payload.position;
         },
         resetWatermark(){
             return initialState
