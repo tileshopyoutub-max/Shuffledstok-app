@@ -1,38 +1,35 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { ImageItems } from "../types/images";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import type { ImageItems } from '../types/images'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787'
 
 export const imagesApi = createApi({
-  reducerPath: "imagesApi",
+  reducerPath: 'imagesApi',
   baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
-  tagTypes: ["Images"],
-  endpoints: (builder) => ({
+  tagTypes: ['Images'],
+  endpoints: builder => ({
     getImages: builder.query<ImageItems[], void>({
-      query: () => "/api/images/",
-      providesTags: ["Images"],
+      query: () => '/api/images/',
+      providesTags: ['Images'],
     }),
     uploadImage: builder.mutation<{ success: boolean; key: string }, FormData>({
-      query: (formData) => ({
-
-        url: "/api/images/upload",
-        method: "POST",
+      query: formData => ({
+        url: '/api/images/upload',
+        method: 'POST',
         body: formData,
-        
       }),
-      invalidatesTags: ["Images"],
+      invalidatesTags: ['Images'],
     }),
-    downloadFile: builder.mutation<Blob, string>({
-      query: (key) => ({
-        url: `/api/files/${key}/download`,
-        method: "GET",
-        responseHandler: async (res) => {
-          const blob = await res.blob()
-          return blob
+    downloadImage: builder.mutation<Blob, string>({
+      query: key => ({
+        url: `/image/${key}/download`,
+        method: 'GET',
+        responseHandler: async res => {
+          return await res.blob()
         },
       }),
     }),
   }),
 })
 
-export const { useGetImagesQuery, useUploadImageMutation, useDownloadFileMutation } = imagesApi
+export const { useGetImagesQuery, useUploadImageMutation, useDownloadImageMutation } = imagesApi

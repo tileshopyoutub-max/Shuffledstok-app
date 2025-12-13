@@ -1,32 +1,15 @@
 import { HeaderHomePage } from '../../user/components/homePage/HeaderHome'
 import { FooterHomePage } from '../../user/components/homePage/FooterHome'
-import { useState } from 'react';
-import { ModalDownload } from '../../user/components/moduls/ModalDownload';
-import { useGetImagesQuery } from '../../shared/api/imagesApi';
-import { Slider } from '../../user/components/homePage/Slider';
-
-const imageses = [
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-  "https://lh3.googleusercontent.com/aida-public/AB6AXuB80T2za701EgPtusg77DOnfZGSuM7WWlvbCL1BmdjQgCrBXijxGsbbQNSHNhSj6qnbPgRw8cwuD2UYZkrKVGNu2e50Q0zij9Zr2hhAfA8tn_ejd10OBEoqwZVeR8c9FNTAw-o9JQ79Sd-_KHmNwNtOJf_ReWOuTnU39lCsr8O_LPtc25fqfLKlFvegqg6XswoxOpH-GGDJTn7ozcFYk29IAUBWkD8rL9v9xjerDrQNdfghtMsVkAYuKbVInjfEq_XsP08JD5DkODQR",
-]
+import { useState } from 'react'
+import { ModalDownload } from '../../user/components/moduls/ModalDownload'
+import { useGetImagesQuery } from '../../shared/api/imagesApi'
+import { Slider } from '../../user/components/homePage/Slider'
 
 export default function HomePage() {
-  const [openModal, setOpenModal] = useState(false);
-  const {data: images} = useGetImagesQuery()
-  console.log(images)
-  const obj = images?.[0]
-  console.log(obj?.url)
+  const [openModal, setOpenModal] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<{ key: string; url: string } | null>(null)
+
+  const { data: images } = useGetImagesQuery()
   return (
     <div className="font-display bg-black">
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
@@ -48,7 +31,7 @@ export default function HomePage() {
 
                 {/* SLIDER */}
                 <div className="relative w-full overflow-hidden mt-8 py-8" style={{ perspective: '2000px' }}>
-                  <Slider images={imageses}/>
+                  <Slider images={images!} />
                 </div>
               </div>
 
@@ -57,20 +40,30 @@ export default function HomePage() {
 
               {/* GRID */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
-                <div
-                  onClick={() => setOpenModal(true)}
-                  className="relative group aspect-[3/4] rounded-lg overflow-hidden bg-center bg-cover flex flex-col justify-end gap-3"
-                  data-alt="Minimalist desk setup with a laptop"
-                  style={{
-                    backgroundImage:
-                      `url(${obj?.url})`,
-                  }}>
-                  {/* Hover gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </div>
-                {/* <img src={`${obj?.url}`} alt="" /> */}
+                {images?.map(img => {
+                  return (
+                    <div
+                      onClick={() => {
+                        setOpenModal(true), setSelectedImage({ key: img.key, url: img.url })
+                      }}
+                      className="relative group aspect-[3/4] rounded-lg overflow-hidden bg-center bg-cover flex flex-col justify-end gap-3"
+                      data-alt="Minimalist desk setup with a laptop"
+                      style={{
+                        backgroundImage: `url(${img?.url})`,
+                      }}>
+                      {/* Hover gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                  )
+                })}
               </div>
-              {openModal && <ModalDownload onClose={() => setOpenModal(false)} />}
+              {openModal && (
+                <ModalDownload
+                  onClose={() => setOpenModal(false)}
+                  fileKey={selectedImage?.key!}
+                  fileUrl={selectedImage?.url!}
+                />
+              )}
             </div>
           </main>
           <FooterHomePage />
