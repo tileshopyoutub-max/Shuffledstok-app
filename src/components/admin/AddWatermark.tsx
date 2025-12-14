@@ -5,14 +5,14 @@ interface AddWatermarkProps {
     selectedFile: File | null;
     watermarkFile: Blob | null;
 }
-export default function AddWatermark({selectedFile, watermarkFile}:AddWatermarkProps) {
-    
+export default function AddWatermark({ selectedFile, watermarkFile }: AddWatermarkProps) {
+
     const settings = useTypedSelector(state => state.watermark);
     const dispatch = useTypedDispatch();
 
     const positions = [
         { value: "tl", justify: "justify-start", align: "items-start", label: "Top Left" },
-        { value: "tc", justify: "justify-center", align: "items-start", label: "Top Center"},
+        { value: "tc", justify: "justify-center", align: "items-start", label: "Top Center" },
         { value: "tr", justify: "justify-end", align: "items-start", label: "Top Right" },
         { value: "ml", justify: "justify-start", align: "items-center", label: "Middle Left" },
         { value: "mc", justify: "justify-center", align: "items-center", label: "Middle Center" },
@@ -97,9 +97,9 @@ export default function AddWatermark({selectedFile, watermarkFile}:AddWatermarkP
                                 </div>
                                 {watermarkFile && (
                                     <div className="flex justify-center items-center mt-4">
-                                        <img src={URL.createObjectURL(watermarkFile)} className="max-w-full max-h-[500px] object-contain rounded-lg shadow-md"/>
+                                        <img src={URL.createObjectURL(watermarkFile)} className="max-w-full max-h-[500px] object-contain rounded-lg shadow-md" />
                                     </div>
-                                    )}
+                                )}
                             </div>
                         </div>
                     </div>

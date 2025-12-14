@@ -18,7 +18,7 @@ export async function GetImagesApi(_: Request, env: Env) {
 
     const images = results.map((img: any) => ({
       ...img,
-      tags: img.tags ? img.tags.split(',') : [],
+      tags: img.tags ? img.tags.split(',').map((tag: string) => tag.trim()) : [],
       url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${img.key}`,
     }));
 
