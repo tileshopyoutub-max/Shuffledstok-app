@@ -1,14 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit';
-
-
-interface WatermarkSettings {
-    enabled: boolean;
-    text: string;
-    opacity: string;
-    fontSize: string;
-    position: string;
-}
+import type {WatermarkSettings} from '../../shared/types/watermark';
 
 const initialState:WatermarkSettings = {
     enabled: false,

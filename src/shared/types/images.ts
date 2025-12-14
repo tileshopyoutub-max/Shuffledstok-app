@@ -1,4 +1,10 @@
 export interface ImageItems {
-  key: string        // ключ объекта в R2
-  url: string        // URL для превью с водяным знаком
+  id: number
+  key: string
+  title: string | null
+  description: string | null
+  tags: string[]
+  has_watermark: number
+  created_at: string
+  url: string
 }

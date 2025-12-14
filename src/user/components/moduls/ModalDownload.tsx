@@ -9,7 +9,7 @@ interface ModalTypes {
 
 export const ModalDownload = ({ onClose, fileKey, fileUrl }: ModalTypes) => {
   const modalRef = useRef<HTMLDivElement>(null)
-  const [downloadFile, { isLoading }] = useDownloadImageMutation()
+  const [downloadFile] = useDownloadImageMutation()
 
   useEffect(() => {
     downloadFile('test.png')
@@ -115,7 +115,7 @@ export const ModalDownload = ({ onClose, fileKey, fileUrl }: ModalTypes) => {
 
               <div className="flex flex-col gap-4">
                 <button onClick={handleDownload} className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold">
-                  {isLoading ? 'Download...' : 'Download for free'}
+                  Download for free
                 </button>
 
                 <button className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold">
