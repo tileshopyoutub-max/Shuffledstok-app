@@ -3,6 +3,7 @@ import { useTypedSelector, useTypedDispatch } from '../../../shared/hooks/redux'
 import { resetWatermark } from '../../../store/slices/watermarkSlice';
 import { useUploadImageMutation } from '../../../shared/api/imagesApi';
 import { useAddWatermark } from './useAddWatermark';
+import { useImageCompressor } from './useImageCompressor';
 
 export function useAddPhoto() {
 
@@ -19,7 +20,8 @@ export function useAddPhoto() {
     const dispatch = useTypedDispatch();
     const [uploadImage] = useUploadImageMutation();
 
-    const { watermarkFile } = useAddWatermark(selectedFile, settings);
+    const compressorFile = useImageCompressor(selectedFile);
+    const watermarkFile = useAddWatermark(settings.enabled ? compressorFile : null, settings);
 
     function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
         if (e.target.files) handleFiles(e.target.files);
@@ -67,7 +69,7 @@ export function useAddPhoto() {
         }
 
         if (settings.enabled) {
-            if (!settings.fontSize || !settings.text.trim() || !settings.position) {
+            if (!settings.fontSize || !settings.text.trim() || (!settings.loopWatermark && !settings.position)) {
                 alert("Please fill all watermark fields before uploading.")
                 return
             }
@@ -81,34 +83,29 @@ export function useAddPhoto() {
         //Собираемся прокидывать фото + настройки watermark
         const formData = new FormData();
         formData.append("file", selectedFile);
-
+        console.log('Отправка оригинал файла, ', selectedFile)
         //Закидываем title, description и tags в formData
         formData.append("title", title);
         formData.append("description", description);
         formData.append("tags", tags);
 
         if (watermarkFile) {
-            formData.append("watermarkFile", watermarkFile, selectedFile.name + '_watermark.png')
+            formData.append("watermarkFile", watermarkFile, 'watermark_' + selectedFile.name)
+            // console.log('waterm, ', watermarkFile.type, watermarkFile, watermarkFile.size)
+        } else {
+            formData.append("compressorFile", compressorFile!, 'no_watermark_' + compressorFile!.name)
+            // console.log('без ватермарки', compressorFile, compressorFile?.size, compressorFile?.size)
         }
 
         try {
             const result = await uploadImage(formData).unwrap();
-            console.log('Загрузка успешна', result)
+            console.log('Загрузка успешна', formData)
             setMessage('The file was uploaded successfully');
-            setSelectedFile(null)
-            dispatch(resetWatermark())
-            setTitle("")
-            setDescription("")
-            setTags("")
-            if (fileInputRef.current) fileInputRef.current.value = '';
         } catch (err: any) {
             console.log('Ошибка загрузки: ', err)
             setMessage(`Download error: ${err.error || 'Unknown error'}`)
-            setSelectedFile(null)
-            dispatch(resetWatermark())
-            setTitle("")
-            setDescription("")
-            setTags("")
+        } finally {
+            resetForm()
         }
     }
 
@@ -126,15 +123,15 @@ export function useAddPhoto() {
     }
 
     function resetForm() {
-    setSelectedFile(null);
-    setTitle('');
-    setDescription('');
-    setTags('');
-    setMessage('');
-    setDragActive(false);
-    dispatch(resetWatermark());
-    if (fileInputRef.current) fileInputRef.current.value = '';
-}
+        setSelectedFile(null);
+        setTitle('');
+        setDescription('');
+        setTags('');
+        setMessage('');
+        setDragActive(false);
+        dispatch(resetWatermark());
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    }
 
 
     return {

@@ -4,17 +4,49 @@ import AdminPageHeader from "../../components/admin/AdminPageHeader";
 import EntityTable from "../../components/admin/EntityTable";
 import Button from "../../components/admin/ui/Button";
 import SearchInput from "../../components/admin/ui/SearchInput";
-import { tags } from "../../data/tags";
+import { useGetImagesQuery } from '../../shared/api/imagesApi';
 
 
 
 export default function Tags(){
+
+    const {data: images} = useGetImagesQuery();
+
+    const allTagsMediaCount = images?.reduce<Record<string, { count: number; firstDate: string }>>((acc, img) => {
+
+        const uniqueTags = new Set(img.tags);
+
+        uniqueTags.forEach(tag => {
+            const imgDate = img.created_at;
+            
+            if(!acc[tag]){
+                acc[tag] = {count: 1, firstDate: imgDate}
+            } else {
+                acc[tag].count += 1;
+                if(new Date(imgDate) < new Date(acc[tag].firstDate)){
+                    acc[tag].firstDate = imgDate
+                }
+            }
+        })
+
+        return acc
+    }, {})
+
+    const tagsArray = Object.entries(allTagsMediaCount || {}).map(([tag, info]) => ({
+        id: tag,
+        tagName: tag,
+        mediaCount: info.count,
+        dateCreated: new Date(info.firstDate).toISOString().slice(0, 10),
+    }))
+
+    console.log(tagsArray)
+    
     const [page, setPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const tagsQuery = searchParams.get('tags') || '';
 
-    const tagsFilter = tags.filter(t => t.tagName.toLowerCase().includes(tagsQuery.toLowerCase()));
+    const tagsFilter = tagsArray.filter(t => t.tagName.toLowerCase().includes(tagsQuery.toLowerCase()));
 
     const maxItemPage = 6;
     const startIndex = (page - 1) * maxItemPage;
