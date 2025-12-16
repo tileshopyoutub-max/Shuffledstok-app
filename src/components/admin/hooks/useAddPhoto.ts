@@ -93,7 +93,6 @@ export function useAddPhoto() {
 
         try {
             const result = await uploadImage(formData).unwrap();
-            console.log('Загрузка успешна', result)
             setMessage('The file was uploaded successfully');
             setSelectedFile(null)
             dispatch(resetWatermark())
@@ -102,7 +101,6 @@ export function useAddPhoto() {
             setTags("")
             if (fileInputRef.current) fileInputRef.current.value = '';
         } catch (err: any) {
-            console.log('Ошибка загрузки: ', err)
             setMessage(`Download error: ${err.error || 'Unknown error'}`)
             setSelectedFile(null)
             dispatch(resetWatermark())

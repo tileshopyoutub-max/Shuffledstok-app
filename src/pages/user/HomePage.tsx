@@ -1,21 +1,33 @@
-import { HeaderHomePage } from '../../user/components/homePage/HeaderHome'
+import { Header } from '../../user/components/homePage/HeaderHome'
 import { FooterHomePage } from '../../user/components/homePage/FooterHome'
-import { useState } from 'react'
+import { useMemo } from 'react'
 import { ModalDownload } from '../../user/components/moduls/ModalDownload'
 import { useGetImagesQuery } from '../../shared/api/imagesApi'
 import { Slider } from '../../user/components/homePage/Slider'
+import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
+import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
 
 export default function HomePage() {
-  const [openModal, setOpenModal] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<{ key: string; url: string } | null>(null)
+  const dispatch = useTypedDispatch()
+  const {isOpen, selectedImage} = useTypedSelector(state => state.imageModal)
 
-  const { data: images } = useGetImagesQuery()
+  const {search} = useTypedSelector(state => state.imagesFilter)
+  const { data: images = [] } = useGetImagesQuery()
+
+  const filteredImages = useMemo(() => {
+    if (!search.trim()) return images
+
+    const query = search.toLowerCase()
+
+    return images.filter(img => img.title?.toLowerCase().includes(query))
+  }, [images, search])
+
   return (
     <div className="font-display bg-black">
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
           {/* HEADER */}
-          <HeaderHomePage />
+          <Header />
           {/* MAIN */}
           <main className="flex flex-1 justify-center py-5">
             <div className="layout-content-container flex flex-col w-full max-w-7xl">
@@ -40,11 +52,12 @@ export default function HomePage() {
 
               {/* GRID */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
-                {images?.map(img => {
+                {filteredImages.map(img => {
                   return (
                     <div
+                      key = {img.key}
                       onClick={() => {
-                        setOpenModal(true), setSelectedImage({ key: img.key, url: img.url })
+                        dispatch(openImageModal(img))
                       }}
                       className="relative group aspect-[3/4] rounded-lg overflow-hidden bg-center bg-cover flex flex-col justify-end gap-3"
                       data-alt="Minimalist desk setup with a laptop"
@@ -57,11 +70,10 @@ export default function HomePage() {
                   )
                 })}
               </div>
-              {openModal && (
+              {isOpen && (
                 <ModalDownload
-                  onClose={() => setOpenModal(false)}
-                  fileKey={selectedImage?.key!}
-                  fileUrl={selectedImage?.url!}
+                  onClose={() => dispatch(closeImageModal())}
+                  file={selectedImage!}
                 />
               )}
             </div>
