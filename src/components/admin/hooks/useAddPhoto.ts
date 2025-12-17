@@ -92,7 +92,7 @@ export function useAddPhoto() {
         }
 
         try {
-            const result = await uploadImage(formData).unwrap();
+            await uploadImage(formData).unwrap();
             setMessage('The file was uploaded successfully');
             setSelectedFile(null)
             dispatch(resetWatermark())

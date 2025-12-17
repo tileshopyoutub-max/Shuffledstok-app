@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { useDownloadImageMutation, useGetImagesQuery } from '../../../shared/api/imagesApi'
-import { findSimilarImages } from './utils/SimilarContent'
+import { findSimilarImages } from '../../utils/FilterSimilarContent'
 import type { ImageItems } from '../../../shared/types/images'
-import { openImageModal } from '../../../store/slices/imageModalSlice'
+import { closeImageModal, openImageModal } from '../../../store/slices/imageModalSlice'
 import { useTypedDispatch } from '../../../shared/hooks/redux'
+import { toggleTag } from '../../../store/slices/imagesFilterSlice'
 
 interface ModalTypes {
   onClose: () => void
@@ -79,7 +80,7 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
             {/* Левая часть */}
             <div className="lg:col-span-2 flex flex-col items-center gap-4">
               <div className="relative w-full max-w-2xl group">
-                <div className="aspect-[3/4] w-full overflow-hidden rounded-xl">
+                <div className="aspect-[3/4] w-full max-h-[65vh] overflow-hidden rounded-xl">
                   <img alt="Preview" className="h-full w-full object-cover" src={url} />
                 </div>
 
@@ -128,7 +129,7 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                 <h3 className="text-lg font-semibold text-gray-200">Tags</h3>
                 {tags.map((tag, i) => {
                   return (
-                    <div key={i} className="flex flex-wrap gap-2">
+                    <div key={i} onClick={() => {dispatch(toggleTag(tag)), dispatch(closeImageModal())}} className="flex flex-wrap gap-2">
                       <a
                         className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full hover:bg-gray-700 transition-colors"
                         href="#">
@@ -141,7 +142,7 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
             </div>
           </div>
           <div className="mt-12 md:mt-20">
-            <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
+            <h2 className="sticky text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
               Similar content
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 p-4">

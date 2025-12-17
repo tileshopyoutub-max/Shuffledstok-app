@@ -1,10 +1,6 @@
-import type { ImageItems } from "../../../../shared/types/images"
+import type { ImageItems } from '../../shared/types/images'
 
-
-export function findSimilarImages(
-  allImages: ImageItems[],
-  current: ImageItems
-): ImageItems[] {
+export function findSimilarImages(allImages: ImageItems[], current: ImageItems): ImageItems[] {
   const currentTags = current.tags?.map(t => t.toLowerCase()) || []
   const currentTitle = current.title?.toLowerCase() || ''
   const currentDescription = current.description?.toLowerCase() || ''

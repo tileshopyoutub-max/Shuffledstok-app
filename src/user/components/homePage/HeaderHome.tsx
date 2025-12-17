@@ -3,6 +3,7 @@ import { CustomLink } from '../CustomLink'
 import { useTypedDispatch, useTypedSelector } from '../../../shared/hooks/redux'
 import { setSearch } from '../../../store/slices/imagesFilterSlice'
 import { useState } from 'react'
+import { hideHero } from '../../../store/slices/heroSlice'
 
 export const Header = () => {
   const {search} = useTypedSelector(state => state.imagesFilter)
@@ -13,6 +14,7 @@ export const Header = () => {
   }
 
   const applySearch = () => {
+    dispatch(hideHero())
     dispatch(setSearch(value.trim()))
     setValue('')
   }
