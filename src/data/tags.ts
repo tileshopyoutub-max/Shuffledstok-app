@@ -5,7 +5,7 @@ interface tagsProps {
     dateCreated: string; 
 }
 
-export const tags: tagsProps[] = [
+export const tags1: tagsProps[] = [
     {
         id: 1,
         tagName: 'Minimalist',
