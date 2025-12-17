@@ -4,18 +4,21 @@ export async function GetImagesApi(_: Request, env: Env) {
   try {
     const { results } = await env.DB.prepare(`
       SELECT
-        id,
-        key,
-        title,
-        description,
-        tags,
-        has_watermark,
-        created_at
-      FROM images
-      ORDER BY created_at DESC
+        i.id,
+        i.key,
+        i.title,
+        i.description,
+        i.has_watermark,
+        i.created_at,
+        GROUP_CONCAT(t.name) AS tags
+      FROM images i
+      LEFT JOIN image_tags it ON i.id = it.image_id
+      LEFT JOIN tags t ON t.id = it.tag_id
+      GROUP BY i.id
+      ORDER BY i.created_at DESC
       LIMIT 100
     `).all();
-
+      console.log(results)
     const images = results.map((img: any) => ({
       ...img,
       tags: img.tags ? img.tags.split(',') : [],

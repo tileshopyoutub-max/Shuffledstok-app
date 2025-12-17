@@ -10,7 +10,9 @@ export async function PostImageApi(request: Request, env: Env) {
 
     const title = normalizeText(formData.get("title"));
     const description = normalizeText(formData.get("description"));
-    const tags = normalizeText(formData.get("tags"));
+
+    const tagsInput = formData.get("tags") as string;
+    const selectedTagIds: number[] = tagsInput ? JSON.parse(tagsInput) : [];
 
     if (!originalFile) {
       return new Response("No file uploaded", { status: 400 });
@@ -43,23 +45,37 @@ export async function PostImageApi(request: Request, env: Env) {
     }
 
     // ---------- D1 ----------
-    await env.DB.prepare(
+    const result = await env.DB.prepare(
       `
-      INSERT INTO images (key, title, description, tags, has_watermark)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO images (key, title, description, has_watermark)
+      VALUES (?, ?, ?, ?)
       `
     ).bind(
       publicKey,
       title,
       description,
-      tags,
       watermarkedFile ? 1 : 0
     ).run();
+
+    const imageId = result.meta.last_row_id;
+
+    if (selectedTagIds.length > 0) {
+      for (const tagId of selectedTagIds) {
+        await env.DB.prepare(
+          `INSERT INTO image_tags (image_id, tag_id) VALUES (?, ?)`
+        ).bind(imageId, tagId).run();
+        
+        await env.DB.prepare(
+          `UPDATE tags SET usage_count = usage_count + 1 WHERE id = ?`
+        ).bind(tagId).run();
+      }
+    }
 
     return new Response(
       JSON.stringify({
         success: true,
         key: publicKey,
+        id: imageId
       }),
       { headers: { "Content-Type": "application/json" } }
     );

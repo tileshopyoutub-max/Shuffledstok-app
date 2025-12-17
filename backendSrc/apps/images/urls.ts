@@ -5,4 +5,5 @@ import { PostImageApi } from './api/postImageApi'
 export default function registerImagesRoutes(router: RouterType) {
   router.get("/api/images/", GetImagesApi)
   router.post("/api/images/upload", PostImageApi)
+
 }
