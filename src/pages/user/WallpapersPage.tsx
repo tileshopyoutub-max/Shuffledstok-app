@@ -1,11 +1,11 @@
-import HeaderWallpapersPage from '../../user/components/wallpapersPage.tsx/HeaderWallpapers'
+import { Header } from '../../user/components/homePage/HeaderHome'
 
 export function WallpapersPage() {
   return (
     <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden font-display bg-black">
       <div className="layout-container flex h-full grow flex-col">
         {/* HEADER */}
-        <HeaderWallpapersPage />
+        <Header />
         {/* MAIN */}
         <main className="flex flex-1 justify-center py-5">
           <div className="layout-content-container flex flex-col w-full max-w-7xl px-4 sm:px-10">

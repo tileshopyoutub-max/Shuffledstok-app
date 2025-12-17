@@ -26,27 +26,24 @@ export async function PostImageApi(request: Request, env: Env) {
     // ---------- R2 ----------
     const originalBuffer = await originalFile.arrayBuffer();
 
-    console.log('Получаем приватный файл, ', originalBuffer.byteLength, originalFile.type)
-    // await env.PRIVATE_BUCKET.put(key, originalBuffer, {
-    //   httpMetadata: { contentType: originalFile.type },
-    // });
+    await env.PRIVATE_BUCKET.put(key, originalBuffer, {
+      httpMetadata: { contentType: originalFile.type },
+    });
 
     let publicKey = key;
 
     if (watermarkedFile) {
       const watermarkedBuffer = await watermarkedFile.arrayBuffer();
       publicKey = `wm_${key}`;
-      console.log('Получаем файл с ватермаркой, ', watermarkedBuffer.byteLength, watermarkedFile.type)
-      // await env.PUBLIC_WATERMARKED_BUCKET.put(publicKey, watermarkedBuffer, {
-      //   httpMetadata: { contentType: watermarkedFile.type },
-      // });
+      await env.PUBLIC_WATERMARKED_BUCKET.put(publicKey, watermarkedBuffer, {
+        httpMetadata: { contentType: watermarkedFile.type },
+      });
     } else if(compressorFile){
       const compressorBuffer = await compressorFile.arrayBuffer();
       publicKey = `compressed_${key}`;
-      console.log('Получаем файл без ватермарки, урезанный, ', compressorBuffer.byteLength, compressorFile.type)
-      // await env.PUBLIC_WATERMARKED_BUCKET.put(publicKey, compressorBuffer, {
-      //   httpMetadata: { contentType: compressorFile.type },
-      // });
+      await env.PUBLIC_WATERMARKED_BUCKET.put(publicKey, compressorBuffer, {
+        httpMetadata: { contentType: compressorFile.type },
+      });
     }
 
     // ---------- D1 ----------

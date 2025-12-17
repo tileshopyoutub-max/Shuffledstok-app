@@ -10,9 +10,10 @@ import HomePage from './pages/user/HomePage'
 import Auth0ProviderWithNavigate from './user/auth0/auth0-provider'
 import { WallpapersPage } from './pages/user/WallpapersPage'
 import { StickersPage } from './pages/user/StickersPage'
-
+import { useHideHeroOnNavigate } from './utils/useHideHero'
 
 function App() {
+  useHideHeroOnNavigate('/')
   return (
     <Auth0ProviderWithNavigate>
       <Routes>

@@ -102,11 +102,9 @@ export function useAddPhoto() {
         }
 
         try {
-            const result = await uploadImage(formData).unwrap();
-            console.log('Загрузка успешна', result)
+            await uploadImage(formData).unwrap();
             setMessage('The file was uploaded successfully');
         } catch (err: any) {
-            console.log('Ошибка загрузки: ', err)
             setMessage(`Download error: ${err.error || 'Unknown error'}`)
         } finally {
             resetForm()
