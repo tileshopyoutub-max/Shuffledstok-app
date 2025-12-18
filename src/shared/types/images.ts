@@ -4,6 +4,7 @@ export interface ImageItems {
   title: string | null
   description: string | null
   tags: string[]
+  categories: string[]
   has_watermark: number
   created_at: string
   url: string

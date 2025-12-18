@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import UserTable from "../../components/admin/UserTable";
 import Button from "../../components/admin/ui/Button";
-import AdminPageHeader from "../../components/admin/AdminPageHeader";
+import AdminPageHeader from "../../components/admin/layout/AdminPageHeader";
 import SearchInput from "../../components/admin/ui/SearchInput";
 
 export default function UserManagement(){

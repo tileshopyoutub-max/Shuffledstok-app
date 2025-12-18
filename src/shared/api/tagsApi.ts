@@ -52,7 +52,7 @@ export const tagsApi = createApi({
             query: ({ id }) => ({
                 url: `/api/tags/${id}`,
                 method: 'DELETE',
-                body: { id }, // или без body, если DELETE не принимает body
+                body: { id },
             }),
             invalidatesTags: ['Tag'],
         }),

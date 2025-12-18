@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import AdminPageHeader from '../../components/admin/AdminPageHeader'
+import AdminPageHeader from '../../components/admin/layout/AdminPageHeader'
 import EntityTable from '../../components/admin/EntityTable'
 import Button from '../../components/admin/ui/Button'
 import { useGetCategoriesQuery } from '../../shared/api/categoriesApi'
 import AddCategoryModal from '../../components/admin/AddCategoryModal'
+
 
 export default function Categories() {
   const { data: categories = [], isLoading } = useGetCategoriesQuery()

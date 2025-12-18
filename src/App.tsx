@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import AdminLayout from './components/admin/AdminLayout'
+import AdminLayout from './components/admin/layout/AdminLayout'
 import UserManagement from './pages/admin/UserManagement'
 import Categories from './pages/admin/Categories'
 import Tags from './pages/admin/Tags'
@@ -11,6 +11,7 @@ import Auth0ProviderWithNavigate from './user/auth0/auth0-provider'
 import { WallpapersPage } from './pages/user/WallpapersPage'
 import { StickersPage } from './pages/user/StickersPage'
 import { useHideHeroOnNavigate } from './utils/useHideHero'
+import AllMedia from './pages/admin/AllMedia'
 
 function App() {
   useHideHeroOnNavigate('/')
@@ -18,11 +19,12 @@ function App() {
     <Auth0ProviderWithNavigate>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/wallpapers" element={<WallpapersPage />} />
-        <Route path="/stickers" element={<StickersPage />} />
+        <Route path="/wallpapers" element={<WallpapersPage category="wallpapers"/>} />
+        <Route path="/stickers" element={<StickersPage category="stickers"/>} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="all-media" element={<AllMedia />} />
           <Route path="userManagement" element={<UserManagement />} />
           <Route path="categories" element={<Categories />} />
           <Route path="tags" element={<Tags />} />

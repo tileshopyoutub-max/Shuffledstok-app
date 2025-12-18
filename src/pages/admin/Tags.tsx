@@ -1,30 +1,35 @@
-import { useSearchParams } from 'react-router-dom';
-import { useGetTagsQuery } from "../../shared/api/tagsApi";
-import { usePagination } from '../../components/admin/hooks/usePagination';
-import {useState} from 'react'
-import AdminPageHeader from "../../components/admin/AdminPageHeader";
+import { useTags } from '../../components/admin/hooks/useTags';
+import AdminPageHeader from "../../components/admin/layout/AdminPageHeader";
 import EntityTable from "../../components/admin/EntityTable";
 import Button from "../../components/admin/ui/Button";
 import SearchInput from "../../components/admin/ui/SearchInput";
-import AddTagModal from '../../components/admin/AddTagModal';
-
-
+import Modal from '../../components/admin/ui/Modal';
 
 
 export default function Tags() {
-
-    const { data: tags = [], isLoading } = useGetTagsQuery();
-    const [searchParams, setSearchParams] = useSearchParams();
-    console.log(tags)
-
-    const [isOpenAddTag, setIsOpenAddTag] = useState<boolean>(false);
-
-    const tagsQuery = searchParams.get('tags') || '';
-    const tagsFilter = tags.filter(t => t.name.toLowerCase().includes(tagsQuery.toLowerCase()));
-
-    const { page, setPage, startIndex, endIndex, pages } = usePagination({ total: tagsFilter.length, pageSize: 6, });
-
-    const visibleTags = tagsFilter.slice(startIndex, endIndex);
+    const {
+        isOpenAddTag,
+        setIsOpenAddTag,
+        isLoading,
+        tagName,
+        setTagName,
+        editTag,
+        setEditTag,
+        deleteTagModal,
+        setDeleteTagModal,
+        visibleTags,
+        startIndex,
+        endIndex,
+        tagsFilter,
+        page,
+        setPage,
+        pages,
+        tagsQuery,
+        setSearchParams,
+        handleAddTag,
+        handleEditTag,
+        handleDeleteTag
+    } = useTags();
 
     if (isLoading) {
         return <div className="p-8 text-center">Loading tags...</div>;
@@ -32,7 +37,7 @@ export default function Tags() {
 
     return (
         <>
-            <AdminPageHeader title="Manage Tags" action={<Button name="add" text="New Tag" onClick={() => setIsOpenAddTag(true)}/>} />
+            <AdminPageHeader title="Manage Tags" action={<Button name="add" text="New Tag" onClick={() => setIsOpenAddTag(true)} />} />
             <SearchInput
                 value={tagsQuery}
                 placeholder="Search tags..."
@@ -49,13 +54,19 @@ export default function Tags() {
                     <tr key={id} className="border-b border-border-dark hover:bg-border-dark/50">
                         <td className="px-6 py-4 text-white">{name}</td>
                         <td className="px-6 py-4">{usage_count}</td>
-                        <td className="px-6 py-4">{created_at}</td>
+                        <td className="px-6 py-4">{new Date(created_at).toISOString().split('T')[0]}</td>
                         <td className="px-6 py-4 text-right">
                             <div className="flex justify-end gap-4">
-                                <button className="text-slate-400 hover:text-white">
+                                <button
+                                    className="text-slate-400 hover:text-white"
+                                    onClick={() => setEditTag({ id, name })}
+                                >
                                     <span className="material-symbols-outlined text-xl">edit</span>
                                 </button>
-                                <button className="text-slate-400 hover:text-red-500">
+                                <button
+                                    className="text-slate-400 hover:text-red-500"
+                                    onClick={() => setDeleteTagModal({ id, name })}
+                                >
                                     <span className="material-symbols-outlined text-xl">delete</span>
                                 </button>
                             </div>
@@ -71,7 +82,56 @@ export default function Tags() {
                 onPageChange={setPage}
             />
 
-            {isOpenAddTag && <AddTagModal onClose={() => setIsOpenAddTag(false)}/>}
+            {isOpenAddTag && (
+                <Modal
+                    title="Add new tag"
+                    handleName="Add"
+                    handleAction={handleAddTag}
+                    onClose={() => {
+                        setIsOpenAddTag(false);
+                        setTagName('')
+                    }}
+                >
+                    <input
+                        type="text"
+                        placeholder="Tag name"
+                        value={tagName}
+                        onChange={(e) => setTagName(e.target.value)}
+                        className="w-full p-2 rounded border bg-component-dark text-white mb-4"
+                    />
+                </Modal>
+            )}
+
+            {editTag && (
+                <Modal
+                    title="Edit tag"
+                    handleName="Save"
+                    handleAction={handleEditTag}
+                    onClose={() => setEditTag(null)}
+                >
+                    <input
+                        type="text"
+                        placeholder="Tag name"
+                        value={editTag.name}
+                        onChange={(e) => setEditTag({ ...editTag, name: e.target.value })}
+                        className="w-full p-2 rounded border bg-component-dark text-white mb-4"
+                    />
+                </Modal>
+            )}
+
+            {deleteTagModal && (
+                <Modal
+                    title="Confirm Delete"
+                    handleName="Delete"
+                    handleAction={async () => {
+                        if (!deleteTagModal) return;
+                        await handleDeleteTag(deleteTagModal.id);
+                    }}
+                    onClose={() => setDeleteTagModal(null)}
+                >
+                    <p>Are you sure you want to delete tag "{deleteTagModal.name}"?</p>
+                </Modal>
+            )}
         </>
     )
 }

@@ -1,6 +1,9 @@
 import { Header } from '../../user/components/homePage/HeaderHome'
+import { useFilterPage, type CategoryPageProps } from '../../components/admin/hooks/useFilterPage';
 
-export function WallpapersPage() {
+export function WallpapersPage({ category }: CategoryPageProps) {
+  const filteredImages = useFilterPage({category})
+
   return (
     <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden font-display bg-black">
       <div className="layout-container flex h-full grow flex-col">
@@ -20,16 +23,16 @@ export function WallpapersPage() {
               </div>
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
-              <div className="relative group image-card overflow-hidden rounded-lg">
+              {filteredImages.map(img => 
+                <div key={img.key} className="relative group image-card overflow-hidden rounded-lg">
                 <img
                   className="w-full h-full object-cover aspect-[3/4] transition-transform duration-300 group-hover:scale-105"
                   data-alt="Abstract swirling colors of pink and blue paint in water."
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-teG-on7Csy_vdzynjQr2hLDIKISLNj99ktPfUF40OIzs_XPvQ8jCkKh6UO_wvI6DJhrpww-mLslh3gDce0JvuSDpZLezqzknYjYooU7Eht-sXS7xdpE0Ku9OmhSeP-WN2BSVnXZxbi9ePcDrwascSIaHWT9gU6_ty3TH2OAufxYCw6W9w1oosk1Z7XUWGExav8WEl2rr0GTPfmwrum5hglbw4t_FRoBkDR9JV70Hz6vP5qD-r_jLL2O_B4mIyDs0V3CJYZNvouB3"
+                  src={img.url}
                 />
                 
               </div>
-              
-              
+              )}
             </div>
             <div className="flex flex-col gap-3 p-4 my-10">
               <div className="flex gap-6 justify-between">

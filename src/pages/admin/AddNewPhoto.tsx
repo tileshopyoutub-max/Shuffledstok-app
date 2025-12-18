@@ -1,6 +1,7 @@
-import AdminPageHeader from '../../components/admin/AdminPageHeader'
+import AdminPageHeader from '../../components/admin/layout/AdminPageHeader'
 import AddWatermark from '../../components/admin/AddWatermark'
 import { useAddPhoto } from '../../components/admin/hooks/useAddPhoto'
+import DropdownSelect from '../../components/admin/DropdownSelect'
 
 export default function AddNewPhoto() {
   const {
@@ -9,16 +10,16 @@ export default function AddNewPhoto() {
     watermarkFile,
     title,
     description,
-    selectedTagIds,
-    selectedCategoryIds,
+    selectedCategories,
+    selectedTags,
     message,
     dragActive,
-    availableTags,
     availableCategories,
+    availableTags,
     setTitle,
     setDescription,
-    setSelectedTagIds,
-    setSelectedCategoryIds,
+    setSelectedCategories,
+    setSelectedTags,
     handleFileChange,
     handleDrop,
     handleDrag,
@@ -96,44 +97,25 @@ export default function AddNewPhoto() {
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}></textarea>
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium leading-6 text-text-secondary" htmlFor="tags">
-              Tags
-            </label>
-            <select
-              multiple
-              className="w-full rounded-md bg-background border border-border p-2"
-              value={selectedTagIds.map(String)}
-              onChange={e => {
-                const values = Array.from(e.target.selectedOptions).map(opt => Number(opt.value))
-                setSelectedTagIds(values)
-              }}>
-              {availableTags.map(tag => (
-                <option key={tag.id} value={tag.id}>
-                  {tag.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium leading-6 text-text-secondary" htmlFor="categories">
-              Categories
-            </label>
-            <select
-              multiple
-              className="w-full rounded-md bg-background border border-border p-2"
-              value={selectedCategoryIds.map(String)}
-              onChange={e => {
-                const values = Array.from(e.target.selectedOptions).map(opt => Number(opt.value))
-                setSelectedCategoryIds(values)
-              }}>
-              {availableCategories.map(tag => (
-                <option key={tag.id} value={tag.id}>
-                  {tag.name}
-                </option>
-              ))}
-            </select>
-          </div>
+
+          <DropdownSelect
+            data={availableTags}
+            selectedItems={selectedTags}
+            setSelectedItems={setSelectedTags}
+            getId={t => t.id}
+            getLabel={t => t.name}
+            label="Tags"
+            placeholder="Select a tag..."
+          />
+          <DropdownSelect
+            data={availableCategories}
+            selectedItems={selectedCategories}
+            setSelectedItems={setSelectedCategories}
+            getId={c => c.id}
+            getLabel={c => c.name}
+            label="Categories"
+            placeholder="Select a category..."
+          />
 
           {/*Окно добавления watermark*/}
           <AddWatermark selectedFile={selectedFile} watermarkFile={watermarkFile} />
