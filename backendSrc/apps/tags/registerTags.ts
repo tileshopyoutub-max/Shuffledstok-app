@@ -1,5 +1,8 @@
 import type { RouterType } from '../../router'
-import { GetTagsApi, CreateTagApi, UpdateTagApi, DeleteTagApi } from '../tags/api/workTagsApi'
+import { GetTagsApi } from './api/getTagsApi'
+import { CreateTagApi } from './api/createTagApi'
+import { UpdateTagApi } from './api/updateTagApi'
+import { DeleteTagApi } from './api/deleteTagApi'
 
 export default function registerTagsRouter(router: RouterType) {
   router.get("/api/tags", GetTagsApi)

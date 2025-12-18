@@ -1,5 +1,6 @@
 import { users } from "../../data/users";
 import { usePagination } from "./hooks/usePagination";
+import { useEffect } from "react";
 import Pagination from "./ui/Pagination";
 
 interface UserTableProps {
@@ -17,8 +18,11 @@ export default function UserTable({ search }: UserTableProps) {
     const { page, setPage, startIndex, endIndex, pages } = usePagination({
         total: filterUser.length,
         pageSize: 4,
-        resetOnTotalChange: true
     });
+
+    useEffect(() => {
+        setPage(1);
+    }, [search]);
 
 
     const visibleUsers = filterUser.slice(startIndex, endIndex);

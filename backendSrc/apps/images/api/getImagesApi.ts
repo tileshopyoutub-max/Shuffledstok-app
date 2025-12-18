@@ -18,7 +18,7 @@ export async function GetImagesApi(_: Request, env: Env) {
       ORDER BY i.created_at DESC
       LIMIT 100
     `).all();
-      console.log(results)
+    
     const images = results.map((img: any) => ({
       ...img,
       tags: img.tags ? img.tags.split(',').map((tag: string) => tag.trim()) : [],

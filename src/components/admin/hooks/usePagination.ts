@@ -1,19 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface UsePaginationProps {
     total: number;
     pageSize?: number;
-    resetOnTotalChange?: boolean;
 }
 
-export function usePagination({ total, pageSize = 10, resetOnTotalChange = false }: UsePaginationProps) {
-
-    useEffect(() => {
-        if (resetOnTotalChange) {
-            setPage(1);
-        }
-    }, [total, resetOnTotalChange]);
-
+export function usePagination({ total, pageSize = 10}: UsePaginationProps) {
+    
     const [page, setPage] = useState(1);
 
     const maxPage = Math.ceil(total / pageSize);

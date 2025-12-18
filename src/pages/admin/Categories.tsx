@@ -1,4 +1,4 @@
-import AdminPageHeader from "../../components/admin/AdminPageHeader";
+import AdminPageHeader from "../../components/admin/layout/AdminPageHeader";
 import EntityTable from "../../components/admin/EntityTable";
 import Button from "../../components/admin/ui/Button";
 import { categories } from "../../data/categories";

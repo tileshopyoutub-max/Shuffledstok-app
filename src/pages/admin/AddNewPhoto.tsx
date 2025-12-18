@@ -1,6 +1,7 @@
-import AdminPageHeader from "../../components/admin/AdminPageHeader";
+import AdminPageHeader from "../../components/admin/layout/AdminPageHeader";
 import AddWatermark from '../../components/admin/AddWatermark';
 import { useAddPhoto } from "../../components/admin/hooks/useAddPhoto";
+import DropdownTags from "../../components/admin/DropdownTags";
 
 
 export default function AddNewPhoto() {
@@ -11,13 +12,13 @@ export default function AddNewPhoto() {
         watermarkFile,
         title,
         description,
-        selectedTagIds,
+        selectedTags,
         message,
         dragActive,
         availableTags,
         setTitle,
         setDescription,
-        setSelectedTagIds,
+        setSelectedTags,
         handleFileChange,
         handleDrop,
         handleDrag,
@@ -73,26 +74,11 @@ export default function AddNewPhoto() {
                                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}></textarea>
                         </div>
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium leading-6 text-text-secondary" htmlFor="tags">Tags</label>
-                        <select
-                            multiple
-                            className="w-full rounded-md bg-background border border-border p-2"
-                            value={selectedTagIds.map(String)}
-                            onChange={(e) => {
-                                const values = Array.from(e.target.selectedOptions).map(opt =>
-                                    Number(opt.value)
-                                );
-                                setSelectedTagIds(values);
-                            }}
-                        >
-                            {availableTags.map(tag => (
-                                <option key={tag.id} value={tag.id}>
-                                    {tag.name}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
+
+                    <DropdownTags 
+                        data={availableTags}
+                        selectedTags={selectedTags}
+                        setSelectedTags={setSelectedTags} />
 
                     {/*Окно добавления watermark*/}
                     <AddWatermark selectedFile={selectedFile} watermarkFile={watermarkFile} />

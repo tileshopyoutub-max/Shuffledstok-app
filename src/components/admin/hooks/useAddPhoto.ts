@@ -5,6 +5,7 @@ import { useUploadImageMutation } from '../../../shared/api/imagesApi';
 import { useAddWatermark } from './useAddWatermark';
 import { useImageCompressor } from './useImageCompressor';
 import { useGetTagsQuery } from '../../../shared/api/tagsApi';
+import type { Tag } from '../../../shared/types/tags';
 
 
 export function useAddPhoto() {
@@ -14,7 +15,7 @@ export function useAddPhoto() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+    const [selectedTags, setSelectedTags] = useState<Tag[]>([])
     const [message, setMessage] = useState<string>("");
     const [dragActive, setDragActive] = useState<boolean>(false);
 
@@ -91,14 +92,14 @@ export function useAddPhoto() {
         //Закидываем title, description и tags в formData
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("tags", JSON.stringify(selectedTagIds));
+        formData.append("tags", JSON.stringify(selectedTags.map(t => t.id)));
 
         if (watermarkFile) {
             formData.append("watermarkFile", watermarkFile, 'watermark_' + selectedFile.name)
-            // console.log('waterm, ', watermarkFile.type, watermarkFile, watermarkFile.size)
+            console.log('waterm, ', watermarkFile.type, watermarkFile, watermarkFile.size)
         } else {
             formData.append("compressorFile", compressorFile!, 'no_watermark_' + compressorFile!.name)
-            // console.log('без ватермарки', compressorFile, compressorFile?.size, compressorFile?.size)
+            console.log('без ватермарки', compressorFile, compressorFile, compressorFile?.size)
         }
 
         try {
@@ -128,6 +129,7 @@ export function useAddPhoto() {
         setSelectedFile(null);
         setTitle('');
         setDescription('');
+        setSelectedTags([]);
         setMessage('');
         setDragActive(false);
         dispatch(resetWatermark());
@@ -141,13 +143,13 @@ export function useAddPhoto() {
         watermarkFile,
         title,
         description,
-        selectedTagIds,
+        selectedTags,
         message,
         dragActive,
         availableTags,
         setTitle,
         setDescription,
-        setSelectedTagIds,
+        setSelectedTags,
         handleFileChange,
         handleDrop,
         handleDrag,
