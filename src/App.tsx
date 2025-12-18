@@ -19,8 +19,8 @@ function App() {
     <Auth0ProviderWithNavigate>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/wallpapers" element={<WallpapersPage />} />
-        <Route path="/stickers" element={<StickersPage />} />
+        <Route path="/wallpapers" element={<WallpapersPage category="wallpapers"/>} />
+        <Route path="/stickers" element={<StickersPage category="stickers"/>} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />

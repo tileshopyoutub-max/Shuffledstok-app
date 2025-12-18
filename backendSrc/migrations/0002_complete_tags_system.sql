@@ -22,7 +22,7 @@ CREATE INDEX IF NOT EXISTS idx_tags_name ON tags(name);
 CREATE INDEX IF NOT EXISTS idx_image_tags_image ON image_tags(image_id);
 CREATE INDEX IF NOT EXISTS idx_image_tags_tag ON image_tags(tag_id);
 
-INSERT OR IGNORE INTO tags (name) VALUES
+INSERT OR IGNORE INTO tags (name) VALUES 
 ('nature'),
 ('urban'),
 ('abstract'),

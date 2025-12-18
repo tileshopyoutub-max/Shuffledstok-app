@@ -5,7 +5,9 @@ import { useUploadImageMutation } from '../../../shared/api/imagesApi';
 import { useAddWatermark } from './useAddWatermark';
 import { useImageCompressor } from './useImageCompressor';
 import { useGetTagsQuery } from '../../../shared/api/tagsApi';
+import { useGetCategoriesQuery } from '../../../shared/api/categoriesApi';
 import type { Tag } from '../../../shared/types/tags';
+import type { Category } from '../../../shared/types/Category';
 
 
 export function useAddPhoto() {
@@ -15,6 +17,7 @@ export function useAddPhoto() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
     const [selectedTags, setSelectedTags] = useState<Tag[]>([])
     const [message, setMessage] = useState<string>("");
     const [dragActive, setDragActive] = useState<boolean>(false);
@@ -24,6 +27,7 @@ export function useAddPhoto() {
 
     const [uploadImage] = useUploadImageMutation();
     const { data: availableTags = [] } = useGetTagsQuery();
+    const { data: availableCategories = [] } = useGetCategoriesQuery();
 
     const compressorFile = useImageCompressor(selectedFile);
     const watermarkFile = useAddWatermark(settings.enabled ? compressorFile : null, settings);
@@ -92,6 +96,7 @@ export function useAddPhoto() {
         //Закидываем title, description и tags в formData
         formData.append("title", title);
         formData.append("description", description);
+        formData.append("categories", JSON.stringify(selectedCategories.map(c => c.id)));
         formData.append("tags", JSON.stringify(selectedTags.map(t => t.id)));
 
         if (watermarkFile) {
@@ -129,6 +134,7 @@ export function useAddPhoto() {
         setSelectedFile(null);
         setTitle('');
         setDescription('');
+        setSelectedCategories([]);
         setSelectedTags([]);
         setMessage('');
         setDragActive(false);
@@ -143,12 +149,15 @@ export function useAddPhoto() {
         watermarkFile,
         title,
         description,
+        selectedCategories,
         selectedTags,
         message,
         dragActive,
         availableTags,
+        availableCategories,
         setTitle,
         setDescription,
+        setSelectedCategories,
         setSelectedTags,
         handleFileChange,
         handleDrop,
