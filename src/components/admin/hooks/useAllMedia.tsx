@@ -4,6 +4,7 @@ import { usePagination } from "./usePagination";
 
 export function useAllMedia() {
     const {data: images = []} = useGetImagesQuery();
+    console.log(images)
 
     const [searchParams, setSearchParams] = useSearchParams();
 

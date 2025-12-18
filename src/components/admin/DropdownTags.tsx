@@ -32,8 +32,9 @@ export default function DropdownTags({ data, selectedTags, setSelectedTags }: Dr
                 <select className="block w-full rounded-md border-0 py-2.5 pl-3 pr-10 bg-background text-text-primary shadow-sm ring-1 ring-inset ring-border focus:ring-2 focus:ring-inset focus:ring-primary-DEFAULT sm:text-sm sm:leading-6 appearance-none cursor-pointer"
                     id="tags-select"
                     name="tags"
-                    onChange={handleSelectedTag}>
-                    <option value="" disabled selected>Select a tag to add...</option>
+                    onChange={handleSelectedTag}
+                    value={''}>
+                    <option disabled value="">Select a tag to add...</option>
                     {data.map(tag => (
                         <option key={tag.id} value={tag.id}>{tag.name}</option>
                     ))}
