@@ -1,5 +1,5 @@
 import { Env } from "../../..";
-import type { Tag } from '../../../../src/shared/types/tags'
+import { Tag } from "../../../types";
 
 //Получение тегов
 export async function GetTagsApi(_: Request, env: Env) {

@@ -5,6 +5,7 @@ import { useUploadImageMutation } from '../../../shared/api/imagesApi';
 import { useAddWatermark } from './useAddWatermark';
 import { useImageCompressor } from './useImageCompressor';
 import { useGetTagsQuery } from '../../../shared/api/tagsApi';
+import { useGetCategoriesQuery } from '../../../shared/api/categoriesApi';
 
 
 export function useAddPhoto() {
@@ -15,6 +16,7 @@ export function useAddPhoto() {
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
+    const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
     const [message, setMessage] = useState<string>("");
     const [dragActive, setDragActive] = useState<boolean>(false);
 
@@ -23,6 +25,7 @@ export function useAddPhoto() {
 
     const [uploadImage] = useUploadImageMutation();
     const { data: availableTags = [] } = useGetTagsQuery();
+    const { data: availableCategories = [] } = useGetCategoriesQuery();
 
     const compressorFile = useImageCompressor(selectedFile);
     const watermarkFile = useAddWatermark(settings.enabled ? compressorFile : null, settings);
@@ -92,6 +95,7 @@ export function useAddPhoto() {
         formData.append("title", title);
         formData.append("description", description);
         formData.append("tags", JSON.stringify(selectedTagIds));
+        formData.append("categories", JSON.stringify(selectedCategoryIds));
 
         if (watermarkFile) {
             formData.append("watermarkFile", watermarkFile, 'watermark_' + selectedFile.name)
@@ -142,12 +146,15 @@ export function useAddPhoto() {
         title,
         description,
         selectedTagIds,
+        selectedCategoryIds,
         message,
         dragActive,
         availableTags,
+        availableCategories,
         setTitle,
         setDescription,
         setSelectedTagIds,
+        setSelectedCategoryIds,
         handleFileChange,
         handleDrop,
         handleDrag,

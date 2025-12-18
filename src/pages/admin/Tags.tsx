@@ -30,9 +30,6 @@ export default function Tags() {
         return <div className="p-8 text-center">Loading tags...</div>;
     }
 
-
-    
-
     return (
         <>
             <AdminPageHeader title="Manage Tags" action={<Button name="add" text="New Tag" onClick={() => setIsOpenAddTag(true)}/>} />

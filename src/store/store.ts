@@ -5,10 +5,12 @@ import watermarkReducer from './slices/watermarkSlice'
 import imagesFilterReducer from './slices/imagesFilterSlice'
 import imageModalReducer from './slices/imageModalSlice'
 import heroReducer from './slices/heroSlice'
+import { categoriesApi } from '../shared/api/categoriesApi'
 
 const rootReducer = combineReducers({
   [imagesApi.reducerPath]: imagesApi.reducer,
   [tagsApi.reducerPath]: tagsApi.reducer,
+  [categoriesApi.reducerPath]: categoriesApi.reducer,
   watermark: watermarkReducer,
   imagesFilter: imagesFilterReducer,
   imageModal: imageModalReducer,
@@ -18,7 +20,8 @@ const rootReducer = combineReducers({
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(imagesApi.middleware).concat(tagsApi.middleware),
+    middleware: getDefaultMiddleware =>
+      getDefaultMiddleware().concat(imagesApi.middleware).concat(tagsApi.middleware).concat(categoriesApi.middleware),
   })
 }
 
