@@ -15,7 +15,6 @@ export function useFileInput(options?: { maxSizeMB?: number }) {
     const archiveImagesInputRef = useRef<HTMLInputElement | null>(null);
     const [archiveImages, setArchiveImages] = useState<File[]>([]);
     const [archiveDragActive, setArchiveDragActive] = useState(false);
-    console.log(archiveImages)
 
     function detectFileType(file: File): FileType {
         if (file.type.startsWith('image/')) return 'image';

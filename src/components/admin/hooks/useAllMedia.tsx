@@ -7,7 +7,6 @@ import { useGetCategoriesQuery } from "../../../shared/api/categoriesApi";
 export function useAllMedia() {
     const {data: images = []} = useGetImagesQuery();
     const {data: categories = []} = useGetCategoriesQuery();
-    console.log(categories)
 
     const navigate = useNavigate();
 

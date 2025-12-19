@@ -78,6 +78,7 @@ export function useAddFile() {
       formData.append('description', description);
       formData.append('categories', JSON.stringify(selectedCategories.map(c => c.id)));
       formData.append('tags', JSON.stringify(selectedTags.map(t => t.id)));
+      formData.append('downloadFree', downloadFree.toString())
 
       if (watermarkFile) {
         formData.append('watermarkFile', watermarkFile);
