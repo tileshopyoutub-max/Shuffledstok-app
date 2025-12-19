@@ -11,6 +11,7 @@ export async function GetImagesApi(_: Request, env: Env) {
         i.description,
         i.has_watermark,
         i.created_at,
+        i.download_free,
         GROUP_CONCAT(DISTINCT t.name) AS tags,
         GROUP_CONCAT(DISTINCT c.name) AS categories
       FROM images i
@@ -23,12 +24,19 @@ export async function GetImagesApi(_: Request, env: Env) {
       LIMIT 100
     `).all();
     
-    const images = results.map((img: any) => ({
-      ...img,
-      tags: img.tags ? img.tags.split(',').map((tag: string) => tag.trim()) : [],
-      categories: img.categories ? img.categories.split(',').map((c: string) => c.trim()) : [],
-      url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${img.key}`,
-    }))
+    const images = results.map((img: any) => {
+      const {
+        download_free, 
+        ...rest
+      } = img
+
+      return {
+        ...rest,
+        downloadFree: !!Number(download_free),
+        tags: img.tags ? img.tags.split(',').map((tag: string) => tag.trim()) : [],
+        categories: img.categories ? img.categories.split(',').map((c: string) => c.trim()) : [],
+        url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${img.key}`,
+      }})
 
     return new Response(JSON.stringify(images), {
       headers: { 'Content-Type': 'application/json' },

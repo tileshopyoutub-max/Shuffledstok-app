@@ -2,6 +2,7 @@ import AdminPageHeader from '../../components/admin/layout/AdminPageHeader'
 import AddWatermark from '../../components/admin/AddWatermark'
 import { useAddPhoto } from '../../components/admin/hooks/useAddPhoto'
 import DropdownSelect from '../../components/admin/DropdownSelect'
+import AddDownloadFree from '../../components/admin/AddDownloadFree'
 
 export default function AddNewPhoto() {
   const {
@@ -26,6 +27,8 @@ export default function AddNewPhoto() {
     handleLeave,
     handleSubmit,
     resetForm,
+    downloadFree, 
+    setDownloadFree,
   } = useAddPhoto()
 
   return (
@@ -117,6 +120,7 @@ export default function AddNewPhoto() {
             placeholder="Select a category..."
           />
 
+          <AddDownloadFree selectedFile={selectedFile} checked={downloadFree} onChange={setDownloadFree}/>
           {/*Окно добавления watermark*/}
           <AddWatermark selectedFile={selectedFile} watermarkFile={watermarkFile} />
 

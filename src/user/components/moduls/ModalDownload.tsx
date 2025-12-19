@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDownloadImageMutation, useGetImagesQuery } from '../../../shared/api/imagesApi'
 import { findSimilarImages } from '../../utils/FilterSimilarContent'
 import type { ImageItems } from '../../../shared/types/images'
@@ -13,10 +13,11 @@ interface ModalTypes {
 
 export const ModalDownload = ({ onClose, file }: ModalTypes) => {
   const modalRef = useRef<HTMLDivElement>(null)
+  const [isPurchased, setIsPurchased] = useState(false)
   const dispatch = useTypedDispatch()
   const [downloadFile] = useDownloadImageMutation()
   const { data: images = [] } = useGetImagesQuery()
-  const { key, url, title, description, tags } = file
+  const { key, url, title, description, tags, downloadFree } = file
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -59,6 +60,10 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
     } catch (error) {
       console.error('Ошибка скачивания файла', error)
     }
+  }
+
+  const handleBuy = () => {
+    setIsPurchased(true)
   }
 
   const similarImages = findSimilarImages(images, file)
@@ -111,25 +116,44 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
               </div>
 
               <div className="flex flex-col gap-4">
-                <button
-                  onClick={handleDownload}
-                  className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold">
-                  Download for free
-                </button>
+                {downloadFree && (
+                  <button
+                    onClick={handleDownload}
+                    className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold">
+                    Download for free
+                  </button>
+                )}
 
-                <button className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold">
-                  Buy for $2.99
-                </button>
+                {!downloadFree && (
+                  <>
+                    <button
+                      onClick={handleBuy}
+                      className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold">
+                      Buy for $2.99
+                    </button>
 
-                <button className="w-full h-12 rounded-lg bg-gray-700 hover:bg-gray-600 text-white font-bold">
-                  Download file
-                </button>
+                    <button
+                      onClick={handleDownload}
+                      disabled={!isPurchased}
+                      className={`w-full h-12 rounded-lg font-bold transition-colors
+                        ${
+                          isPurchased ? 'bg-primary hover:bg-primary/90 text-white' : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                        }`}>
+                      Download file
+                    </button>
+                  </>
+                )}
               </div>
               <div className="border-t border-gray-800 pt-6 flex flex-col gap-3">
                 <h3 className="text-lg font-semibold text-gray-200">Tags</h3>
                 {tags.map((tag, i) => {
                   return (
-                    <div key={i} onClick={() => {dispatch(toggleTag(tag)), dispatch(closeImageModal())}} className="flex flex-wrap gap-2">
+                    <div
+                      key={i}
+                      onClick={() => {
+                        dispatch(toggleTag(tag)), dispatch(closeImageModal())
+                      }}
+                      className="flex flex-wrap gap-2">
                       <a
                         className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full hover:bg-gray-700 transition-colors"
                         href="#">
