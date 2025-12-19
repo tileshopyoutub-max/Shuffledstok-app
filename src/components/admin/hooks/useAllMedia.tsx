@@ -1,24 +1,35 @@
-import { useSearchParams } from "react-router-dom"
+import { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom"
 import { useGetImagesQuery } from "../../../shared/api/imagesApi";
 import { usePagination } from "./usePagination";
+import { useGetCategoriesQuery } from "../../../shared/api/categoriesApi";
 
 export function useAllMedia() {
     const {data: images = []} = useGetImagesQuery();
-    console.log(images)
+    const {data: categories = []} = useGetCategoriesQuery();
+    console.log(categories)
+
+    const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
+    const [selectedCategory, setSelectedCategory] = useState<string>('');
 
     const imagesQuery = searchParams.get('q') || '';
 
-    const filteredImages = images.filter(img => img.title?.toLocaleLowerCase().includes(imagesQuery.toLocaleLowerCase())
+    let filteredImages = images.filter(img => img.title?.toLocaleLowerCase().includes(imagesQuery.toLocaleLowerCase())
         || img.id.toString().includes(imagesQuery)
         || img.tags.some(tag => tag.toLocaleLowerCase().includes(imagesQuery.toLocaleLowerCase())))
+
+    if (selectedCategory) {
+        filteredImages = filteredImages.filter(img => img.categories.includes(selectedCategory));
+    }
 
     const { page, setPage, startIndex, endIndex, pages } = usePagination({ total: filteredImages.length, pageSize: 10 });
     const visibleImages = filteredImages.slice(startIndex, endIndex);
 
     return {
         images,
+        categories,
         page,
         setPage,
         startIndex,
@@ -28,5 +39,8 @@ export function useAllMedia() {
         setSearchParams,
         imagesQuery,
         filteredImages,
+        selectedCategory,
+        setSelectedCategory,
+        navigate,
     }
 }

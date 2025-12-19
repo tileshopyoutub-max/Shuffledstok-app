@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { WatermarkSettings } from '../../../shared/types/watermark';
+import type { WatermarkSettings } from '../../../../shared/types/watermark';
 
 export function useAddWatermark(file: File | null, settings: WatermarkSettings) {
 

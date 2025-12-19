@@ -1,32 +1,46 @@
 import AdminPageHeader from '../../components/admin/layout/AdminPageHeader'
 import AddWatermark from '../../components/admin/AddWatermark'
-import { useAddPhoto } from '../../components/admin/hooks/useAddPhoto'
+import { useAddFile } from '../../components/admin/hooks/useAddFile'
 import DropdownSelect from '../../components/admin/DropdownSelect'
+import FileDropzone from '../../components/admin/FileDropzone';
 
-export default function AddNewPhoto() {
+export default function AddNewFile() {
   const {
     fileInputRef,
-    selectedFile,
-    watermarkFile,
+    file,
+    fileType,
+    message,
+    dragActive,
+
     title,
     description,
     selectedCategories,
     selectedTags,
-    message,
-    dragActive,
     availableCategories,
     availableTags,
+
     setTitle,
     setDescription,
     setSelectedCategories,
     setSelectedTags,
+
+    watermarkFile,
     handleFileChange,
     handleDrop,
     handleDrag,
     handleLeave,
     handleSubmit,
     resetForm,
-  } = useAddPhoto()
+
+    archiveImages,
+    archiveImagesInputRef,
+    archiveDragActive,
+    setArchiveImages,
+    handleArchiveDrop,
+    handleArchiveDrag,
+    handleArchiveLeave,
+    removeArchiveImage,
+  } = useAddFile();
 
   return (
     <>
@@ -34,38 +48,60 @@ export default function AddNewPhoto() {
       <p className="text-text-secondary mt-1">Upload a new media file to the ShuffledStock library.</p>
       <div className="bg-surface p-8 rounded-lg border border-border">
         <form className="space-y-3" onSubmit={handleSubmit}>
-          <div onDragEnter={handleDrag} onDragOver={handleDrag} onDragLeave={handleLeave} onDrop={handleDrop}>
-            <label className="block text-sm font-medium text-text-secondary mb-2">Media File</label>
-            <label htmlFor="file-upload" className="cursor-pointer">
-              <div
-                className={`mt-2 flex justify-center rounded-lg border border-dashed border-border px-6 py-10 ${
-                  dragActive ? 'bg-blue-700' : 'bg-background'
-                }`}>
-                <div className="text-center">
-                  <span className="material-symbols-outlined text-5xl text-text-placeholder">
-                    {selectedFile ? 'check_circle' : 'cloud_upload'}
-                  </span>
+          <FileDropzone
+            file={file}
+            dragActive={dragActive}
+            fileInputRef={fileInputRef}
+            accept="image/*,.zip,.rar,.7z"
+            onChange={handleFileChange}
+            onDragEnter={handleDrag}
+            onDragOver={handleDrag}
+            onDragLeave={handleLeave}
+            onDrop={handleDrop} />
 
-                  <div className="mt-4 flex text-sm leading-6 text-text-secondary">
-                    <label
-                      className="relative cursor-pointer rounded-md font-semibold text-primary-DEFAULT focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-DEFAULT focus-within:ring-offset-2 focus-within:ring-offset-background hover:text-primary-hover"
-                      htmlFor="file-upload">
-                      <span>{selectedFile ? selectedFile.name : 'Upload a file or drag and drop'}</span>
-                      <input
-                        ref={fileInputRef}
-                        className="sr-only"
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        onChange={handleFileChange}
-                      />
-                    </label>
-                  </div>
-                  <p className="text-xs leading-5 text-text-placeholder">PNG, JPG, GIF up to 10MB</p>
-                </div>
+          {fileType === 'archive' && (
+            <>
+              <FileDropzone
+                file={archiveImages[0]}
+                dragActive={archiveDragActive}
+                fileInputRef={archiveImagesInputRef}
+                inputId="archive-images-upload"
+                accept="image/*"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (!e.target.files) return;
+                  const filesArray = Array.from(e.target.files);
+                  setArchiveImages(prev => [...prev, ...filesArray]);
+                }}
+                onDragEnter={handleArchiveDrag}
+                onDragOver={handleArchiveDrag}
+                onDragLeave={handleArchiveLeave}
+                onDrop={handleArchiveDrop}
+                label="Upload images for the current archive"
+                description="Upload images for the current archive"
+              />
+
+
+              <div className="mt-2 text-sm text-text-secondary flex flex-wrap gap-2">
+                {archiveImages.map((file, index) => (
+                  <span
+                    key={index}
+                    className="inline-flex items-center rounded-md bg-primary-DEFAULT/20 px-2 py-1 text-sm font-medium text-primary-DEFAULT ring-1 ring-inset ring-primary-DEFAULT/30"
+                  >
+                    {file.name}
+                    <button
+                      type="button"
+                      className="ml-1.5 h-3.5 w-3.5 rounded-sm hover:bg-primary-DEFAULT/20 inline-flex items-center justify-center transition-colors"
+                      onClick={() => removeArchiveImage(index)}
+                    >
+                      <span className="sr-only">Remove</span>
+                      <span className="material-symbols-outlined text-[14px]">close</span>
+                    </button>
+                  </span>
+                ))}
               </div>
-            </label>
-          </div>
+            </>
+          )}
+
           <div>
             <label className="block text-sm font-medium leading-6 text-text-secondary" htmlFor="title">
               Title
@@ -118,11 +154,13 @@ export default function AddNewPhoto() {
           />
 
           {/*Окно добавления watermark*/}
-          <AddWatermark selectedFile={selectedFile} watermarkFile={watermarkFile} />
+          {fileType === 'image' && file && (
+            <AddWatermark selectedFile={file} watermarkFile={watermarkFile} />
+          )}
 
           <div className="pt-4 flex justify-end gap-4">
             <p>{message}</p>
-            {selectedFile && (
+            {file && (
               <button
                 className="rounded-md bg-surface-accent px-4 py-2 text-sm font-semibold text-text-primary shadow-sm hover:bg-border transition-colors"
                 type="button"

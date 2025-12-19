@@ -3,7 +3,7 @@ import AdminLayout from './components/admin/layout/AdminLayout'
 import UserManagement from './pages/admin/UserManagement'
 import Categories from './pages/admin/Categories'
 import Tags from './pages/admin/Tags'
-import AddNewPhoto from './pages/admin/AddNewPhoto'
+import AddNewFile from './pages/admin/AddNewFile'
 import Dashboard from './pages/admin/Dashboard'
 import './App.css'
 import HomePage from './pages/user/HomePage'
@@ -28,7 +28,7 @@ function App() {
           <Route path="userManagement" element={<UserManagement />} />
           <Route path="categories" element={<Categories />} />
           <Route path="tags" element={<Tags />} />
-          <Route path="new-photo" element={<AddNewPhoto />} />
+          <Route path="new-photo" element={<AddNewFile />} />
           <Route path="settings" element={<h2>Settings</h2>} />
         </Route>
       </Routes>

@@ -32,7 +32,7 @@ export const imagesApi = createApi({
     deleteImage: builder.mutation<{success: boolean, message: string}, {id: number}>({
       query: ({id}) => ({
         url: `/api/images/${id}`,
-        method: 'DELETE'
+        method: 'DELETE',
       }),
       invalidatesTags: ['Images']
     }),

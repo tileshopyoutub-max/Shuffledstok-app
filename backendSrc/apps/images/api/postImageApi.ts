@@ -28,6 +28,7 @@ export async function PostImageApi(request: Request, env: Env) {
 
     // ---------- R2 ----------
     const originalBuffer = await originalFile.arrayBuffer()
+    console.log('Сохраняем файл оригинал, ', originalBuffer)
 
     await env.PRIVATE_BUCKET.put(key, originalBuffer, {
       httpMetadata: { contentType: originalFile.type },
@@ -38,12 +39,14 @@ export async function PostImageApi(request: Request, env: Env) {
     if (watermarkedFile) {
       const watermarkedBuffer = await watermarkedFile.arrayBuffer()
       publicKey = `wm_${key}`
+      console.log('Сохраняем файл с ватермаркой, ', watermarkedBuffer)
       await env.PUBLIC_WATERMARKED_BUCKET.put(publicKey, watermarkedBuffer, {
         httpMetadata: { contentType: watermarkedFile.type },
       })
     } else if (compressorFile) {
       const compressorBuffer = await compressorFile.arrayBuffer()
       publicKey = `compressed_${key}`
+      console.log('Сохраняем файл без ватермарки, ', compressorBuffer)
       await env.PUBLIC_WATERMARKED_BUCKET.put(publicKey, compressorBuffer, {
         httpMetadata: { contentType: compressorFile.type },
       })

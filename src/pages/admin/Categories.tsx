@@ -7,7 +7,7 @@ import AddCategoryModal from '../../components/admin/AddCategoryModal'
 
 
 export default function Categories() {
-  const { data: categories = [], isLoading } = useGetCategoriesQuery()
+  const { data: categories = [], isLoading,  } = useGetCategoriesQuery(undefined, {refetchOnMountOrArgChange: true})
   console.log(categories)
 
   const [isOpenAddCategory, setIsOpenAddCategory] = useState<boolean>(false)

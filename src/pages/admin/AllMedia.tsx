@@ -2,17 +2,29 @@ import AdminPageHeader from "../../components/admin/layout/AdminPageHeader"
 import SearchInput from "../../components/admin/ui/SearchInput"
 import Pagination from '../../components/admin/ui/Pagination'
 import { useAllMedia } from '../../components/admin/hooks/useAllMedia'
+import { useDeleteImageMutation } from "../../shared/api/imagesApi"
+import Button from "../../components/admin/ui/Button"
+
 
 export default function AllMedia() {
 
-    const selectCategories = ['Wallpapers', 'Icons', 'Sticker', 'Cat'];
     const selectedFormat = ['JPG', 'PNG', 'SVG', 'WEBP']
 
-    const {page, setPage, pages, visibleImages, setSearchParams, imagesQuery, filteredImages} = useAllMedia();
+    const [deleteImage] = useDeleteImageMutation();
+
+    async function handleDeleteImage(id: number) {
+        try {
+            await deleteImage({ id }).unwrap();
+        } catch {
+            alert('Failed to delete tag');
+        }
+    };
+
+    const { page, setPage, pages, visibleImages, setSearchParams, imagesQuery, filteredImages, categories, selectedCategory, setSelectedCategory, navigate } = useAllMedia();
 
     return (
         <div>
-            <AdminPageHeader title="Media Library" />
+            <AdminPageHeader title="Media Library" action={<Button name="add" text="Add new file" onClick={() => navigate('/admin/new-photo')}/>}/>
             <div className="pt-5 pb-4">
                 <div className="bg-card-dark border border-border-dark rounded-xl p-3 mb-6 shadow-sm">
                     <div className="flex flex-col xl:flex-row gap-3">
@@ -26,10 +38,15 @@ export default function AllMedia() {
                         <div className="flex flex-wrap items-center gap-2">
                             <div className="relative group">
                                 <select
-                                    className="appearance-none h-10 bg-background-dark border border-border-dark text-slate-300 text-sm rounded-lg pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer hover:bg-slate-800 transition-colors min-w-[140px]">
+                                    className="appearance-none h-10 bg-background-dark border border-border-dark text-slate-300 text-sm rounded-lg pl-3 pr-8 focus:ring-1 focus:ring-primary focus:border-primary outline-none cursor-pointer hover:bg-slate-800 transition-colors min-w-[140px]"
+                                    onChange={(e) => {
+                                        setSelectedCategory(e.target.value);
+                                        setPage(1);
+                                    }}
+                                    value={selectedCategory}>
                                     <option value="">All Categories</option>
-                                    {selectCategories.map(category => (
-                                        <option key={category} value={category}>{category}</option>
+                                    {categories.map(category => (
+                                        <option key={category.id} value={category.name}>{category.name}</option>
                                     ))}
                                 </select>
                                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
@@ -113,13 +130,13 @@ export default function AllMedia() {
                                 </div>
                             </div>
                             <div className="col-span-2 hidden md:block">
-                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/20">
-                                    Wallpapers
-                                </span>
+                                {image.categories.map(category => (
+                                    <span key={category} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/20">{category}</span>
+                                ))}
                             </div>
                             <div className="col-span-3 hidden lg:flex flex-wrap gap-1.5">
                                 {image.tags.map(tag => (
-                                    <span key={tag} className="text-[10px] text-slate-400 bg-background-dark border border-border-dark px-1.5 py-0.5 rounded">
+                                    <span key={`${image.id}-${tag}`} className="text-[10px] text-slate-400 bg-background-dark border border-border-dark px-1.5 py-0.5 rounded">
                                         {tag}
                                     </span>
                                 ))}
@@ -135,7 +152,9 @@ export default function AllMedia() {
                                 </button>
                                 <button
                                     className="p-2 text-slate-400 hover:text-danger hover:bg-slate-700 rounded transition-colors"
-                                    title="Delete">
+                                    title="Delete"
+                                    onClick={() => handleDeleteImage(image.id)}
+                                    >
                                     <span className="material-symbols-outlined text-lg">delete</span>
                                 </button>
                                 <button
