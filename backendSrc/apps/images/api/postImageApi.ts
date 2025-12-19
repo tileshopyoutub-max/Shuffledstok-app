@@ -18,6 +18,9 @@ export async function PostImageApi(request: Request, env: Env) {
     const categoriesInput = formData.get('categories') as string
     const selectedCategoryIds: number[] = categoriesInput ? JSON.parse(categoriesInput) : []
 
+    const downloadFreeInput = formData.get('downloadFree') as string | null
+    const downloadFree = downloadFreeInput === 'true' ? 1 : 0
+
     if (!originalFile) {
       return new Response('No file uploaded', { status: 400 })
     }
@@ -55,11 +58,11 @@ export async function PostImageApi(request: Request, env: Env) {
     // ---------- D1 ----------
     const result = await env.DB.prepare(
       `
-      INSERT INTO images (key, title, description, has_watermark)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO images (key, title, description, has_watermark, download_free)
+      VALUES (?, ?, ?, ?, ?)
       `,
     )
-      .bind(publicKey, title, description, watermarkedFile ? 1 : 0)
+      .bind(publicKey, title, description, watermarkedFile ? 1 : 0, downloadFree)
       .run()
 
     const imageId = result.meta.last_row_id

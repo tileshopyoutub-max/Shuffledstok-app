@@ -20,6 +20,8 @@ export function useAddFile() {
   const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
+  const [downloadFree, setDownloadFree] = useState<boolean>(true)
+
   const settings = useTypedSelector(state => state.watermark);
   const dispatch = useTypedDispatch();
 
@@ -115,6 +117,9 @@ export function useAddFile() {
 
   return {
     ...fileInput,
+
+    downloadFree,
+    setDownloadFree,
 
     title,
     description,

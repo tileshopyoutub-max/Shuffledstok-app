@@ -3,6 +3,8 @@ import AddWatermark from '../../components/admin/AddWatermark'
 import { useAddFile } from '../../components/admin/hooks/useAddFile'
 import DropdownSelect from '../../components/admin/DropdownSelect'
 import FileDropzone from '../../components/admin/FileDropzone';
+import AddDownloadFree from '../../components/admin/AddDownloadFree'
+
 
 export default function AddNewFile() {
   const {
@@ -40,7 +42,11 @@ export default function AddNewFile() {
     handleArchiveDrag,
     handleArchiveLeave,
     removeArchiveImage,
+    downloadFree, 
+    setDownloadFree,
   } = useAddFile();
+
+
 
   return (
     <>
@@ -153,6 +159,7 @@ export default function AddNewFile() {
             placeholder="Select a category..."
           />
 
+          <AddDownloadFree selectedFile={file} checked={downloadFree} onChange={setDownloadFree}/>
           {/*Окно добавления watermark*/}
           {fileType === 'image' && file && (
             <AddWatermark selectedFile={file} watermarkFile={watermarkFile} />
