@@ -9,7 +9,7 @@ export const categoriesApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: API_BASE_URL }),
     tagTypes: ['Category'],
     endpoints: (builder) => ({
-        // Получить все теги
+        // Получить все категории
         getCategories: builder.query<Category[], void>({
             query: () => '/api/categories',
             providesTags: (result = []) => [
@@ -19,7 +19,7 @@ export const categoriesApi = createApi({
             transformResponse: (response: { categories: Category[] }) => response.categories,
         }),
 
-        // Создать новый тег
+        // Создать новый категорию
         createCategory: builder.mutation<
             { success: boolean; category: Category },
             { name: string }
@@ -32,7 +32,7 @@ export const categoriesApi = createApi({
             invalidatesTags: ['Category'],
         }),
 
-        // Обновить тег
+        // Обновить категорию
         updateCategory: builder.mutation<
             { success: boolean; category: Category },
             { id: number; name: string }
@@ -45,7 +45,7 @@ export const categoriesApi = createApi({
             invalidatesTags: (_, __, { id }) => [{ type: 'Category', id }],
         }),
 
-        // Удалить тег
+        // Удалить категорию
         deleteCategory: builder.mutation<
             { success: boolean; message: string },
             { id: number }
@@ -53,7 +53,7 @@ export const categoriesApi = createApi({
             query: ({ id }) => ({
                 url: `/api/categories/${id}`,
                 method: 'DELETE',
-                body: { id }, // или без body, если DELETE не принимает body
+                body: { id },
             }),
             invalidatesTags: ['Category'],
         }),

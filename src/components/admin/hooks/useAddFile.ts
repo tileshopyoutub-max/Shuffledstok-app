@@ -8,7 +8,7 @@ import { useGetTagsQuery } from '../../../shared/api/tagsApi';
 import { useGetCategoriesQuery } from '../../../shared/api/categoriesApi';
 import type { Tag } from '../../../shared/types/tags';
 import type { Category } from '../../../shared/types/Category';
-
+import { useUploadArchiveMutation } from '../../../shared/api/archivesApi';
 import { useFileInput } from './useFileInput';
 
 
@@ -26,6 +26,7 @@ export function useAddFile() {
   const dispatch = useTypedDispatch();
 
   const [uploadImage] = useUploadImageMutation();
+  const [uploadArchive] = useUploadArchiveMutation();
   const { data: availableTags = [] } = useGetTagsQuery();
   const { data: availableCategories = [] } = useGetCategoriesQuery();
 
@@ -89,9 +90,21 @@ export function useAddFile() {
       await uploadImage(formData).unwrap();
     }
 
-    if(fileInput.fileType === 'archive'){
-      console.log('Архив отправляется', fileInput.file)
-      console.log('Фото к нему: ', fileInput.archiveImages)
+    if (fileInput.fileType === 'archive') {
+      const formData = new FormData();
+
+      formData.append('archive', fileInput.file);
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('categories', JSON.stringify(selectedCategories.map(c => c.id)));
+      formData.append('tags', JSON.stringify(selectedTags.map(t => t.id)));
+      formData.append('downloadFree', downloadFree.toString())
+
+      fileInput.archiveImages.forEach(img => {
+        formData.append('archiveImages', img)
+      })
+
+      await uploadArchive(formData).unwrap();
     }
 
 

@@ -47,7 +47,6 @@ export default function AddNewFile() {
   } = useAddFile();
 
 
-
   return (
     <>
       <AdminPageHeader title="Add New File" />
@@ -148,6 +147,7 @@ export default function AddNewFile() {
             getLabel={t => t.name}
             label="Tags"
             placeholder="Select a tag..."
+            multiple
           />
           <DropdownSelect
             data={availableCategories}

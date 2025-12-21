@@ -16,7 +16,7 @@ export default function AddDownloadFree({
           <input
             aria-describedby="watermark-standard-description"
             className="h-4 w-4 rounded border-border bg-surface text-primary-DEFAULT focus:ring-primary-DEFAULT focus:ring-offset-background"
-            id="watermark-standard"
+            id="download-free"
             name="watermark"
             type="checkbox"
             checked={checked}
@@ -25,10 +25,10 @@ export default function AddDownloadFree({
           />
         </div>
         <div className="ml-3 text-sm leading-6">
-          <label className="font-medium text-text-primary" htmlFor="watermark-standard">
+          <label className="font-medium text-text-primary" htmlFor="download-free">
             Download Free
           </label>
-          <p className="text-text-secondary" id="watermark-standard-description">
+          <p className="text-text-secondary" id="download-free-description">
             Apply download free to image.
           </p>
         </div>

@@ -72,7 +72,7 @@ export default function AddWatermark({ selectedFile, watermarkFile }: AddWaterma
                                 <div className="relative">
                                     <input
                                         className="block w-full rounded-md border-0 py-2 bg-background text-text-primary shadow-sm ring-1 ring-inset ring-border placeholder:text-text-placeholder focus:ring-2 focus:ring-inset focus:ring-primary-DEFAULT sm:text-sm sm:leading-6"
-                                        id="font-size" placeholder="24" type="number" onChange={(e) => dispatch(setSettingsWatermark({ fontSize: Number(e.target.value) }))} value={settings.fontSize} />
+                                        id="font-size" placeholder="24" type="number" onChange={(e) => dispatch(setSettingsWatermark({ fontSize: e.target.value === "" ? "" : Number(e.target.value) }))} value={settings.fontSize} />
                                     <span
                                         className="absolute right-3 top-2 text-text-placeholder text-sm pointer-events-none">px</span>
                                 </div>
