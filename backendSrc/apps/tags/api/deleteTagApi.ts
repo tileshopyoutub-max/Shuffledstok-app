@@ -10,23 +10,25 @@ export async function DeleteTagApi(request: Request, env: Env) {
             }, { status: 400 });
         }
 
-        const tag = await env.DB.prepare(
-            `SELECT t.*, COUNT(it.image_id) as image_count
-       FROM tags t
-       LEFT JOIN image_tags it ON t.id = it.tag_id
-       WHERE t.id = ?
-       GROUP BY t.id`
-        ).bind(id).first<{ name: string; usage_count: number; image_count: number }>();
+        const tagUsage = await env.DB.prepare(`
+            SELECT
+                t.*,
+                (SELECT COUNT(*) FROM image_tags WHERE tag_id = t.id) AS image_count,
+                (SELECT COUNT(*) FROM archive_tags WHERE tag_id = t.id) AS archive_count
+            FROM tags t
+            WHERE t.id = ?
+        `).bind(id).first<{ name: string; image_count: number; archive_count: number }>();
 
-        if (!tag) {
-            return Response.json({
-                success: false, error: "Tag not found"
-            }, { status: 404 });
+        if (!tagUsage) {
+            return Response.json({ success: false, error: "Tag not found" }, { status: 404 });
         }
 
-        if (tag.image_count > 0) {
+        const totalUsage = tagUsage.image_count + tagUsage.archive_count;
+
+        if (totalUsage > 0) {
             return Response.json({
-                success: false, error: `Cannot delete tag "${tag.name}". It is used by ${tag.image_count} image(s).`
+                success: false,
+                error: `Cannot delete tag "${tagUsage.name}". It is used by ${totalUsage} item(s).`
             }, { status: 400 });
         }
 
@@ -34,7 +36,7 @@ export async function DeleteTagApi(request: Request, env: Env) {
 
         return Response.json({
             success: true,
-            message: `Tag "${tag.name}" deleted successfully`
+            message: `Tag "${tagUsage.name}" deleted successfully`
         });
 
     } catch (err) {
