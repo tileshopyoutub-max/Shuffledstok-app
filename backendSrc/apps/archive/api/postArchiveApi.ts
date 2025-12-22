@@ -1,10 +1,10 @@
 import type { Env } from '../../..'
 
 interface ArchiveImage {
-  id: number
-  key: string
-  archiveId: number
-  relatedPhotos: ArchiveImage[]
+  id: number;
+  key: string;
+  archiveId: number;
+  sortOrder: number;
 }
 
 export async function postArchiveApi(request: Request, env: Env) {
@@ -48,7 +48,8 @@ export async function postArchiveApi(request: Request, env: Env) {
     const archiveImagesFiles = formData.getAll('archiveImages') as File[]
     const savedImages: ArchiveImage[] = []
 
-    for (const img of archiveImagesFiles) {
+    for (let i = 0; i < archiveImagesFiles.length; i++) {
+      const img = archiveImagesFiles[i]
       const ext = img.name.split('.').pop()
       const key = crypto.randomUUID() + '.' + ext
       const buffer = await img.arrayBuffer()
@@ -58,21 +59,30 @@ export async function postArchiveApi(request: Request, env: Env) {
       })
 
       const imgResult = await env.DB.prepare(`
-        INSERT INTO archive_images (archive_id, key)
-        VALUES (?, ?)
-      `).bind(archiveId, key).run()
+        INSERT INTO archive_images (archive_id, key, sort_order)
+        VALUES (?, ?, ?)
+      `).bind(archiveId, key, i).run()
 
       savedImages.push({
         id: imgResult.meta.last_row_id,
         key,
         archiveId,
-        relatedPhotos: []
+        sortOrder: i,
       })
     }
 
-    savedImages.forEach(img => {
-      img.relatedPhotos = savedImages.filter(i => i.id !== img.id)
-    })
+    const imagesWithRelations = savedImages.map((img) => ({
+      ...img,
+      relatedPhotos: savedImages
+        .filter(other => other.id !== img.id)
+        .map(other => ({
+          id: other.id,
+          key: other.key,
+          archiveId,
+          sortOrder: other.sortOrder
+        }))
+    }))
+
 
     if (selectedTagIds.length > 0) {
       for (const tagId of selectedTagIds) {
@@ -96,8 +106,7 @@ export async function postArchiveApi(request: Request, env: Env) {
       success: true,
       archive: {
         id: archiveId,
-        key: archiveKey,
-        images: savedImages
+        images: imagesWithRelations
       }
     }), { headers: { 'Content-Type': 'application/json' } })
   } catch (err) {

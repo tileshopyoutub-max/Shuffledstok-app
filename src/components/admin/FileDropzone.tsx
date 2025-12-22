@@ -31,11 +31,11 @@ export default function FileDropzone({
     return (
         <div onDragEnter={onDragEnter} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
             <label className="block text-sm font-medium text-text-secondary mb-2">{label}</label>
-            <label htmlFor="file-upload" className="cursor-pointer">
+            <label htmlFor={inputId} className="cursor-pointer">
                 <div
                     className={`mt-2 flex justify-center rounded-lg border border-dashed border-border px-6 py-10 ${dragActive ? 'bg-blue-700' : 'bg-background'
                         }`}>
-                    <div className="text-center">
+                    <div className="text-center flex flex-col items-center justify-center gap-2">
                         <span className="material-symbols-outlined text-5xl text-text-placeholder">
                             {file ? 'check_circle' : 'cloud_upload'}
                         </span>
@@ -43,7 +43,7 @@ export default function FileDropzone({
                         <div className="mt-4 flex text-sm leading-6 text-text-secondary">
                             <label
                                 className="relative cursor-pointer rounded-md font-semibold text-primary-DEFAULT focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-DEFAULT focus-within:ring-offset-2 focus-within:ring-offset-background hover:text-primary-hover"
-                                htmlFor={inputId || 'file-upload'}>
+                                htmlFor={inputId}>
                                 <span>{file ? file.name : 'Upload a file or drag and drop'}</span>
                                 <input
                                     ref={fileInputRef}

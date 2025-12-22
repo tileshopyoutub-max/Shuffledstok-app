@@ -32,7 +32,7 @@ export function useAddWatermark(file: File | null, settings: WatermarkSettings) 
 
             let x = 10, y = 10;
 
-            const fontSize = settings.fontSize;
+            const fontSize = Number(settings.fontSize) || 24;
 
             if (settings.loopWatermark) {
                 const textWidth = ctx.measureText(settings.text).width;

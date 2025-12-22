@@ -11,7 +11,7 @@ export default function AllMedia() {
 
     const selectedFormat = ['JPG', 'PNG', 'SVG', 'WEBP']
 
-    const { page, setPage, pages, visibleImages, setSearchParams, imagesQuery, filteredImages, categories, selectedCategory, setSelectedCategory, navigate } = useAllMedia();
+    const { page, setPage, pages, visibleMedia, setSearchParams, imagesQuery, filteredImages, categories, selectedCategory, setSelectedCategory, navigate } = useAllMedia();
     const { deleteModal, openDeleteModal, closeDeleteModal, handleDelete } = useMediaDeletion();
 
     return (
@@ -111,31 +111,37 @@ export default function AllMedia() {
                 </div>
                 <div className="flex-1 overflow-y-auto px-8 pb-8">
                     <div className="flex flex-col gap-2">
-                        {visibleImages.map(image => (
-                            <div key={image.key} className="group grid grid-cols-12 gap-4 items-center bg-component-dark border border-border-dark rounded-lg p-3 hover:border-primary/50 transition-all hover:bg-slate-800/50">
+                        {visibleMedia.map(item => (
+                            <div key={`${item.type}-${item.id}`} className="group grid grid-cols-12 gap-4 items-center bg-component-dark border border-border-dark rounded-lg p-3 hover:border-primary/50 transition-all hover:bg-slate-800/50">
                                 <div className="col-span-4 md:col-span-4 lg:col-span-3 flex items-center gap-4">
                                     <div className="w-16 h-12 rounded bg-black overflow-hidden shrink-0 relative border border-border-dark">
-                                        <img src={image.url} alt={image.title!} />
+                                        <img src={item.url} alt={item.title!} />
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-white font-medium text-sm truncate" title={image.title!}>{image.title}</h3>
-                                        <p className="text-xs text-slate-500 font-mono mt-0.5">ID: #{image.id}</p>
+                                        <h3 className="text-white font-medium text-sm truncate" title={item.title!}>{item.title}</h3>
+                                        <p className="text-xs text-slate-500 font-mono mt-0.5">ID: #{item.id}</p>
+                                        {item.type === 'archive' && (<>
+                                            <p className="text-xs text-slate-500 font-mono mt-0.5">Archive</p>
+                                            <p className="text-xs text-slate-500 font-mono mt-0.5">{item.imageCount} photo</p>
+                                        </>)}
+                                        {item.type === 'image' && (<p className="text-xs text-slate-500 font-mono mt-0.5">Image</p>)}
                                     </div>
+                                    
                                 </div>
                                 <div className="col-span-2 hidden md:block">
-                                    {image.categories.map(category => (
+                                    {item.categories.map(category => (
                                         <span key={category} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/20">{category}</span>
                                     ))}
                                 </div>
                                 <div className="col-span-3 hidden lg:flex flex-wrap gap-1.5">
-                                    {image.tags.map(tag => (
-                                        <span key={`${image.id}-${tag}`} className="text-[10px] text-slate-400 bg-background-dark border border-border-dark px-1.5 py-0.5 rounded">
+                                    {item.tags.map(tag => (
+                                        <span key={`${item.id}-${tag}`} className="text-[10px] text-slate-400 bg-background-dark border border-border-dark px-1.5 py-0.5 rounded">
                                             {tag}
                                         </span>
                                     ))}
                                 </div>
                                 <div className="col-span-3 md:col-span-3 lg:col-span-2 text-sm text-slate-400">
-                                    {new Date(image.created_at).toLocaleDateString()}
+                                    {new Date(item.created_at).toLocaleDateString()}
                                 </div>
                                 <div className="col-span-5 md:col-span-3 lg:col-span-2 flex justify-end items-center gap-2">
                                     <button
@@ -146,7 +152,7 @@ export default function AllMedia() {
                                     <button
                                         className="p-2 text-slate-400 hover:text-danger hover:bg-slate-700 rounded transition-colors"
                                         title="Delete"
-                                        onClick={() => openDeleteModal(image.id, image.title!)}
+                                        onClick={() => openDeleteModal(item.id, item.title, item.type)}
                                     >
                                         <span className="material-symbols-outlined text-lg">delete</span>
                                     </button>
@@ -164,7 +170,7 @@ export default function AllMedia() {
                         currentPage={page}
                         onPageChange={setPage}
                         startingCurrentPosition={1}
-                        lastCurrentPosition={visibleImages.length}
+                        lastCurrentPosition={visibleMedia.length}
                         maxCountPosition={filteredImages.length}
                         pages={pages} />
                 </div>

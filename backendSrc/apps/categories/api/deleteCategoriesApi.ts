@@ -10,23 +10,25 @@ export async function DeleteCategoryApi(request: Request, env: Env) {
             }, { status: 400 });
         }
 
-        const category = await env.DB.prepare(
-            `SELECT c.*, COUNT(ic.image_id) as image_count
-       FROM categories c
-       LEFT JOIN image_categories ic ON c.id = ic.category_id
-       WHERE c.id = ?
-       GROUP BY c.id`
-        ).bind(id).first<{ name: string; usage_count: number; image_count: number }>();
+        const categoryUsage = await env.DB.prepare(`
+            SELECT
+                c.*,
+                (SELECT COUNT(*) FROM image_categories WHERE category_id = c.id) AS image_count,
+                (SELECT COUNT(*) FROM archive_categories WHERE category_id = c.id) AS archive_count
+            FROM categories c
+            WHERE c.id = ?
+        `).bind(id).first<{ name: string; image_count: number; archive_count: number }>();
 
-        if (!category) {
-            return Response.json({
-                success: false, error: "Category not found"
-            }, { status: 404 });
+        if (!categoryUsage) {
+            return Response.json({ success: false, error: "Category not found" }, { status: 404 });
         }
 
-        if (category.image_count > 0) {
+        const totalUsage = categoryUsage.image_count + categoryUsage.archive_count;
+
+        if (totalUsage > 0) {
             return Response.json({
-                success: false, error: `Cannot delete category "${category.name}". It is used by ${category.image_count} image(s).`
+                success: false,
+                error: `Cannot delete category "${categoryUsage.name}". It is used by ${totalUsage} item(s).`
             }, { status: 400 });
         }
 
@@ -34,7 +36,7 @@ export async function DeleteCategoryApi(request: Request, env: Env) {
 
         return Response.json({
             success: true,
-            message: `category "${category.name}" deleted successfully`
+            message: `Category "${categoryUsage.name}" deleted successfully`
         });
 
     } catch (err) {

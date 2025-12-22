@@ -42,7 +42,7 @@ export default function AddNewFile() {
     handleArchiveDrag,
     handleArchiveLeave,
     removeArchiveImage,
-    downloadFree, 
+    downloadFree,
     setDownloadFree,
   } = useAddFile();
 
@@ -54,6 +54,7 @@ export default function AddNewFile() {
       <div className="bg-surface p-8 rounded-lg border border-border">
         <form className="space-y-3" onSubmit={handleSubmit}>
           <FileDropzone
+            inputId="main-file-upload"
             file={file}
             dragActive={dragActive}
             fileInputRef={fileInputRef}
@@ -75,7 +76,12 @@ export default function AddNewFile() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (!e.target.files) return;
                   const filesArray = Array.from(e.target.files);
-                  setArchiveImages(prev => [...prev, ...filesArray]);
+                  setArchiveImages(prev => {
+                    const newFiles = filesArray.filter(
+                      f => !prev.some(existing => existing.name === f.name && existing.size === f.size)
+                    );
+                    return [...prev, ...newFiles];
+                  });
                 }}
                 onDragEnter={handleArchiveDrag}
                 onDragOver={handleArchiveDrag}
@@ -159,7 +165,7 @@ export default function AddNewFile() {
             placeholder="Select a category..."
           />
 
-          <AddDownloadFree selectedFile={file} checked={downloadFree} onChange={setDownloadFree}/>
+          <AddDownloadFree selectedFile={file} checked={downloadFree} onChange={setDownloadFree} />
           {/*Окно добавления watermark*/}
           {fileType === 'image' && file && (
             <AddWatermark selectedFile={file} watermarkFile={watermarkFile} />
