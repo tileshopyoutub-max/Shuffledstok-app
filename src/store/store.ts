@@ -6,6 +6,7 @@ import imagesFilterReducer from './slices/imagesFilterSlice'
 import imageModalReducer from './slices/imageModalSlice'
 import heroReducer from './slices/heroSlice'
 import { categoriesApi } from '../shared/api/categoriesApi'
+import sidebarReducer from './slices/sidebarSlice'
 
 const rootReducer = combineReducers({
   [imagesApi.reducerPath]: imagesApi.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   imagesFilter: imagesFilterReducer,
   imageModal: imageModalReducer,
   hero: heroReducer,
+  sidebar: sidebarReducer,
 })
 
 export const setupStore = () => {

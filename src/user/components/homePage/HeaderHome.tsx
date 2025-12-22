@@ -1,35 +1,20 @@
 import { Link } from 'react-router-dom'
 import { CustomLink } from '../CustomLink'
-import { useTypedDispatch, useTypedSelector } from '../../../shared/hooks/redux'
-import { setSearch } from '../../../store/slices/imagesFilterSlice'
-import { useState } from 'react'
-import { hideHero } from '../../../store/slices/heroSlice'
+import { useTypedSelector } from '../../../shared/hooks/redux'
+import { BurgerButton } from '../sidebar/BurgerButton'
+import { useSearchInput } from '../../hooks/useSearchInput'
 
 export const Header = () => {
-  const {search} = useTypedSelector(state => state.imagesFilter)
-  const dispatch = useTypedDispatch()
-  const [value, setValue] = useState(search)
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
-  }
-
-  const applySearch = () => {
-    dispatch(hideHero())
-    dispatch(setSearch(value.trim()))
-    setValue('')
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      applySearch()
-      setValue('')
-    }
-  }
+  const { search } = useTypedSelector(state => state.imagesFilter)
+  const { value, handleChange, handleKeyDown, applySearch } = useSearchInput({
+    initialValue: search,
+  })
 
   return (
-    <header className="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-800/80 bg-black/80 backdrop-blur-sm px-6 py-3">
+    <header className="sticky top-0 z-[50] flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-800/80 bg-black/80 backdrop-blur-sm px-6 py-3">
       <div className="flex items-center gap-8">
         <div className="flex items-center gap-2 text-gray-100">
+          <BurgerButton />
           <div className="size-6 text-primary">
             <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -58,7 +43,9 @@ export const Header = () => {
       <div className="flex flex-1 justify-end items-center gap-4">
         <label className="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
           <div className="flex w-full flex-1 items-stretch h-full">
-            <div onClick={applySearch} className="text-gray-400 flex bg-background-dark/50 items-center justify-center pl-3 rounded-l-lg border border-gray-700 border-r-0">
+            <div
+              onClick={applySearch}
+              className="text-gray-400 flex bg-background-dark/50 items-center justify-center pl-3 rounded-l-lg border border-gray-700 border-r-0">
               <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
                 search
               </span>

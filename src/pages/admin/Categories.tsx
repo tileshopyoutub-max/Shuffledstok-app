@@ -8,7 +8,6 @@ import AddCategoryModal from '../../components/admin/AddCategoryModal'
 
 export default function Categories() {
   const { data: categories = [], isLoading } = useGetCategoriesQuery()
-  console.log(categories)
 
   const [isOpenAddCategory, setIsOpenAddCategory] = useState<boolean>(false)
   if (isLoading) {

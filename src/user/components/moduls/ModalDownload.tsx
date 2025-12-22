@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { useDownloadImageMutation, useGetImagesQuery } from '../../../shared/api/imagesApi'
+import { useRef } from 'react'
+import { useGetImagesQuery } from '../../../shared/api/imagesApi'
 import { findSimilarImages } from '../../utils/FilterSimilarContent'
 import type { ImageItems } from '../../../shared/types/images'
 import { closeImageModal, openImageModal } from '../../../store/slices/imageModalSlice'
 import { useTypedDispatch } from '../../../shared/hooks/redux'
 import { toggleTag } from '../../../store/slices/imagesFilterSlice'
+import { useImageModal } from './utils/useImageModal'
 
 interface ModalTypes {
   onClose: () => void
@@ -13,58 +14,15 @@ interface ModalTypes {
 
 export const ModalDownload = ({ onClose, file }: ModalTypes) => {
   const modalRef = useRef<HTMLDivElement>(null)
-  const [isPurchased, setIsPurchased] = useState(false)
   const dispatch = useTypedDispatch()
-  const [downloadFile] = useDownloadImageMutation()
   const { data: images = [] } = useGetImagesQuery()
   const { key, url, title, description, tags, downloadFree } = file
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-
-    const handleOutsideClick = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onClose()
-      }
-    }
-
-    window.addEventListener('keydown', handleEsc)
-
-    const timeoutId = setTimeout(() => {
-      document.addEventListener('mousedown', handleOutsideClick)
-    }, 0)
-
-    return () => {
-      window.removeEventListener('keydown', handleEsc)
-      clearTimeout(timeoutId)
-      document.removeEventListener('mousedown', handleOutsideClick)
-    }
-  }, [onClose])
-
-  const handleDownload = async () => {
-    try {
-      const blob = await downloadFile(key).unwrap()
-
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-
-      a.href = url
-      a.download = key
-      document.body.appendChild(a)
-      a.click()
-
-      a.remove()
-      URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Ошибка скачивания файла', error)
-    }
-  }
-
-  const handleBuy = () => {
-    setIsPurchased(true)
-  }
+  const { isPurchased, handleBuy, handleDownload } = useImageModal({
+    modalRef,
+    onClose,
+    fileKey: key,
+  })
 
   const similarImages = findSimilarImages(images, file)
 
@@ -137,7 +95,9 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                       disabled={!isPurchased}
                       className={`w-full h-12 rounded-lg font-bold transition-colors
                         ${
-                          isPurchased ? 'bg-primary hover:bg-primary/90 text-white' : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+                          isPurchased
+                            ? 'bg-primary hover:bg-primary/90 text-white'
+                            : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                         }`}>
                       Download file
                     </button>
