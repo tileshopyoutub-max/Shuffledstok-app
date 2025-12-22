@@ -14,6 +14,7 @@ import { useHideHeroOnNavigate } from './utils/useHideHero'
 import AllMedia from './pages/admin/AllMedia'
 import { useTypedSelector } from './shared/hooks/redux'
 import { Sidebar } from './user/components/sidebar/Sidebar'
+import { AdminRoute } from './pages/admin/AdminRoute'
 
 function App() {
   useHideHeroOnNavigate('/')
@@ -26,6 +27,8 @@ function App() {
         <Route path="/wallpapers" element={<WallpapersPage category="wallpapers"/>} />
         <Route path="/stickers" element={<StickersPage category="stickers"/>} />
 
+        <Route element={<AdminRoute />}>
+        
         <Route path="/admin" element={<AdminLayout />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="all-media" element={<AllMedia />} />
@@ -34,6 +37,7 @@ function App() {
           <Route path="tags" element={<Tags />} />
           <Route path="new-photo" element={<AddNewFile />} />
           <Route path="settings" element={<h2>Settings</h2>} />
+        </Route>
         </Route>
       </Routes>
     </Auth0ProviderWithNavigate>

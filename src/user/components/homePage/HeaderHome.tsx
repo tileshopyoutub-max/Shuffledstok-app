@@ -3,6 +3,7 @@ import { CustomLink } from '../CustomLink'
 import { useTypedSelector } from '../../../shared/hooks/redux'
 import { BurgerButton } from '../sidebar/BurgerButton'
 import { useSearchInput } from '../../hooks/useSearchInput'
+import { LogoutButton } from './LogoutButton'
 
 export const Header = () => {
   const { search } = useTypedSelector(state => state.imagesFilter)
@@ -60,6 +61,7 @@ export const Header = () => {
           </div>
         </label>
         <div className="flex gap-2">
+          <LogoutButton/>
           <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 text-sm font-bold leading-normal tracking-[0.015em] transition-colors">
             <span className="truncate">Login</span>
           </button>
