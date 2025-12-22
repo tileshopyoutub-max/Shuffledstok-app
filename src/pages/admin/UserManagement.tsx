@@ -1,13 +1,10 @@
 import { useSearchParams } from "react-router-dom";
-import {useState} from 'react'
 import UserTable from "../../components/admin/UserTable";
 import Button from "../../components/admin/ui/Button";
-import AdminPageHeader from "../../components/admin/AdminPageHeader";
+import AdminPageHeader from "../../components/admin/layout/AdminPageHeader";
 import SearchInput from "../../components/admin/ui/SearchInput";
 
 export default function UserManagement(){
-
-    const [page, setPage] = useState(1);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const userQuery = searchParams.get('users') || '';
@@ -23,7 +20,6 @@ export default function UserManagement(){
                     value={userQuery}
                     placeholder="Search by name, email..."
                     onChange={(e) => {
-                        setPage(1)
                         const value = e.target.value;
                         value ? setSearchParams({users: value}) : setSearchParams({})
                     }}/>
@@ -42,7 +38,7 @@ export default function UserManagement(){
                 </div>
             </div>
             
-            <UserTable page={page} setPage={setPage} search={userQuery}/>
+            <UserTable search={userQuery}/>
         </>
     )
 }

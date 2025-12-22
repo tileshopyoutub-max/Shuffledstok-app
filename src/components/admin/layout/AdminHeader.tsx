@@ -1,4 +1,4 @@
-import UserAvatar from '../../assets/admin/user_avatar_fake.avif'
+import UserAvatar from '../../../assets/admin/user_avatar_fake.avif'
 
 export default function AdminHeader(){
     return(

@@ -1,0 +1,3 @@
+-- Migration number: 0005 	 2025-12-18T13:28:26.660Z
+ALTER TABLE images
+ADD COLUMN download_free INTEGER DEFAULT 1;
