@@ -1,23 +1,30 @@
+import type { MediaItem } from '../../components/admin/hooks/useAllMedia'
 import type { ImageItems } from '../../shared/types/images'
 
-export function findSimilarImages(allImages: ImageItems[], current: ImageItems): ImageItems[] {
-  const currentTags = current.tags?.map(t => t.toLowerCase()) || []
-  const currentTitle = current.title?.toLowerCase() || ''
-  const currentDescription = current.description?.toLowerCase() || ''
+export function findSimilarImages(
+  allMedia: MediaItem[],
+  current: MediaItem
+): ImageItems[] {
+  if (current.type !== 'image') return []
 
-  return allImages.filter(img => {
-    if (img.url === current.url) return false // не показываем саму картинку
+  const currentImage = current.original
 
-    // совпадение по title
-    if (img.title?.toLowerCase().includes(currentTitle)) return true
+  const currentTags = currentImage.tags?.map(t => t.toLowerCase()) || []
+  const currentTitle = currentImage.title?.toLowerCase() || ''
+  const currentDescription = currentImage.description?.toLowerCase() || ''
 
-    // совпадение по description
-    if (img.description?.toLowerCase().includes(currentDescription)) return true
+  return allMedia
+    .filter((item): item is Extract<MediaItem, { type: 'image' }> => item.type === 'image')
+    .map(item => item.original)
+    .filter(img => {
+      if (img.url === currentImage.url) return false
 
-    // совпадение по тегам
-    const imgTags = img.tags?.map(t => t.toLowerCase()) || []
-    if (currentTags.some(tag => imgTags.includes(tag))) return true
+      if (img.title?.toLowerCase().includes(currentTitle)) return true
+      if (img.description?.toLowerCase().includes(currentDescription)) return true
 
-    return false
-  })
+      const imgTags = img.tags?.map(t => t.toLowerCase()) || []
+      if (currentTags.some(tag => imgTags.includes(tag))) return true
+
+      return false
+    })
 }

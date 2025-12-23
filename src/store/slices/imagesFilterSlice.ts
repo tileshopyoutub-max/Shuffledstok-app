@@ -5,6 +5,7 @@ interface ImagesFilterState {
   selectedTags: string[]
   selectedCategories: string[]
   accessType: 'free' | 'premium' | null
+  photoType: 'Single' | 'Archive' | null
 }
 
 const initialState: ImagesFilterState = {
@@ -12,6 +13,7 @@ const initialState: ImagesFilterState = {
   selectedTags: [],
   selectedCategories: [],
   accessType: null,
+  photoType: null,
 }
 
 const imagesFilterSlice = createSlice({
@@ -37,10 +39,13 @@ const imagesFilterSlice = createSlice({
         : [...state.selectedCategories, category]
     },
     clearCategories(state) {
-      state.selectedCategories = [];
+      state.selectedCategories = []
     },
-    setAccessType(state, action: PayloadAction<'free' | 'premium' | null>) {
-      state.accessType = action.payload
+    toggleAccessType(state, action: PayloadAction<'free' | 'premium'>) {
+      state.accessType = state.accessType === action.payload ? null : action.payload
+    },
+    togglePhotoType(state, action: PayloadAction<'Single' | 'Archive'>) {
+      state.photoType = state.photoType === action.payload ? null : action.payload
     },
 
     resetFilters(state) {
@@ -48,9 +53,19 @@ const imagesFilterSlice = createSlice({
       state.selectedTags = []
       state.selectedCategories = []
       state.accessType = null
+      state.photoType = null
     },
   },
 })
 
-export const { setSearch, clearSearch, toggleTag, toggleCategory, resetFilters, setAccessType, clearCategories } = imagesFilterSlice.actions
+export const {
+  setSearch,
+  clearSearch,
+  toggleTag,
+  toggleCategory,
+  resetFilters,
+  toggleAccessType,
+  clearCategories,
+  togglePhotoType,
+} = imagesFilterSlice.actions
 export default imagesFilterSlice.reducer

@@ -1,22 +1,37 @@
 import { useRef } from 'react'
-import { useGetImagesQuery } from '../../../shared/api/imagesApi'
 import { findSimilarImages } from '../../utils/FilterSimilarContent'
-import type { ImageItems } from '../../../shared/types/images'
 import { closeImageModal, openImageModal } from '../../../store/slices/imageModalSlice'
 import { useTypedDispatch } from '../../../shared/hooks/redux'
 import { toggleTag } from '../../../store/slices/imagesFilterSlice'
-import { useImageModal } from './utils/useImageModal'
+import { useImageModal } from './hooks/useImageModal'
+import { useAllMedia, type MediaItem } from '../../../components/admin/hooks/useAllMedia'
+import { ArchiveSlider } from './ArchiveSlider'
 
 interface ModalTypes {
   onClose: () => void
-  file: ImageItems
+  file: MediaItem
 }
 
 export const ModalDownload = ({ onClose, file }: ModalTypes) => {
   const modalRef = useRef<HTMLDivElement>(null)
   const dispatch = useTypedDispatch()
-  const { data: images = [] } = useGetImagesQuery()
-  const { key, url, title, description, tags, downloadFree } = file
+  const { allMedia } = useAllMedia()
+
+  const isArchive = file.type === 'archive'
+  const image = isArchive
+    ? file.original.images[0] // обложка архива
+    : file.original
+
+  const { key, url, title, description, tags, downloadFree } = isArchive
+    ? {
+        key: file.original.id.toString(),
+        url: image.url,
+        title: file.original.title,
+        description: file.original.description,
+        tags: file.original.tags,
+        downloadFree: file.original.downloadFree,
+      }
+    : file.original
 
   const { isPurchased, handleBuy, handleDownload } = useImageModal({
     modalRef,
@@ -24,7 +39,7 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
     fileKey: key,
   })
 
-  const similarImages = findSimilarImages(images, file)
+  const similarImages = findSimilarImages(allMedia, file)
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
@@ -42,28 +57,16 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
             {/* Левая часть */}
             <div className="lg:col-span-2 flex flex-col items-center gap-4">
-              <div className="relative w-full max-w-2xl group">
+              {isArchive ? (
+                <ArchiveSlider images={file.original.images} />
+              ) : (
+                <div className="relative w-full max-w-2xl group">
                 <div className="aspect-[3/4] w-full max-h-[65vh] overflow-hidden rounded-xl">
                   <img alt="Preview" className="h-full w-full object-cover" src={url} />
                 </div>
-
-                {/* Стрелки */}
-                <button className="absolute left-3 top-1/2 -translate-y-1/2 size-8 rounded-full bg-black/50 hover:bg-black/75 text-white opacity-0 group-hover:opacity-100 transition">
-                  <span className="material-symbols-outlined text-xl">chevron_left</span>
-                </button>
-                <button className="absolute right-3 top-1/2 -translate-y-1/2 size-8 rounded-full bg-black/50 hover:bg-black/75 text-white opacity-0 group-hover:opacity-100 transition">
-                  <span className="material-symbols-outlined text-xl">chevron_right</span>
-                </button>
-
-                {/* Индикаторы */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  <div className="size-2 rounded-full bg-white"></div>
-                  <div className="size-2 rounded-full bg-white/50"></div>
-                  <div className="size-2 rounded-full bg-white/50"></div>
-                </div>
               </div>
-
-              {/* Превьюшки */}
+              )}
+              
             </div>
 
             {/* Правая часть */}
@@ -125,17 +128,27 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
               </div>
             </div>
           </div>
-          <div className="mt-12 md:mt-20">
+          <div className="mt-12 md:mt-6">
             <h2 className="sticky text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
               Similar content
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 p-4">
               {similarImages.map(img => {
+                const mediaItem: MediaItem = {
+                  id: img.id,
+                  type: 'image',
+                  title: img.title || 'Untitled Image',
+                  url: img.url,
+                  categories: img.categories || [],
+                  tags: img.tags || [],
+                  created_at: img.created_at,
+                  original: img,
+                }
                 return (
                   <div
                     key={img.key}
                     onClick={() => {
-                      dispatch(openImageModal(img))
+                      dispatch(openImageModal(mediaItem))
                     }}
                     className="relative group bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end aspect-[3/4] overflow-hidden"
                     style={{

@@ -4,18 +4,32 @@ import { useGetImagesQuery } from "../../../shared/api/imagesApi";
 import { usePagination } from "./usePagination";
 import { useGetCategoriesQuery } from "../../../shared/api/categoriesApi";
 import { useGetArchivesQuery } from "../../../shared/api/archivesApi";
+import type { ArchiveItem } from "../../../shared/types/archives";
+import type { ImageItems } from "../../../shared/types/images";
 
 
-interface MediaItem {
-    id: number;
-    type: 'image' | 'archive';
-    title: string;
-    url?: string;
-    categories: string[];
-    tags: string[];
-    created_at: string;
-    imageCount?: number;
-}
+export type MediaItem =
+  | {
+      id: number
+      type: 'image'
+      title: string
+      url?: string
+      categories: string[]
+      tags: string[]
+      created_at: string
+      original: ImageItems
+    }
+  | {
+      id: number
+      type: 'archive'
+      title: string
+      url?: string
+      categories: string[]
+      tags: string[]
+      created_at: string
+      imageCount: number
+      original: ArchiveItem
+    }
 
 export function useAllMedia() {
     const { data: images = [] } = useGetImagesQuery();
@@ -31,7 +45,8 @@ export function useAllMedia() {
             url: img.url,
             categories: img.categories || [],
             tags: img.tags || [],
-            created_at: img.created_at
+            created_at: img.created_at,
+            original: img
         })),
 
         ...archives.map(archive => ({
@@ -42,7 +57,8 @@ export function useAllMedia() {
             tags: archive.tags || [],
             created_at: archive.created_at || new Date().toISOString(),
             imageCount: archive.images.length,
-            url: archive.images[0].url
+            url: archive.images[0].url,
+            original: archive
         }))
     ];
 
@@ -79,5 +95,6 @@ export function useAllMedia() {
         selectedCategory,
         setSelectedCategory,
         navigate,
+        allMedia
     }
 }
