@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useTypedSelector } from '../../../../shared/hooks/redux'
 import { useSearchInput } from '../../../hooks/useSearchInput'
-import { imagesFilter } from '../utils/imagesFilter'
+import { useFilteredMedia } from '../../../hooks/useFilteredMedia'
 
 export const MainSidebar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -9,7 +9,7 @@ export const MainSidebar = () => {
   const { value, handleChange, handleKeyDown } = useSearchInput({
     initialValue: search,
   })
-  const filteredResults = imagesFilter()
+  const filteredResults = useFilteredMedia()
   return (
     <main
       className="flex-1 h-full bg-[#050505] p-8 hidden lg:block overflow-auto relative"
@@ -66,27 +66,29 @@ export const MainSidebar = () => {
       </div>
       {/* <!-- Grid of results placeholder --> */}
       <div className="grid gap-6 grid-cols-[repeat(auto-fit,minmax(180px,1fr))]">
-        {filteredResults.map(img => (
-          <div key={img.key} className="bg-surface-dark rounded-xl overflow-hidden group">
-            <div className="h-64 w-full bg-neutral-800 relative">
-              <img
-                alt="Dark modern architectural building at night"
-                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
-                data-alt="Dark modern architectural building at night"
-                src={img.url}
-              />
+        {filteredResults.length === 0 ? (
+          <p className="text-gray-400 col-span-full">Images not found</p>
+        ) : (
+          filteredResults.map(img => (
+            <div key={`${img.type}-${img.id}`} className="bg-surface-dark rounded-xl overflow-hidden group">
+              <div className="h-64 w-full bg-neutral-800 relative">
+                <img
+                  alt="Dark modern architectural building at night"
+                  className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300"
+                  data-alt="Dark modern architectural building at night"
+                  src={img.url}
+                />
+              </div>
+              <div className="p-4 border-t border-white/5">
+                <h4 className="text-white text-sm font-medium truncate">{img.title}</h4>
+                <p className="text-gray-500 text-xs mt-1">
+                  {img.categories[0]} • {img.original.downloadFree ? 'Free' : 'Premium'}
+                </p>
+              </div>
             </div>
-            <div className="p-4 border-t border-white/5">
-              <h4 className="text-white text-sm font-medium truncate">{img.title}</h4>
-              <p className="text-gray-500 text-xs mt-1">
-                {img.categories[0]} • {img.downloadFree ? 'Free' : 'Premium'}
-              </p>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </main>
   )
 }
-
-

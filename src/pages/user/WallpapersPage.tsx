@@ -1,8 +1,13 @@
+import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
+import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
 import { Header } from '../../user/components/homePage/HeaderHome'
-import { useFilterPage, type CategoryPageProps } from '../../components/admin/hooks/useFilterPage';
+import { ModalDownload } from '../../user/components/modal/ModalDownload'
+import { useFilterPage, type CategoryPageProps } from '../../user/hooks/useFilterPage'
 
 export function WallpapersPage({ category }: CategoryPageProps) {
-  const filteredImages = useFilterPage({category})
+  const dispatch = useTypedDispatch()
+  const { isOpen, selectedImage } = useTypedSelector(state => state.imageModal)
+  const filteredImages = useFilterPage({ category })
 
   return (
     <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden font-display bg-black">
@@ -23,17 +28,22 @@ export function WallpapersPage({ category }: CategoryPageProps) {
               </div>
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
-              {filteredImages.map(img => 
-                <div key={img.key} className="relative group image-card overflow-hidden rounded-lg">
-                <img
-                  className="w-full h-full object-cover aspect-[3/4] transition-transform duration-300 group-hover:scale-105"
-                  data-alt="Abstract swirling colors of pink and blue paint in water."
-                  src={img.url}
-                />
-                
-              </div>
-              )}
+              {filteredImages.map(img => (
+                <div
+                  key={`${img.type}-${img.id}`}
+                  onClick={() => {
+                    dispatch(openImageModal(img))
+                  }}
+                  className="relative group image-card overflow-hidden rounded-lg">
+                  <img
+                    className="w-full h-full object-cover aspect-[3/4] transition-transform duration-300 group-hover:scale-105"
+                    data-alt="Abstract swirling colors of pink and blue paint in water."
+                    src={img.url}
+                  />
+                </div>
+              ))}
             </div>
+            {isOpen && <ModalDownload onClose={() => dispatch(closeImageModal())} file={selectedImage!} />}
             <div className="flex flex-col gap-3 p-4 my-10">
               <div className="flex gap-6 justify-between">
                 <p className="text-slate-900 dark:text-white text-base font-medium leading-normal">

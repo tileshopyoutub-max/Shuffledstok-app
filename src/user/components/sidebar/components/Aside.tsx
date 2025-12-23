@@ -1,12 +1,21 @@
 import { useGetCategoriesQuery } from '../../../../shared/api/categoriesApi'
 import { useGetTagsQuery } from '../../../../shared/api/tagsApi'
 import { useTypedDispatch, useTypedSelector } from '../../../../shared/hooks/redux'
-import { clearCategories, resetFilters, setAccessType, toggleCategory, toggleTag } from '../../../../store/slices/imagesFilterSlice'
+import {
+  clearCategories,
+  resetFilters,
+
+  toggleAccessType,
+
+  toggleCategory,
+  togglePhotoType,
+  toggleTag,
+} from '../../../../store/slices/imagesFilterSlice'
 import { BurgerButton } from '../BurgerButton'
 import { sumUsageCount } from '../utils/totalCount'
 
 const Aside = () => {
-  const { selectedCategories, selectedTags, accessType } = useTypedSelector(state => state.imagesFilter)
+  const { selectedCategories, selectedTags, accessType, photoType } = useTypedSelector(state => state.imagesFilter)
   const { isOpen } = useTypedSelector(state => state.sidebar)
   const { data: categories = [] } = useGetCategoriesQuery()
   const { data: tags = [] } = useGetTagsQuery()
@@ -46,7 +55,7 @@ const Aside = () => {
                 name="access_type"
                 type="radio"
                 checked={accessType === 'free'}
-                onChange={() => dispatch(setAccessType('free'))}
+                onClick={() => dispatch(toggleAccessType('free'))}
                 value="free"
               />
               <div className="flex grow flex-col">
@@ -61,7 +70,7 @@ const Aside = () => {
                 name="access_type"
                 type="radio"
                 checked={accessType === 'premium'}
-                onChange={() => dispatch(setAccessType('premium'))}
+                onClick={() => dispatch(toggleAccessType('premium'))}
                 value="premium"
               />
               <div className="flex grow flex-col">
@@ -79,11 +88,25 @@ const Aside = () => {
           <div className="flex h-11 w-full items-center justify-center rounded-lg bg-surface-dark border border-white/10 p-1">
             <label className="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-[4px] px-2 transition-all has-[:checked]:bg-primary has-[:checked]:text-white text-gray-400 text-sm font-medium leading-normal hover:text-white">
               <span className="truncate">Single</span>
-              <input className="invisible w-0 absolute" name="photo_type" type="radio" value="Single" />
+              <input
+                className="invisible w-0 absolute"
+                type="radio"
+                name="photo_type"
+                value="Single"
+                checked={photoType === 'Single'}
+                onClick={() => dispatch(togglePhotoType('Single'))}
+              />
             </label>
             <label className="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-[4px] px-2 transition-all has-[:checked]:bg-primary has-[:checked]:text-white text-gray-400 text-sm font-medium leading-normal hover:text-white">
               <span className="truncate">Archive</span>
-              <input className="invisible w-0 absolute" name="photo_type" type="radio" value="Archive" />
+              <input
+                className="invisible w-0 absolute"
+                type="radio"
+                name="photo_type"
+                value="Archive"
+                checked={photoType === 'Archive'}
+                onClick={() => dispatch(togglePhotoType('Archive'))}
+              />
             </label>
           </div>
         </div>

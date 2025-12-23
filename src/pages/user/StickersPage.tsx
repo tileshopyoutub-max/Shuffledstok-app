@@ -1,9 +1,14 @@
-import { useFilterPage, type CategoryPageProps } from '../../components/admin/hooks/useFilterPage'
+import { useFilterPage, type CategoryPageProps } from '../../user/hooks/useFilterPage'
 import { Header } from '../../user/components/homePage/HeaderHome'
 import { FooterStickersPage } from '../../user/components/stickersPage/FooterStickersPage'
+import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
+import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
+import { ModalDownload } from '../../user/components/modal/ModalDownload'
 
 export const StickersPage = ({ category }: CategoryPageProps) => {
-  const filteredImages = useFilterPage({category})
+  const dispatch = useTypedDispatch()
+  const { isOpen, selectedImage } = useTypedSelector(state => state.imageModal)
+  const filteredImages = useFilterPage({ category })
 
   return (
     <div className="font-display">
@@ -20,19 +25,22 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
               </div>
               {/* <!-- ImageGrid --> */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 md:p-10">
-                {filteredImages.map(img => 
+                {filteredImages.map(img => (
                   <div
-                  key={img.key}
-                  className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-square group relative"
-                  data-alt="Vibrant abstract sticker with swirling colors"
-                  style={{
-                    backgroundImage: `url(${img.url})`
-                  }}>
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-                  
-                </div>
-                )}
+                    key={`${img.type}-${img.id}`}
+                    onClick={() => {
+                      dispatch(openImageModal(img))
+                    }}
+                    className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-square group relative"
+                    data-alt="Vibrant abstract sticker with swirling colors"
+                    style={{
+                      backgroundImage: `url(${img.url})`,
+                    }}>
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+                  </div>
+                ))}
               </div>
+              {isOpen && <ModalDownload onClose={() => dispatch(closeImageModal())} file={selectedImage!} />}
               {/* <!-- ProgressBar / Loading Indicator --> */}
               <div className="flex flex-col gap-3 p-4 md:p-10">
                 <div className="flex gap-6 justify-between">

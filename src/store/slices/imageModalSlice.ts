@@ -1,10 +1,10 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { ImageItems } from '../../shared/types/images'
+import type { MediaItem } from '../../components/admin/hooks/useAllMedia'
 
 
 interface ImageModalState {
   isOpen: boolean
-  selectedImage: ImageItems | null
+  selectedImage: MediaItem | null
 }
 
 const initialState: ImageModalState = {
@@ -16,7 +16,7 @@ const imageModalSlice = createSlice({
   name: 'imageModal',
   initialState,
   reducers: {
-    openImageModal(state, action: PayloadAction<ImageItems>) {
+    openImageModal(state, action: PayloadAction<MediaItem>) {
       state.isOpen = true
       state.selectedImage = action.payload
     },
