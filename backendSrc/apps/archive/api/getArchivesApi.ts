@@ -9,6 +9,7 @@ export async function getArchivesApi(request: Request, env: Env) {
         a.title,
         a.description,
         a.download_free,
+        a.created_at,
         GROUP_CONCAT(DISTINCT t.name) AS tags,
         GROUP_CONCAT(DISTINCT c.name) AS categories
       FROM archives a
@@ -52,6 +53,7 @@ export async function getArchivesApi(request: Request, env: Env) {
         title: archive.title,
         description: archive.description,
         download_free: archive.download_free,
+        created_at: archive.created_at,
         tags: archive.tags ? archive.tags.split(',') : [],
         categories: archive.categories ? archive.categories.split(',') : [],
         images: imageList

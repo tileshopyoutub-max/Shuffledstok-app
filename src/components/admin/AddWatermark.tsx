@@ -3,10 +3,12 @@ import { setSettingsWatermark } from "../../store/slices/watermarkSlice";
 import { toggleLoopWatermark } from "../../store/slices/watermarkSlice";
 
 interface AddWatermarkProps {
-    selectedFile: File | null;
-    watermarkFile: Blob | null;
+    selectedFile?: File | null;
+    watermarkFile?: Blob | null;
+    selectedFilesArr?: File[];
+    watermarkFilesArr?: Blob[];
 }
-export default function AddWatermark({ selectedFile, watermarkFile }: AddWatermarkProps) {
+export default function AddWatermark({ selectedFile, watermarkFile, selectedFilesArr, watermarkFilesArr }: AddWatermarkProps) {
 
     const settings = useTypedSelector(state => state.watermark);
     const dispatch = useTypedDispatch();
@@ -32,7 +34,7 @@ export default function AddWatermark({ selectedFile, watermarkFile }: AddWaterma
                         name="watermark"
                         type="checkbox"
                         checked={settings.enabled}
-                        disabled={!selectedFile}
+                        disabled={!selectedFile && (!selectedFilesArr || selectedFilesArr.length === 0)}
                         onChange={(e) => dispatch(setSettingsWatermark({ enabled: e.target.checked }))} />
                 </div>
                 <div className="ml-3 text-sm leading-6">
@@ -137,6 +139,17 @@ export default function AddWatermark({ selectedFile, watermarkFile }: AddWaterma
                                         <img src={URL.createObjectURL(watermarkFile)} className="max-w-full max-h-[500px] object-contain rounded-lg shadow-md" />
                                     </div>
                                 )}
+
+                                {watermarkFilesArr && selectedFilesArr && selectedFilesArr.length > 0 && (
+                                    <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                        {watermarkFilesArr.map((file, index) => (
+                                            <div key={index} className="w-full aspect-square">
+                                                <img src={URL.createObjectURL(file)} className="w-full h-full object-cover rounded-lg shadow-md" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     </div>

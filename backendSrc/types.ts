@@ -13,11 +13,12 @@ export interface Tag {
 }
 
 export interface ArchiveRow {
-  id: number
-  key: string
-  title: string
-  description: string
-  download_free: number
-  tags: string | null
-  categories: string | null
+  id: number;
+  key: string;
+  title: string;
+  description: string;
+  download_free: number;
+  created_at: string;
+  tags: string | null;
+  categories: string | null;
 }

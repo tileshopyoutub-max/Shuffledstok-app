@@ -10,6 +10,8 @@ import type { Tag } from '../../../shared/types/tags';
 import type { Category } from '../../../shared/types/Category';
 import { useUploadArchiveMutation } from '../../../shared/api/archivesApi';
 import { useFileInput } from './useFileInput';
+import { useArchiveImagesCompressor } from './images/useArchiveImagesCompressor';
+import { useArchiveImagesWatermark } from './images/useArchiveImagesWatermark'
 
 
 export function useAddFile() {
@@ -34,9 +36,15 @@ export function useAddFile() {
     fileInput.fileType === 'image' ? fileInput.file : null
   );
 
+  const compressorFileArchive = useArchiveImagesCompressor(
+    fileInput.fileType === 'archive' ? fileInput.archiveImages : null
+  );
+
   const watermarkFile = useAddWatermark(
     fileInput.fileType === 'image' && settings.enabled ? compressorFile : null, settings
   );
+
+  const watermarkFileArchive = useArchiveImagesWatermark(fileInput.fileType === 'archive' ? compressorFileArchive : null, settings);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -100,16 +108,22 @@ export function useAddFile() {
       formData.append('tags', JSON.stringify(selectedTags.map(t => t.id)));
       formData.append('downloadFree', downloadFree.toString())
 
-      fileInput.archiveImages.forEach(img => {
-        formData.append('archiveImages', img)
-      })
+      if (watermarkFileArchive.length) {
+        watermarkFileArchive.forEach(img => {
+          formData.append('archiveImagesWatermark', img)
+          console.log('Отправляем файлы с ватермаркой, ', img)
+        })
+      } else if (compressorFileArchive.length) {
+        compressorFileArchive.forEach(img => {
+          formData.append('archiveCompressedImages', img)
+          console.log('Отправляем файлы без ватермарки, ', img)
+        })
+      }
 
       await uploadArchive(formData).unwrap();
     }
 
-
     fileInput.setMessage('The file was uploaded successfully')
-
 
     fileInput.reset();
     setTitle('');
@@ -146,6 +160,7 @@ export function useAddFile() {
     setSelectedCategories,
     setSelectedTags,
     watermarkFile,
+    watermarkFileArchive,
     handleSubmit,
     resetForm,
   };

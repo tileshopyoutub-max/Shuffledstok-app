@@ -60,7 +60,7 @@ export function useAllMedia() {
             url: archive.images[0].url,
             original: archive
         }))
-    ];
+    ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());;
 
     const navigate = useNavigate();
 

@@ -45,7 +45,17 @@ export async function postArchiveApi(request: Request, env: Env) {
 
     const archiveId = archiveResult.meta.last_row_id
 
-    const archiveImagesFiles = formData.getAll('archiveImages') as File[]
+    const watermarkImages = formData.getAll('archiveImagesWatermark') as File[];
+    const compressedImages = formData.getAll('archiveCompressedImages') as File[];
+
+    const archiveImagesFiles = watermarkImages.length > 0 ? watermarkImages : compressedImages;
+
+    if (archiveImagesFiles.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'No preview images provided' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
     const savedImages: ArchiveImage[] = []
 
     for (let i = 0; i < archiveImagesFiles.length; i++) {
@@ -57,6 +67,12 @@ export async function postArchiveApi(request: Request, env: Env) {
       await env.PUBLIC_WATERMARKED_BUCKET.put(key, buffer, {
         httpMetadata: { contentType: img.type }
       })
+
+      console.log('[UPLOAD TO PUBLIC]', {
+        key,
+        contentType: img.type,
+        size: buffer.byteLength
+      });
 
       const imgResult = await env.DB.prepare(`
         INSERT INTO archive_images (archive_id, key, sort_order)
