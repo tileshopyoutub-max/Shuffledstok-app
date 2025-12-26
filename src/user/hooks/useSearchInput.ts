@@ -18,13 +18,11 @@ export const useSearchInput = ({initialValue = ''}: UseSearchInputOptions) => {
   const applySearch = () => {
     dispatch(hideHero())
     dispatch(setSearch(value.trim()))
-    setValue('')
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       applySearch()
-      setValue('')
     }
   }
 

@@ -40,7 +40,6 @@ export async function DeleteCategoryApi(request: Request, env: Env) {
         });
 
     } catch (err) {
-        console.error("Error deleting category:", err);
         return Response.json({
             success: false, error: "Failed to delete category"
         }, { status: 500 });

@@ -6,35 +6,46 @@ import { useGetCategoriesQuery } from "../../../shared/api/categoriesApi";
 import { useGetArchivesQuery } from "../../../shared/api/archivesApi";
 import type { ArchiveItem } from "../../../shared/types/archives";
 import type { ImageItems } from "../../../shared/types/images";
+import { useUpdateFeaturedMutation as useUpdateImageFeatured } from '../../../shared/api/imagesApi'
+import { useUpdateFeaturedMutation as useUpdateArchiveFeatured } from '../../../shared/api/archivesApi'
+import { useUpdateArchivePreviewMutation } from "../../../shared/api/archivesApi";
 
 
 export type MediaItem =
-  | {
-      id: number
-      type: 'image'
-      title: string
-      url?: string
-      categories: string[]
-      tags: string[]
-      created_at: string
-      original: ImageItems
+    | {
+        id: number
+        type: 'image'
+        title: string
+        url?: string
+        categories: string[]
+        tags: string[]
+        created_at: string
+        original: ImageItems
+        featured?: number
     }
-  | {
-      id: number
-      type: 'archive'
-      title: string
-      url?: string
-      categories: string[]
-      tags: string[]
-      created_at: string
-      imageCount: number
-      original: ArchiveItem
+    | {
+        id: number
+        type: 'archive'
+        title: string
+        url?: string
+        categories: string[]
+        tags: string[]
+        created_at: string
+        imageCount: number
+        original: ArchiveItem
+        featured?: number
     }
 
 export function useAllMedia() {
     const { data: images = [] } = useGetImagesQuery();
     const { data: categories = [] } = useGetCategoriesQuery();
     const { data: archives = [] } = useGetArchivesQuery();
+
+    const [updateImageFeatured] = useUpdateImageFeatured();
+    const [updateArchiveFeatured] = useUpdateArchiveFeatured();
+    const [updateArchivePreview] = useUpdateArchivePreviewMutation();
+
+    const [localArchivePreviews, setLocalArchivePreviews] = useState<Record<number, number>>({});
 
     const allMedia: MediaItem[] = [
 
@@ -46,21 +57,49 @@ export function useAllMedia() {
             categories: img.categories || [],
             tags: img.tags || [],
             created_at: img.created_at,
-            original: img
+            original: img,
+            featured: img.featured,
         })),
 
-        ...archives.map(archive => ({
-            id: archive.id,
-            type: 'archive' as const,
-            title: archive.title || 'Untitled Archive',
-            categories: archive.categories || [],
-            tags: archive.tags || [],
-            created_at: archive.created_at || new Date().toISOString(),
-            imageCount: archive.images.length,
-            url: archive.images[0].url,
-            original: archive
-        }))
-    ];
+        ...archives.map(archive => {
+            const previewId = localArchivePreviews[archive.id] || archive.preview_image_id || archive.images[0]?.id;
+            const previewImage = archive.images.find(img => img.id === previewId) || archive.images[0];
+
+            return {
+                id: archive.id,
+                type: 'archive' as const,
+                title: archive.title || 'Untitled Archive',
+                categories: archive.categories || [],
+                tags: archive.tags || [],
+                created_at: archive.created_at || new Date().toISOString(),
+                imageCount: archive.images.length,
+                url: previewImage?.url,
+                original: archive,
+                featured: archive.featured
+            }
+        })
+    ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    async function updateFeatured(item: MediaItem, value: number) {
+        if (item.type === 'image') {
+            await updateImageFeatured({ id: item.id, featured: value });
+        } else {
+            await updateArchiveFeatured({ id: item.id, featured: value });
+        }
+    }
+
+    async function setArchivePreview(archiveId: number, previewImageId: number) {
+        setLocalArchivePreviews(prev => ({ ...prev, [archiveId]: previewImageId }));
+        try {
+            await updateArchivePreview({ id: archiveId, preview_image_id: previewImageId }).unwrap();
+        } catch (error) {
+            setLocalArchivePreviews(prev => {
+                const newState = { ...prev };
+                delete newState[archiveId];
+                return newState;
+            });
+        }
+    }
 
     const navigate = useNavigate();
 
@@ -85,8 +124,6 @@ export function useAllMedia() {
         categories,
         page,
         setPage,
-        startIndex,
-        endIndex,
         pages,
         visibleMedia,
         setSearchParams,
@@ -95,6 +132,9 @@ export function useAllMedia() {
         selectedCategory,
         setSelectedCategory,
         navigate,
-        allMedia
+        allMedia,
+        updateFeatured,
+        localArchivePreviews,
+        setArchivePreview
     }
 }

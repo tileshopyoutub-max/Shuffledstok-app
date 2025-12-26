@@ -5,6 +5,7 @@ export interface ArchiveImage {
   sortOrder: number;
   url: string;
   relatedPhotos: ArchiveImage[];
+  featured?: number;
 }
 
 export interface ArchiveItem {
@@ -17,4 +18,6 @@ export interface ArchiveItem {
   categories: string[];
   images: ArchiveImage[];
   created_at?: string;
+  featured?: number;
+  preview_image_id?: number;
 }

@@ -2,8 +2,6 @@ import { useEffect } from 'react'
 import { useTypedDispatch, useTypedSelector } from '../../../shared/hooks/redux'
 import { closeSidebar } from '../../../store/slices/sidebarSlice'
 import Aside from './components/Aside'
-import { MainSidebar } from './components/MainSidebar'
-
 
 export const Sidebar = () => {
   const { isOpen } = useTypedSelector(state => state.sidebar)
@@ -33,13 +31,10 @@ export const Sidebar = () => {
         fixed left-0 right-0 z-[100]
         transition-opacity duration-300
         ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-        w-full max-w-[360px] sm:max-w-[400px] md:max-w-[480px] lg:max-w-[1020px]
+        w-full max-w-[340px] 
       `}>
       {/* <!-- Left Sidebar --> */}
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-2" onClick={() => dispatch(closeSidebar())} />
       <Aside/>
-      {/* <!-- Main Content Area (Abstract background pattern for visual context) --> */}
-      <MainSidebar/>
     </div>
   )
 }

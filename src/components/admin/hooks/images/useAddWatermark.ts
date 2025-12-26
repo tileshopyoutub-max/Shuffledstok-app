@@ -65,7 +65,7 @@ export function useAddWatermark(file: File | null, settings: WatermarkSettings) 
 
             canvas.toBlob((blob) => {
                 if (blob) setWatermarkFile(blob)
-            }, 'image/jpeg')
+            }, 'image/jpeg', 0.92)
         }
 
         return () => {

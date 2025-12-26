@@ -6,6 +6,8 @@ import { toggleTag } from '../../../store/slices/imagesFilterSlice'
 import { useImageModal } from './hooks/useImageModal'
 import { useAllMedia, type MediaItem } from '../../../components/admin/hooks/useAllMedia'
 import { ArchiveSlider } from './ArchiveSlider'
+import { useExpandableText } from '../../hooks/useExpandableText'
+import { FiArrowDown } from 'react-icons/fi'
 
 interface ModalTypes {
   onClose: () => void
@@ -39,6 +41,8 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
     fileKey: key,
   })
 
+  const { textRef, maxHeight, expanded, isOverflowing, toggle } = useExpandableText()
+
   const similarImages = findSimilarImages(allMedia, file)
 
   return (
@@ -46,14 +50,15 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
       {/* Модальное окно */}
       <div
         ref={modalRef}
-        className="bg-background-dark text-gray-100 w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden relative max-h-[90vh]">
+        className="bg-background-dark text-gray-100 w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden overflow-y-auto relative max-h-[90vh]" style={{ scrollbarWidth: 'none' }}>
         {/* Кнопка закрытия */}
-        <button onClick={onClose} className="absolute right-3 top-3 text-gray-400 hover:text-gray-200 transition">
-          <span className="material-symbols-outlined text-3xl">close</span>
-        </button>
-
+        <div className="flex justify-end flex-shrink-0 lg:hidden max-h-[30px]">
+          <button onClick={onClose} className="text-blue-500 hover:text-blue-400 transition p-1">
+            <span className="material-symbols-outlined text-2xl">close</span>
+          </button>
+        </div>
         {/* Контент модалки со скроллом */}
-        <div className="p-6 overflow-y-auto max-h-[90vh] scrollbar-none" style={{ scrollbarWidth: 'none' }}>
+        <div className="pt-0 lg:pt-6 p-7  max-h-[90vh] scrollbar-none" >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
             {/* Левая часть */}
             <div className="lg:col-span-2 flex flex-col items-center gap-4">
@@ -61,19 +66,50 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                 <ArchiveSlider images={file.original.images} />
               ) : (
                 <div className="relative w-full max-w-2xl group">
-                <div className="aspect-[3/4] w-full max-h-[65vh] overflow-hidden rounded-xl">
-                  <img alt="Preview" className="h-full w-full object-cover" src={url} />
+                  <div className="aspect-[3/4] w-full max-h-[65vh] overflow-hidden rounded-xl">
+                    <img alt="Preview" className="h-full w-full object-cover" src={url} />
+                  </div>
                 </div>
-              </div>
               )}
-              
             </div>
 
             {/* Правая часть */}
             <div className="flex flex-col gap-6">
               <div className="flex flex-col gap-3">
-                <h1 className="text-3xl md:text-4xl font-bold">{title}</h1>
-                <p className="text-gray-400">{description}</p>
+                <div className="flex justify-between">
+                  <h1 className="text-3xl md:text-4xl font-bold">{title}</h1>
+                  <button
+                    onClick={onClose}
+                    className="text-blue-500 hover:text-blue-400 transition self-start hidden lg:inline-block">
+                    <span className="material-symbols-outlined text-3xl">close</span>
+                  </button>
+                </div>
+                <p
+                  ref={textRef}
+                  className="text-gray-400 overflow-hidden transition-[max-height] duration-1000 ease-in-out"
+                  style={{ maxHeight }}>
+                  {description}
+                </p>
+                {isOverflowing && (
+                  <div
+                    className={`flex gap-2 items-center shadow-[0_-14px_20px_0_rgba(17,25,33,0.9)] ${
+                      expanded ? 'mt-1' : ''
+                    }`}>
+                    <button onClick={toggle} className="self-start text-blue-500 hover:text-blue-400 text-sm">
+                      {expanded ? 'Скрыть' : 'Читать далее'}
+                    </button>
+                    <span
+                      className={`
+                        inline-flex
+                        text-blue-500
+                        transition-transform duration-1000 ease-in-out
+                        origin-center
+                        ${expanded ? 'rotate-180' : 'rotate-0'}
+                      `}>
+                      <FiArrowDown />
+                    </span>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-4">
@@ -109,22 +145,24 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
               </div>
               <div className="border-t border-gray-800 pt-6 flex flex-col gap-3">
                 <h3 className="text-lg font-semibold text-gray-200">Tags</h3>
-                {tags.map((tag, i) => {
-                  return (
-                    <div
-                      key={i}
-                      onClick={() => {
-                        dispatch(toggleTag(tag)), dispatch(closeImageModal())
-                      }}
-                      className="flex flex-wrap gap-2">
-                      <a
-                        className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full hover:bg-gray-700 transition-colors"
-                        href="#">
-                        {tag}
-                      </a>
-                    </div>
-                  )
-                })}
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag, i) => {
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => {
+                          dispatch(toggleTag(tag)), dispatch(closeImageModal())
+                        }}
+                        className="flex flex-wrap gap-2">
+                        <a
+                          className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full hover:bg-gray-700 transition-colors"
+                          href="#">
+                          {tag}
+                        </a>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             </div>
           </div>

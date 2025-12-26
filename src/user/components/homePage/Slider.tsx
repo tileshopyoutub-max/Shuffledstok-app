@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSwipeable } from 'react-swipeable'
-import type { ImageItems } from '../../../shared/types/images'
 
-interface Slider {
-  images: ImageItems[]
+interface SliderItem {
+  id: number
+  title: string
+  url: string
+  type: 'image' | 'archive'
+  created_at: string
 }
 
-export const Slider: React.FC<Slider> = ({ images }) => {
+interface SliderProps {
+  images: SliderItem[]
+}
+
+export const Slider: React.FC<SliderProps> = ({ images }) => {
   const [index, setIndex] = useState(0)
 
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -43,7 +50,7 @@ export const Slider: React.FC<Slider> = ({ images }) => {
   const gap = isMobile ? 90 : isTablet ? 120 : 150
 
   return (
-    <div className="relative w-full h-[420px] sm:h-[520px] lg:h-[600px] flex items-center justify-center overflow-hidden bg-black" {...handlers} ref={containerRef}>
+    <div className="relative w-full h-[420px] sm:h-[520px] lg:h-[600px] flex items-center justify-center overflow-hidden bg-black " {...handlers} ref={containerRef}>
       {/* КНОПКИ */}
       <button onClick={prev} className="absolute left-4 text-white text-4xl z-20 select-none">
         ❮

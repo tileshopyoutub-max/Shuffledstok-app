@@ -1,19 +1,14 @@
 import { Link } from 'react-router-dom'
 import { CustomLink } from '../CustomLink'
-import { useTypedSelector } from '../../../shared/hooks/redux'
 import { BurgerButton } from '../sidebar/BurgerButton'
-import { useSearchInput } from '../../hooks/useSearchInput'
+import { SearchInput } from '../ui/SearchInput'
 
 export const Header = () => {
-  const { search } = useTypedSelector(state => state.imagesFilter)
-  const { value, handleChange, handleKeyDown, applySearch } = useSearchInput({
-    initialValue: search,
-  })
 
   return (
-    <header className="sticky top-0 z-[50] flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-800/80 bg-black/80 backdrop-blur-sm px-6 py-3">
-      <div className="flex items-center gap-8">
-        <div className="flex items-center gap-2 text-gray-100">
+    <header className="sticky top-0 z-[50] flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-800/80 bg-black/80 backdrop-blur-sm px-4 py-3">
+      <div className="flex items-center gap-8 mr-4">
+        <div className="flex items-center gap-2 text-gray-100 mr-2">
           <BurgerButton />
           <div className="size-6 text-primary">
             <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -41,32 +36,7 @@ export const Header = () => {
         </div>
       </div>
       <div className="flex flex-1 justify-end items-center gap-4">
-        <label className="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
-          <div className="flex w-full flex-1 items-stretch h-full">
-            <div
-              onClick={applySearch}
-              className="text-gray-400 flex bg-background-dark/50 items-center justify-center pl-3 rounded-l-lg border border-gray-700 border-r-0">
-              <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
-                search
-              </span>
-            </div>
-            <input
-              className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg border border-gray-700 border-l-0 text-gray-100 focus:outline-0 focus:ring-2 focus:ring-primary/50 ring-inset bg-background-dark/50 h-full placeholder:text-gray-400 px-4 pl-2 text-sm font-normal leading-normal"
-              placeholder="Search"
-              value={value}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-            />
-          </div>
-        </label>
-        <div className="flex gap-2">
-          <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-gray-800/80 hover:bg-gray-700/80 text-gray-200 text-sm font-bold leading-normal tracking-[0.015em] transition-colors">
-            <span className="truncate">Login</span>
-          </button>
-          <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary/90 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors">
-            <span className="truncate">Sign Up</span>
-          </button>
-        </div>
+        <SearchInput/>
       </div>
     </header>
   )

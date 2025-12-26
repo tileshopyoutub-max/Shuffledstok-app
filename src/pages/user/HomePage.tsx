@@ -1,7 +1,6 @@
 import { Header } from '../../user/components/homePage/HeaderHome'
 import { FooterHomePage } from '../../user/components/homePage/FooterHome'
 import { ModalDownload } from '../../user/components/modal/ModalDownload'
-import { useGetImagesQuery } from '../../shared/api/imagesApi'
 import { Slider } from '../../user/components/homePage/Slider'
 import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
 import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
@@ -9,16 +8,20 @@ import { hideHero } from '../../store/slices/heroSlice'
 import { toggleTag } from '../../store/slices/imagesFilterSlice'
 import { useGetTagsQuery } from '../../shared/api/tagsApi'
 import { useFilteredMedia } from '../../user/hooks/useFilteredMedia'
+import { addViewedImage } from '../../store/slices/viewedImagesSlice'
+import { ViewedImagesSlider } from '../../user/components/homePage/ViewedImagesSlider'
+
+import { useFeaturedMedia } from '../../user/hooks/useFeaturedMedia'
 
 export default function HomePage() {
   const dispatch = useTypedDispatch()
   const { isOpen, selectedImage } = useTypedSelector(state => state.imageModal)
-  const { data: images = [] } = useGetImagesQuery()
   const { selectedTags } = useTypedSelector(state => state.imagesFilter)
   const { data: tags = [] } = useGetTagsQuery()
   const { isVisible } = useTypedSelector(state => state.hero)
 
   const filteredImages = useFilteredMedia()
+  const {featuredMedia} = useFeaturedMedia()
 
   return (
     <div className="font-display bg-black">
@@ -26,11 +29,13 @@ export default function HomePage() {
         <div className="layout-container flex h-full grow flex-col">
           {/* HEADER */}
           <Header />
+          
           {/* MAIN */}
           <main className="flex flex-1 justify-center py-5">
+            
             <div className="layout-content-container flex flex-col w-full max-w-7xl">
               {isVisible && (
-                <div className="px-4 py-10 md:py-3 flex flex-col gap-1 items-center text-center">
+                <div className="px-4 py-10 md:py-3 flex flex-col gap-1 items-center text-center hidden sm:block">
                   <div className="flex flex-col gap-4 text-center">
                     <h1 className="text-gray-50 text-4xl font-black leading-tight tracking-tighter md:text-6xl">
                       Elevate Your Digital Space
@@ -42,14 +47,17 @@ export default function HomePage() {
 
                   {/* SLIDER */}
                   <div className="relative w-full max-w-5xl mx-auto overflow-hidden" style={{ perspective: '2000px' }}>
-                    <Slider images={images!} />
+                    <Slider images={featuredMedia} />
+                    
                   </div>
                 </div>
               )}
-
+              {/* Slider */}
+                <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">Previous Images</h2>
+                <ViewedImagesSlider/>
               {/* MEDIA GRID TITLE */}
               <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">All Media</h2>
-              <div className="flex flex-wrap gap-2 ml-3">
+              <div className="flex flex-nowrap gap-2 ml-3 lg:flex-wrap overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
                 {tags.map(t => (
                   <label key={t.id} className="cursor-pointer group">
                     <input
@@ -64,7 +72,7 @@ export default function HomePage() {
                   </label>
                 ))}
               </div>
-
+              
               {/* GRID */}
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
                 {filteredImages.length === 0 ? (
@@ -77,6 +85,7 @@ export default function HomePage() {
                         onClick={() => {
                           dispatch(hideHero())
                           dispatch(openImageModal(img))
+                          dispatch(addViewedImage(img))
                         }}
                         className="relative group aspect-[3/4] rounded-lg overflow-hidden bg-center bg-cover flex flex-col justify-end gap-3"
                         data-alt="Minimalist desk setup with a laptop"

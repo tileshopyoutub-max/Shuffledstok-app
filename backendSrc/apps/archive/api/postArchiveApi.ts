@@ -45,13 +45,24 @@ export async function postArchiveApi(request: Request, env: Env) {
 
     const archiveId = archiveResult.meta.last_row_id
 
-    const archiveImagesFiles = formData.getAll('archiveImages') as File[]
+    const watermarkImages = formData.getAll('archiveImagesWatermark') as File[];
+    const compressedImages = formData.getAll('archiveCompressedImages') as File[];
+
+    const archiveImagesFiles = watermarkImages.length > 0 ? watermarkImages : compressedImages;
+    const prefix = watermarkImages.length > 0 ? 'wm_' : 'compressed_';
+
+    if (archiveImagesFiles.length === 0) {
+      return new Response(
+        JSON.stringify({ error: 'No preview images provided' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
     const savedImages: ArchiveImage[] = []
 
     for (let i = 0; i < archiveImagesFiles.length; i++) {
       const img = archiveImagesFiles[i]
       const ext = img.name.split('.').pop()
-      const key = crypto.randomUUID() + '.' + ext
+      const key = `${prefix}${crypto.randomUUID()}.${ext}`;
       const buffer = await img.arrayBuffer()
 
       await env.PUBLIC_WATERMARKED_BUCKET.put(key, buffer, {
@@ -70,6 +81,11 @@ export async function postArchiveApi(request: Request, env: Env) {
         sortOrder: i,
       })
     }
+
+    const previewImageId = savedImages[0]?.id ?? null
+    await env.DB.prepare(`
+      UPDATE archives SET preview_image_id = ? WHERE id = ?
+    `).bind(previewImageId, archiveId).run()
 
     const imagesWithRelations = savedImages.map((img) => ({
       ...img,
@@ -106,11 +122,11 @@ export async function postArchiveApi(request: Request, env: Env) {
       success: true,
       archive: {
         id: archiveId,
+        preview_image_id: previewImageId,
         images: imagesWithRelations
       }
     }), { headers: { 'Content-Type': 'application/json' } })
   } catch (err) {
-    console.error('postArchiveApi error:', err)
     return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

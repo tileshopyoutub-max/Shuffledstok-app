@@ -27,6 +27,7 @@ export default function AddNewFile() {
     setSelectedTags,
 
     watermarkFile,
+    watermarkFileArchive,
     handleFileChange,
     handleDrop,
     handleDrag,
@@ -169,6 +170,10 @@ export default function AddNewFile() {
           {/*Окно добавления watermark*/}
           {fileType === 'image' && file && (
             <AddWatermark selectedFile={file} watermarkFile={watermarkFile} />
+          )}
+
+          {fileType === 'archive' && archiveImages.length > 0 && (
+            <AddWatermark selectedFilesArr={archiveImages} watermarkFilesArr={watermarkFileArchive} />
           )}
 
           <div className="pt-4 flex justify-end gap-4">
