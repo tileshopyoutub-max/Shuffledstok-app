@@ -1,12 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useSwipeable } from 'react-swipeable'
-import type { ImageItems } from '../../../shared/types/images'
 
-interface Slider {
-  images: ImageItems[]
+interface SliderItem {
+  id: number
+  title: string
+  url: string
+  type: 'image' | 'archive'
+  created_at: string
 }
 
-export const Slider: React.FC<Slider> = ({ images }) => {
+interface SliderProps {
+  images: SliderItem[]
+}
+
+export const Slider: React.FC<SliderProps> = ({ images }) => {
   const [index, setIndex] = useState(0)
 
   const containerRef = useRef<HTMLDivElement | null>(null)

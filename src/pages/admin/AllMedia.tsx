@@ -5,13 +5,29 @@ import { useAllMedia } from '../../components/admin/hooks/useAllMedia'
 import Button from "../../components/admin/ui/Button"
 import { useMediaDeletion } from "../../components/admin/hooks/useMediaDelet"
 import Modal from "../../components/admin/ui/Modal"
+import ArchivePreviewSelector from "../../components/admin/ArchivePreviewSelector"
 
 
 export default function AllMedia() {
 
     const selectedFormat = ['JPG', 'PNG', 'SVG', 'WEBP']
 
-    const { page, setPage, pages, visibleMedia, setSearchParams, imagesQuery, filteredImages, categories, selectedCategory, setSelectedCategory, navigate } = useAllMedia();
+    const {
+        page,
+        setPage,
+        pages,
+        visibleMedia,
+        setSearchParams,
+        imagesQuery,
+        filteredImages,
+        categories,
+        selectedCategory,
+        setSelectedCategory,
+        navigate,
+        updateFeatured,
+        localArchivePreviews,
+        setArchivePreview
+    } = useAllMedia();
     const { deleteModal, openDeleteModal, closeDeleteModal, handleDelete } = useMediaDeletion();
 
     return (
@@ -102,48 +118,70 @@ export default function AllMedia() {
                 <div className="w-full px-8 pb-2">
                     <div
                         className="grid grid-cols-12 gap-4 px-4 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-border-dark/50">
-                        <div className="col-span-4 md:col-span-4 lg:col-span-3">Asset</div>
+                        <div className="col-span-2">Asset</div>
+                        <div className="col-span-2 flex justify-center">Type</div>
                         <div className="col-span-2 hidden md:block">Category</div>
-                        <div className="col-span-3 hidden lg:block">Tags</div>
-                        <div className="col-span-3 md:col-span-3 lg:col-span-2">Date Added</div>
-                        <div className="col-span-5 md:col-span-3 lg:col-span-2 text-right">Actions</div>
+                        <div className="col-span-2 hidden lg:block">Tags</div>
+                        <div className="col-span-2 md:col-span-2 lg:col-span-2">Date Added</div>
+                        <div className="col-span-1 flex justify-center">Featured</div>
+                        <div className="col-span-1 text-right">Actions</div>
                     </div>
                 </div>
                 <div className="flex-1 overflow-y-auto px-8 pb-8">
                     <div className="flex flex-col gap-2">
                         {visibleMedia.map(item => (
                             <div key={`${item.type}-${item.id}`} className="group grid grid-cols-12 gap-4 items-center bg-component-dark border border-border-dark rounded-lg p-3 hover:border-primary/50 transition-all hover:bg-slate-800/50">
-                                <div className="col-span-4 md:col-span-4 lg:col-span-3 flex items-center gap-4">
+                                <div className="col-span-4 md:col-span-4 lg:col-span-2 flex items-center gap-4">
                                     <div className="w-16 h-12 rounded bg-black overflow-hidden shrink-0 relative border border-border-dark">
-                                        <img src={item.url} alt={item.title!} />
+                                        <img
+                                            src={item.url}
+                                            alt={item.title!}
+                                        />
                                     </div>
                                     <div className="min-w-0">
                                         <h3 className="text-white font-medium text-sm truncate" title={item.title!}>{item.title}</h3>
                                         <p className="text-xs text-slate-500 font-mono mt-0.5">ID: #{item.id}</p>
                                         {item.type === 'archive' && (<>
-                                            <p className="text-xs text-slate-500 font-mono mt-0.5">Archive</p>
                                             <p className="text-xs text-slate-500 font-mono mt-0.5">{item.imageCount} photo</p>
+                                            <ArchivePreviewSelector
+                                                archive={item.original}
+                                                currentPreviewId={localArchivePreviews[item.id] || item.original.preview_image_id || item.original.images[0]?.id}
+                                                onSelect={(previewImageId) => setArchivePreview(item.id, previewImageId)}
+                                            />
                                         </>)}
                                         {item.type === 'image' && (<p className="text-xs text-slate-500 font-mono mt-0.5">Image</p>)}
                                     </div>
-                                    
+
+                                </div>
+
+                                <div className="col-span-2 flex justify-center">
+                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${item.type === 'image'
+                                        ? 'bg-teal-500/20 text-teal-400 border border-teal-500/20'
+                                        : 'bg-purple-500/20 text-purple-400 border border-purple-500/20'
+                                        }`}>{item.type}</span>
                                 </div>
                                 <div className="col-span-2 hidden md:block">
                                     {item.categories.map(category => (
                                         <span key={category} className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/20">{category}</span>
                                     ))}
                                 </div>
-                                <div className="col-span-3 hidden lg:flex flex-wrap gap-1.5">
+                                <div className="col-span-2 hidden lg:flex flex-wrap gap-1.5">
                                     {item.tags.map(tag => (
                                         <span key={`${item.id}-${tag}`} className="text-[10px] text-slate-400 bg-background-dark border border-border-dark px-1.5 py-0.5 rounded">
                                             {tag}
                                         </span>
                                     ))}
                                 </div>
-                                <div className="col-span-3 md:col-span-3 lg:col-span-2 text-sm text-slate-400">
+                                <div className="col-span-2 md:col-span-2 lg:col-span-2 text-sm text-slate-400">
                                     {new Date(item.created_at).toLocaleDateString()}
                                 </div>
-                                <div className="col-span-5 md:col-span-3 lg:col-span-2 flex justify-end items-center gap-2">
+                                <div className="col-span-1 flex justify-center">
+                                    <input checked={item.featured === 1}
+                                        className="w-4 h-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent cursor-pointer"
+                                        type="checkbox"
+                                        onChange={(e) => updateFeatured(item, e.target.checked ? 1 : 0)} />
+                                </div>
+                                <div className="col-span-1 flex justify-end items-center gap-2">
                                     <button
                                         className="p-2 text-slate-400 hover:text-primary hover:bg-slate-700 rounded transition-colors"
                                         title="Edit">

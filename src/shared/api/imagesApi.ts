@@ -29,14 +29,23 @@ export const imagesApi = createApi({
         },
       }),
     }),
-    deleteImage: builder.mutation<{success: boolean, message: string}, {id: number}>({
-      query: ({id}) => ({
+    deleteImage: builder.mutation<{ success: boolean, message: string }, { id: number }>({
+      query: ({ id }) => ({
         url: `/api/images/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Images']
     }),
+    updateFeatured: builder.mutation<{ success: boolean; id: number; featured: number },{ id: number; featured: number }>({
+      query: ({ id, featured }) => ({
+        url: '/api/admin/update-featured',
+        method: 'POST',
+        body: { id, value: featured },
+      }),
+      invalidatesTags: ['Images'],
+    })
+
   }),
 })
 
-export const { useGetImagesQuery, useUploadImageMutation, useDownloadImageMutation, useDeleteImageMutation } = imagesApi
+export const { useGetImagesQuery, useUploadImageMutation, useDownloadImageMutation, useDeleteImageMutation, useUpdateFeaturedMutation } = imagesApi
