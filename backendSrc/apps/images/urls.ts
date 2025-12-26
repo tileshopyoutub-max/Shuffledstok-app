@@ -4,6 +4,7 @@ import { GetViewImageApi } from './api/getViewImageApi'
 import { GetImagesApi } from './api/getImagesApi'
 import { PostImageApi } from './api/postImageApi'
 import { DeleteImageApi } from './api/deleteImageApi'
+import { updateFeaturedImageApi } from './api/updateFeaturedImageApi'
 
 export default function registerImagesRoutes(router: RouterType) {
   router.get("/api/images/", GetImagesApi)
@@ -11,4 +12,5 @@ export default function registerImagesRoutes(router: RouterType) {
   router.get("/image/:key", GetViewImageApi)
   router.get("/image/:key/download", downloadImageApi)
   router.delete("/api/images/:id", DeleteImageApi)
+  router.post("/api/admin/update-featured", updateFeaturedImageApi)
 }

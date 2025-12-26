@@ -62,8 +62,6 @@ export function useArchiveImagesCompressor(files: File[] | null) {
 
                 if (!blob) continue;
 
-                console.log(`[Compress] File: ${file.name}, original: ${file.size} bytes, compressed: ${blob.size} bytes`);
-
                 if (blob.size >= file.size) {
                     result.push(file)
                 } else {
@@ -74,7 +72,7 @@ export function useArchiveImagesCompressor(files: File[] | null) {
             if (!cancelled) {
                 setCompressorFile(result);
             }
-            
+
         }
 
         compressorAll();

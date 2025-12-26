@@ -12,6 +12,7 @@ export async function GetImagesApi(_: Request, env: Env) {
         i.has_watermark,
         i.created_at,
         i.download_free,
+        i.featured,
         GROUP_CONCAT(DISTINCT t.name) AS tags,
         GROUP_CONCAT(DISTINCT c.name) AS categories
       FROM images i
@@ -26,13 +27,15 @@ export async function GetImagesApi(_: Request, env: Env) {
     
     const images = results.map((img: any) => {
       const {
-        download_free, 
+        download_free,
+        featured, 
         ...rest
       } = img
 
       return {
         ...rest,
         downloadFree: !!Number(download_free),
+        featured: Number(featured) || 0,
         tags: img.tags ? img.tags.split(',').map((tag: string) => tag.trim()) : [],
         categories: img.categories ? img.categories.split(',').map((c: string) => c.trim()) : [],
         url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${img.key}`,

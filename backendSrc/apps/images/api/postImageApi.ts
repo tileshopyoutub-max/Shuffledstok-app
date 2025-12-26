@@ -55,11 +55,11 @@ export async function PostImageApi(request: Request, env: Env) {
     // ---------- D1 ----------
     const result = await env.DB.prepare(
       `
-      INSERT INTO images (key, title, description, has_watermark, download_free)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO images (key, title, description, has_watermark, download_free, featured)
+      VALUES (?, ?, ?, ?, ?, ?)
       `,
     )
-      .bind(publicKey, title, description, watermarkedFile ? 1 : 0, downloadFree)
+      .bind(publicKey, title, description, watermarkedFile ? 1 : 0, downloadFree, 0)
       .run()
 
     const imageId = result.meta.last_row_id
@@ -87,6 +87,7 @@ export async function PostImageApi(request: Request, env: Env) {
         success: true,
         key: publicKey,
         id: imageId,
+        featured: 0,
       }),
       { headers: { 'Content-Type': 'application/json' } },
     )

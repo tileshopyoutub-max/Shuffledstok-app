@@ -47,7 +47,6 @@ export async function UpdateCategoryApi(request: Request, env: Env) {
             }, { status: 409 });
         }
 
-        console.error("Error updating category:", err);
         return Response.json({
             success: false, error: "Failed to update category"
         }, { status: 500 });

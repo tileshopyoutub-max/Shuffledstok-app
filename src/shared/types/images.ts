@@ -9,4 +9,5 @@ export interface ImageItems {
   has_watermark: number
   created_at: string
   url: string
+  featured?: number
 }

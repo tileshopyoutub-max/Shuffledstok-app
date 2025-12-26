@@ -111,12 +111,10 @@ export function useAddFile() {
       if (watermarkFileArchive.length) {
         watermarkFileArchive.forEach(img => {
           formData.append('archiveImagesWatermark', img)
-          console.log('Отправляем файлы с ватермаркой, ', img)
         })
       } else if (compressorFileArchive.length) {
         compressorFileArchive.forEach(img => {
           formData.append('archiveCompressedImages', img)
-          console.log('Отправляем файлы без ватермарки, ', img)
         })
       }
 

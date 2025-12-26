@@ -17,7 +17,6 @@ export function useMediaDeletion() {
                 await deleteArchive({ id: deleteModal.id }).unwrap();
             }
         } catch (error) {
-            console.error("Failed to delete file:", error);
             alert(`Failed to delete ${deleteModal.type}`);
         } finally {
             setDeleteModal(null);

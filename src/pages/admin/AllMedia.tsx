@@ -5,13 +5,29 @@ import { useAllMedia } from '../../components/admin/hooks/useAllMedia'
 import Button from "../../components/admin/ui/Button"
 import { useMediaDeletion } from "../../components/admin/hooks/useMediaDelet"
 import Modal from "../../components/admin/ui/Modal"
+import ArchivePreviewSelector from "../../components/admin/ArchivePreviewSelector"
 
 
 export default function AllMedia() {
 
     const selectedFormat = ['JPG', 'PNG', 'SVG', 'WEBP']
 
-    const { page, setPage, pages, visibleMedia, setSearchParams, imagesQuery, filteredImages, categories, selectedCategory, setSelectedCategory, navigate } = useAllMedia();
+    const {
+        page,
+        setPage,
+        pages,
+        visibleMedia,
+        setSearchParams,
+        imagesQuery,
+        filteredImages,
+        categories,
+        selectedCategory,
+        setSelectedCategory,
+        navigate,
+        updateFeatured,
+        localArchivePreviews,
+        setArchivePreview
+    } = useAllMedia();
     const { deleteModal, openDeleteModal, closeDeleteModal, handleDelete } = useMediaDeletion();
 
     return (
@@ -117,14 +133,21 @@ export default function AllMedia() {
                             <div key={`${item.type}-${item.id}`} className="group grid grid-cols-12 gap-4 items-center bg-component-dark border border-border-dark rounded-lg p-3 hover:border-primary/50 transition-all hover:bg-slate-800/50">
                                 <div className="col-span-4 md:col-span-4 lg:col-span-2 flex items-center gap-4">
                                     <div className="w-16 h-12 rounded bg-black overflow-hidden shrink-0 relative border border-border-dark">
-                                        <img src={item.url} alt={item.title!} />
+                                        <img
+                                            src={item.url}
+                                            alt={item.title!}
+                                        />
                                     </div>
                                     <div className="min-w-0">
                                         <h3 className="text-white font-medium text-sm truncate" title={item.title!}>{item.title}</h3>
                                         <p className="text-xs text-slate-500 font-mono mt-0.5">ID: #{item.id}</p>
                                         {item.type === 'archive' && (<>
-                                            <p className="text-xs text-slate-500 font-mono mt-0.5">Archive</p>
                                             <p className="text-xs text-slate-500 font-mono mt-0.5">{item.imageCount} photo</p>
+                                            <ArchivePreviewSelector
+                                                archive={item.original}
+                                                currentPreviewId={localArchivePreviews[item.id] || item.original.preview_image_id || item.original.images[0]?.id}
+                                                onSelect={(previewImageId) => setArchivePreview(item.id, previewImageId)}
+                                            />
                                         </>)}
                                         {item.type === 'image' && (<p className="text-xs text-slate-500 font-mono mt-0.5">Image</p>)}
                                     </div>
@@ -133,8 +156,8 @@ export default function AllMedia() {
 
                                 <div className="col-span-2 flex justify-center">
                                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${item.type === 'image'
-                                            ? 'bg-teal-500/20 text-teal-400 border border-teal-500/20'
-                                            : 'bg-purple-500/20 text-purple-400 border border-purple-500/20'
+                                        ? 'bg-teal-500/20 text-teal-400 border border-teal-500/20'
+                                        : 'bg-purple-500/20 text-purple-400 border border-purple-500/20'
                                         }`}>{item.type}</span>
                                 </div>
                                 <div className="col-span-2 hidden md:block">
@@ -153,9 +176,10 @@ export default function AllMedia() {
                                     {new Date(item.created_at).toLocaleDateString()}
                                 </div>
                                 <div className="col-span-1 flex justify-center">
-                                    <input checked={false}
+                                    <input checked={item.featured === 1}
                                         className="w-4 h-4 rounded border-border-dark bg-background-dark text-primary focus:ring-primary focus:ring-offset-0 focus:ring-offset-transparent cursor-pointer"
-                                        type="checkbox" />
+                                        type="checkbox"
+                                        onChange={(e) => updateFeatured(item, e.target.checked ? 1 : 0)} />
                                 </div>
                                 <div className="col-span-1 flex justify-end items-center gap-2">
                                     <button

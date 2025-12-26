@@ -21,4 +21,6 @@ export interface ArchiveRow {
   created_at: string;
   tags: string | null;
   categories: string | null;
+  featured?: number;
+  preview_image_id?: number;
 }

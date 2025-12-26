@@ -1,7 +1,6 @@
 import { Header } from '../../user/components/homePage/HeaderHome'
 import { FooterHomePage } from '../../user/components/homePage/FooterHome'
 import { ModalDownload } from '../../user/components/modal/ModalDownload'
-import { useGetImagesQuery } from '../../shared/api/imagesApi'
 import { Slider } from '../../user/components/homePage/Slider'
 import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
 import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
@@ -9,16 +8,17 @@ import { hideHero } from '../../store/slices/heroSlice'
 import { toggleTag } from '../../store/slices/imagesFilterSlice'
 import { useGetTagsQuery } from '../../shared/api/tagsApi'
 import { useFilteredMedia } from '../../user/hooks/useFilteredMedia'
+import { useFeaturedMedia } from '../../user/hooks/useFeaturedMedia'
 
 export default function HomePage() {
   const dispatch = useTypedDispatch()
   const { isOpen, selectedImage } = useTypedSelector(state => state.imageModal)
-  const { data: images = [] } = useGetImagesQuery()
   const { selectedTags } = useTypedSelector(state => state.imagesFilter)
   const { data: tags = [] } = useGetTagsQuery()
   const { isVisible } = useTypedSelector(state => state.hero)
 
   const filteredImages = useFilteredMedia()
+  const {featuredMedia} = useFeaturedMedia()
 
   return (
     <div className="font-display bg-black">
@@ -26,8 +26,10 @@ export default function HomePage() {
         <div className="layout-container flex h-full grow flex-col">
           {/* HEADER */}
           <Header />
+          
           {/* MAIN */}
           <main className="flex flex-1 justify-center py-5">
+            
             <div className="layout-content-container flex flex-col w-full max-w-7xl">
               {isVisible && (
                 <div className="px-4 py-10 md:py-3 flex flex-col gap-1 items-center text-center">
@@ -42,7 +44,8 @@ export default function HomePage() {
 
                   {/* SLIDER */}
                   <div className="relative w-full max-w-5xl mx-auto overflow-hidden" style={{ perspective: '2000px' }}>
-                    <Slider images={images!} />
+                    <Slider images={featuredMedia} />
+                    
                   </div>
                 </div>
               )}

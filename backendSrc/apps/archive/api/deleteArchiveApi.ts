@@ -64,7 +64,6 @@ export async function deleteArchiveApi(request: Request, env: Env) {
     );
 
   } catch (err) {
-    console.error('deleteArchiveApi error:', err);
     return new Response(
       JSON.stringify({ 
         error: 'Internal server error',

@@ -44,7 +44,22 @@ export const archivesApi = createApi({
       }),
       invalidatesTags: ['Archives'],
     }),
+    updateFeatured: builder.mutation<{ success: boolean; id: number; featured: number }, { id: number; featured: number }>({
+      query: ({ id, featured }) => ({
+        url: '/api/admin/update-featured-archive',
+        method: 'POST',
+        body: { id, value: featured },
+      }),
+      invalidatesTags: ['Archives'],
+    }),
+    updateArchivePreview: builder.mutation<void, { id: number, preview_image_id: number }>({
+      query: ({ id, preview_image_id }) => ({
+        url: `/archives/${id}/preview`,
+        method: 'PATCH',
+        body: { preview_image_id },
+      }),
+    }),
   }),
 })
 
-export const { useGetArchivesQuery, useUploadArchiveMutation, useDownloadArchiveMutation, useDeleteArchiveMutation } = archivesApi
+export const { useGetArchivesQuery, useUploadArchiveMutation, useDownloadArchiveMutation, useDeleteArchiveMutation, useUpdateFeaturedMutation, useUpdateArchivePreviewMutation  } = archivesApi
