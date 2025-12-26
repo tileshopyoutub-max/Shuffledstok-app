@@ -1,36 +1,32 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
 import { imagesApi } from '../shared/api/imagesApi'
 import { tagsApi } from '../shared/api/tagsApi'
-import watermarkReducer from './slices/watermarkSlice'
-import imagesFilterReducer from './slices/imagesFilterSlice'
-import imageModalReducer from './slices/imageModalSlice'
-import heroReducer from './slices/heroSlice'
 import { categoriesApi } from '../shared/api/categoriesApi'
-import sidebarReducer from './slices/sidebarSlice'
 import { archivesApi } from '../shared/api/archivesApi'
+import { type PersistConfig } from 'redux-persist'
+import persistReducer from 'redux-persist/es/persistReducer'
+import persistStore from 'redux-persist/es/persistStore'
+import { rootReducer, type RootReducer } from './rootReducer'
+import storage from 'redux-persist/lib/storage'
 
-const rootReducer = combineReducers({
-  [imagesApi.reducerPath]: imagesApi.reducer,
-  [tagsApi.reducerPath]: tagsApi.reducer,
-  [categoriesApi.reducerPath]: categoriesApi.reducer,
-  [archivesApi.reducerPath]: archivesApi.reducer,
-  watermark: watermarkReducer,
-  imagesFilter: imagesFilterReducer,
-  imageModal: imageModalReducer,
-  hero: heroReducer,
-  sidebar: sidebarReducer,
-})
-
-export const setupStore = () => {
-  return configureStore({
-    reducer: rootReducer,
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware().concat(imagesApi.middleware).concat(tagsApi.middleware).concat(categoriesApi.middleware).concat(archivesApi.middleware),
-  })
+const persistConfig: PersistConfig<RootReducer> = {
+  key: 'root',
+  storage,
+  whitelist: ['viewedImages'], 
 }
 
-export const store = setupStore()
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-export type RootState = ReturnType<typeof rootReducer>
-export type AppState = ReturnType<typeof setupStore>
-export type AppDispatch = AppState['dispatch']
+export const store = configureStore({
+  reducer: persistedReducer,
+    middleware: getDefaultMiddleware =>
+       getDefaultMiddleware({
+      serializableCheck: false, 
+    })
+      .concat(imagesApi.middleware).concat(tagsApi.middleware).concat(categoriesApi.middleware).concat(archivesApi.middleware),
+  })
+
+export const persistor = persistStore(store)
+
+export type RootState = ReturnType<typeof store.getState>
+export type AppDispatch = typeof store.dispatch

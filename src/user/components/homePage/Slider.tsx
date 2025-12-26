@@ -43,7 +43,7 @@ export const Slider: React.FC<Slider> = ({ images }) => {
   const gap = isMobile ? 90 : isTablet ? 120 : 150
 
   return (
-    <div className="relative w-full h-[420px] sm:h-[520px] lg:h-[600px] flex items-center justify-center overflow-hidden bg-black" {...handlers} ref={containerRef}>
+    <div className="relative w-full h-[420px] sm:h-[520px] lg:h-[600px] flex items-center justify-center overflow-hidden bg-black " {...handlers} ref={containerRef}>
       {/* КНОПКИ */}
       <button onClick={prev} className="absolute left-4 text-white text-4xl z-20 select-none">
         ❮

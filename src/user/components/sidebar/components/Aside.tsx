@@ -1,12 +1,11 @@
+
 import { useGetCategoriesQuery } from '../../../../shared/api/categoriesApi'
 import { useGetTagsQuery } from '../../../../shared/api/tagsApi'
 import { useTypedDispatch, useTypedSelector } from '../../../../shared/hooks/redux'
 import {
   clearCategories,
   resetFilters,
-
   toggleAccessType,
-
   toggleCategory,
   togglePhotoType,
   toggleTag,
@@ -25,7 +24,7 @@ const Aside = () => {
   return (
     <aside
       className={`
-          w-[340px] h-full flex flex-col
+          max-w-[430px] h-full flex flex-col
           bg-black border-r border-white/10
           shrink-0 relative z-20
           transition-transform duration-300
@@ -47,7 +46,7 @@ const Aside = () => {
       <div className="flex-1 overflow-y-auto px-6 pb-10 custom-scrollbar" style={{ scrollbarWidth: 'none' }}>
         {/* <!-- Access Type Section --> */}
         <div className="py-4 border-b border-white/5">
-          <h2 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4">Access Type</h2>
+          <h2 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 mt-4">Access Type</h2>
           <div className="flex flex-col gap-3">
             <label className="group relative flex items-center gap-4 rounded-lg border border-white/10 p-3 cursor-pointer hover:border-white/20 hover:bg-white/5 transition-all">
               <input
