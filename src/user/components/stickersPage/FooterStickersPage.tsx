@@ -1,7 +1,7 @@
 export const FooterStickersPage = () => {
   return (
     <footer className="flex flex-col gap-6 px-5 py-10 text-center @container">
-      <div className="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
+      {/* <div className="flex flex-wrap items-center justify-center gap-6 @[480px]:flex-row @[480px]:justify-around">
         <a
           className="text-[#9dabb8] text-base font-normal leading-normal min-w-40 hover:text-primary transition-colors"
           href="#">
@@ -22,51 +22,16 @@ export const FooterStickersPage = () => {
           href="#">
           Privacy Policy
         </a>
-      </div>
+      </div> */}
       <div className="flex flex-wrap justify-center gap-4">
-        {/* <!-- This is an example of a custom social icon using SVG, replace with your preferred method --> */}
-        <a className="text-[#9dabb8] hover:text-primary transition-colors" href="#">
-          <svg
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path d="M22 4s-.7 2.1-2 3.4c1.6 1.4 2.8 3.2 2.8 5.5 0 3.9-3.3 7.1-7.4 7.1-1.1 0-2.1-.3-3.1-.8-1.5-.8-2.8-1.9-3.9-3.2-1.7-2-2.9-4.3-3.1-6.8s.5-5.1 2.2-7.2c1.7-2 4.1-3.2 6.7-3.2 1.3 0 2.5.3 3.6.8 1.1.5 2.1 1.2 2.8 2.1z"></path>
+        <a target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-200 transition-colors" href="https://t.me/shuffledstock">
+          <svg aria-hidden="true" className="h-6 w-6" fill="currentColor" viewBox="0 0 448 512">
+            <path d="M446.7 98.6l-67.6 318.8c-5.1 22.5-18.4 28.1-37.3 17.5l-103-75.9-49.7 47.8c-5.5 5.5-10.1 10.1-20.7 10.1l7.4-104.9 190.9-172.5c8.3-7.4-1.8-11.5-12.9-4.1L117.8 284 16.2 252.2c-22.1-6.9-22.5-22.1 4.6-32.7L418.2 66.4c18.4-6.9 34.5 4.1 28.5 32.2z" />
           </svg>
         </a>
-        <a className="text-[#9dabb8] hover:text-primary transition-colors" href="#">
-          <svg
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg">
-            <rect height="20" rx="5" ry="5" width="20" x="2" y="2"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
-          </svg>
-        </a>
-        <a className="text-[#9dabb8] hover:text-primary transition-colors" href="#">
-          <svg
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12a10 10 0 0 0 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-1.5a1.5 1.5 0 0 0-1.5 1.5V12h3l-.5 3h-2.5v6.8A10 10 0 0 0 22 12c0-5.52-4.48-10-10-10z"></path>
+        <a target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-200 transition-colors" href="https://www.instagram.com/shuffledstock">
+          <svg aria-hidden="true" className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
           </svg>
         </a>
       </div>
