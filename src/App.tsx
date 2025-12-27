@@ -12,16 +12,12 @@ import { WallpapersPage } from './pages/user/WallpapersPage'
 import { StickersPage } from './pages/user/StickersPage'
 import { useHideHeroOnNavigate } from './utils/useHideHero'
 import AllMedia from './pages/admin/AllMedia'
-import { useTypedSelector } from './shared/hooks/redux'
-import { Sidebar } from './user/components/sidebar/Sidebar'
 import { AdminRoute } from './pages/admin/AdminRoute'
 
 function App() {
   useHideHeroOnNavigate('/')
-  const { isOpen } = useTypedSelector(state => state.sidebar)
   return (
     <Auth0ProviderWithNavigate>
-      {isOpen && <Sidebar />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/wallpapers" element={<WallpapersPage category="wallpapers"/>} />
