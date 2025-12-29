@@ -26,12 +26,12 @@ export default function HomePage() {
 
   return (
     <div className="font-display bg-black">
+      <Header />
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
           {/* HEADER */}
-          <Header />
           <div className="flex overflow-hidden">
-            <Sidebar/>
+            <Sidebar />
             <main className="flex flex-1 justify-center py-5 min-w-0">
               <div className="layout-content-container flex flex-col w-full max-w-7xl">
                 {isVisible && (

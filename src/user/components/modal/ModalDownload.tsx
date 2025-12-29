@@ -50,15 +50,21 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
       {/* Модальное окно */}
       <div
         ref={modalRef}
-        className="bg-background-dark text-gray-100 w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden overflow-y-auto relative max-h-[90vh]" style={{ scrollbarWidth: 'none' }}>
+        className="bg-background-dark text-gray-100 w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden overflow-y-auto relative max-h-[90vh]"
+        style={{ scrollbarWidth: 'none' }}>
         {/* Кнопка закрытия */}
-        <div className="flex justify-end flex-shrink-0 lg:hidden max-h-[30px]">
+        <div className="sticky top-4 z-10 flex justify-end px-4">
+          <button onClick={onClose} className="text-blue-500 hover:text-blue-400 transition hidden lg:inline-flex">
+            <span className="material-symbols-outlined text-3xl">close</span>
+          </button>
+        </div>
+        <div className="sticky top-0 flex justify-end flex-shrink-0 lg:hidden max-h-[30px]">
           <button onClick={onClose} className="text-blue-500 hover:text-blue-400 transition p-1">
             <span className="material-symbols-outlined text-2xl">close</span>
           </button>
         </div>
         {/* Контент модалки со скроллом */}
-        <div className="pt-0 lg:pt-6 p-7  max-h-[90vh] scrollbar-none" >
+        <div className="pt-0 lg:pt-0 p-7  max-h-[90vh] scrollbar-none">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
             {/* Левая часть */}
             <div className="lg:col-span-2 flex flex-col items-center gap-4">
@@ -78,11 +84,6 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
               <div className="flex flex-col gap-3">
                 <div className="flex justify-between">
                   <h1 className="text-3xl md:text-4xl font-bold">{title}</h1>
-                  <button
-                    onClick={onClose}
-                    className="text-blue-500 hover:text-blue-400 transition self-start hidden lg:inline-block">
-                    <span className="material-symbols-outlined text-3xl">close</span>
-                  </button>
                 </div>
                 <p
                   ref={textRef}
