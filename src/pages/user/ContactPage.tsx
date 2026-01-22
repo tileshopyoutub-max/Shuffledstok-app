@@ -1,0 +1,130 @@
+import HeaderInfo from "../../user/components/infoPages/HeaderInfo";
+import FooterInfo from "../../user/components/infoPages/FooterInfo";
+import "./ContactPage.css";
+
+export default function ContactPage() {
+  return (
+    <>
+      <HeaderInfo />
+      <main className="font-display  bg-black pt-40 pb-20 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16 space-y-4">
+            <span className="text-primary uppercase tracking-[0.3em] text-xs font-bold">
+              Contact Support
+            </span>
+
+            <h1 className="text-white text-5xl md:text-7xl font-bold leading-tight tracking-tight pt-2">
+              Get in Touch
+            </h1>
+
+            <div className="pt-6">
+              <a
+                className="email-link text-2xl md:text-3xl font-light tracking-wide text-white/80 transition-all duration-300"
+                href="mailto:shuffledstock.com@outlook.com"
+              >
+                shuffledstock.com@outlook.com
+              </a>
+            </div>
+          </div>
+
+          <div className="mt-12 bg-[#0A0A0A] border border-white/5 rounded-2xl p-8 md:p-12 shadow-2xl">
+            <form
+              className="space-y-8"
+              onSubmit={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-white/60 tracking-wider uppercase ml-1">
+                    Full Name
+                  </label>
+                  <input
+                    className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all"
+                    placeholder="Enter your name"
+                    type="text"
+                    name="fullName"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-white/60 tracking-wider uppercase ml-1">
+                    Email Address
+                  </label>
+                  <input
+                    className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all"
+                    placeholder="you@example.com"
+                    type="email"
+                    name="email"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-white/60 tracking-wider uppercase ml-1">
+                  Subject
+                </label>
+                <input
+                  className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all"
+                  placeholder="What is this regarding?"
+                  type="text"
+                  name="subject"
+                />
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-white/60 tracking-wider uppercase ml-1">
+                  Message
+                </label>
+                <textarea
+                  className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all resize-none"
+                  placeholder="Tell us how we can help..."
+                  rows={5}
+                  name="message"
+                />
+              </div>
+
+              <div className="pt-4 flex justify-center md:justify-start">
+                <button
+                  className="glow-hover group relative flex items-center justify-center gap-3 min-w-[200px] bg-primary text-black font-bold py-4 px-8 rounded-xl transition-all active:scale-[0.98]"
+                  type="submit"
+                >
+                  <span className="uppercase tracking-widest text-sm">
+                    Send Message
+                  </span>
+                  <span className="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">
+                    send
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <div className="text-white mt-20 flex flex-wrap justify-center gap-12 opacity-40">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">
+                verified
+              </span>
+              <span className="text-sm">Verified Support</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">
+                schedule
+              </span>
+              <span className="text-sm">24h Response Goal</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">
+                security
+              </span>
+              <span className="text-sm">Encrypted Connection</span>
+            </div>
+          </div>
+        </div>
+      </main>
+      <FooterInfo />
+    </>
+  );
+}

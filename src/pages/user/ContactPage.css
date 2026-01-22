@@ -1,0 +1,33 @@
+body {
+  font-family: "Space Grotesk", sans-serif;
+  background-color: #000000;
+}
+.glow-hover:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+  transition: all 0.3s ease;
+}
+.input-focus-effect:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+  outline: none;
+}
+.email-link:hover {
+  color: #3b82f6;
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+}
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: #3b82f6;
+  transition: width 0.3s ease;
+}
+.nav-underline:hover::after {
+  width: 100%;
+}
