@@ -10,12 +10,13 @@ export const FooterHomePage = () => {
         >
           About
         </Link>
-        <a
+        <Link
+          to="/contact"
           className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
-          href="#"
         >
           Contact
-        </a>
+        </Link>
+
         <a
           className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
           href="#"
@@ -28,12 +29,13 @@ export const FooterHomePage = () => {
         >
           Terms of Service
         </a>
-        <a
+
+        <Link
+          to="/privacy"
           className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
-          href="#"
         >
           Privacy Policy
-        </a>
+        </Link>
       </div>
       <div className="flex flex-wrap justify-center gap-4">
         <a

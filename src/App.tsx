@@ -14,8 +14,8 @@ import { useHideHeroOnNavigate } from "./utils/useHideHero";
 import AllMedia from "./pages/admin/AllMedia";
 import { AdminRoute } from "./pages/admin/AdminRoute";
 import AboutPage from "./pages/user/AboutPage";
-import PrivacyPolicyPage from "./pages/user/PrivacypolicyPage";
 import ContactPage from "./pages/user/ContactPage";
+import PrivacyPolicyPage from "./pages/user/PrivacyPolicyPage";
 
 function App() {
   useHideHeroOnNavigate("/");

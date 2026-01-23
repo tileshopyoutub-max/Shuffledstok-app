@@ -1,11 +1,10 @@
-import HeaderInfo from "../../user/components/infoPages/HeaderInfo";
-import FooterInfo from "../../user/components/infoPages/FooterInfo";
-import "./ContactPage.css";
+import { Header } from "../../user/components/homePage/HeaderHome";
+import { FooterHomePage } from "../../user/components/homePage/FooterHome";
 
 export default function ContactPage() {
   return (
     <>
-      <HeaderInfo />
+      <Header />
       <main className="font-display  bg-black pt-40 pb-20 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -17,22 +16,25 @@ export default function ContactPage() {
               Get in Touch
             </h1>
 
-            <div className="pt-6">
+            {/* <div className="pt-6">
               <a
-                className="email-link text-2xl md:text-3xl font-light tracking-wide text-white/80 transition-all duration-300"
+                className="transition-all duration-300 hover:text-[#3b82f6] hover:shadow-[0_0_8px_rgba(59,130,246,0.3)] text-2xl md:text-3xl font-light tracking-wide text-white/80 transition-all duration-300"
                 href="mailto:shuffledstock.com@outlook.com"
               >
                 shuffledstock.com@outlook.com
               </a>
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-12 bg-[#0A0A0A] border border-white/5 rounded-2xl p-8 md:p-12 shadow-2xl">
             <form
+              action="mailto:shuffledstock.com@outlook.com"
+              method="POST"
+              encType="text/plain"
               className="space-y-8"
-              onSubmit={(e) => {
-                e.preventDefault();
-              }}
+              //   onSubmit={(e) => {
+              //     e.preventDefault();
+              //   }}
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
@@ -40,7 +42,7 @@ export default function ContactPage() {
                     Full Name
                   </label>
                   <input
-                    className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all"
+                    className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 focus:border-[#3b82f6] focus:shadow-[0_0_0_1px_#3b82f6] focus:outline-none"
                     placeholder="Enter your name"
                     type="text"
                     name="fullName"
@@ -52,7 +54,7 @@ export default function ContactPage() {
                     Email Address
                   </label>
                   <input
-                    className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all"
+                    className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 focus:border-[#3b82f6] focus:shadow-[0_0_0_1px_#3b82f6] focus:outline-none"
                     placeholder="you@example.com"
                     type="email"
                     name="email"
@@ -65,7 +67,7 @@ export default function ContactPage() {
                   Subject
                 </label>
                 <input
-                  className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all"
+                  className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 focus:border-[#3b82f6] focus:shadow-[0_0_0_1px_#3b82f6] focus:outline-none"
                   placeholder="What is this regarding?"
                   type="text"
                   name="subject"
@@ -77,7 +79,7 @@ export default function ContactPage() {
                   Message
                 </label>
                 <textarea
-                  className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 input-focus-effect transition-all resize-none"
+                  className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 focus:border-[#3b82f6] focus:shadow-[0_0_0_1px_#3b82f6] focus:outline-none transition-all resize-none"
                   placeholder="Tell us how we can help..."
                   rows={5}
                   name="message"
@@ -86,7 +88,7 @@ export default function ContactPage() {
 
               <div className="pt-4 flex justify-center md:justify-start">
                 <button
-                  className="glow-hover group relative flex items-center justify-center gap-3 min-w-[200px] bg-primary text-black font-bold py-4 px-8 rounded-xl transition-all active:scale-[0.98]"
+                  className="transition-all duration-300 ease-[ease] hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] group relative flex items-center justify-center gap-3 min-w-[200px] bg-primary text-black font-bold py-4 px-8 rounded-xl transition-all active:scale-[0.98]"
                   type="submit"
                 >
                   <span className="uppercase tracking-widest text-sm">
@@ -124,7 +126,7 @@ export default function ContactPage() {
           </div>
         </div>
       </main>
-      <FooterInfo />
+      <FooterHomePage />
     </>
   );
 }
