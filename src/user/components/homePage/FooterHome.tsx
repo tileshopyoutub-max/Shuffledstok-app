@@ -17,7 +17,7 @@ export const FooterHomePage = () => {
           Contact
         </Link>
 
-        <a
+        {/* <a
           className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
           href="#"
         >
@@ -28,7 +28,7 @@ export const FooterHomePage = () => {
           href="#"
         >
           Terms of Service
-        </a>
+        </a> */}
 
         <Link
           to="/privacy"

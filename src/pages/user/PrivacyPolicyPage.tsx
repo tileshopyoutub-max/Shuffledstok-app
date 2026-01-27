@@ -211,100 +211,11 @@ export default function PrivacyPolicyPage() {
                 >
                   shuffledstock.com@outlook.com
                 </Link>
-
-                <button className="flex items-center justify-center gap-2 bg-white/10 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all">
-                  <span className="material-symbols-outlined">
-                    support_agent
-                  </span>
-                  Help Center
-                </button>
               </div>
             </div>
           </section>
         </div>
       </div>
-
-      <footer className="font-display  bg-black border-t border-white/5 py-20 px-6">
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-white/10 p-1 rounded">
-                <svg
-                  className="size-5 text-white"
-                  fill="none"
-                  viewBox="0 0 48 48"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </div>
-              <span className="text-white font-bold tracking-tight uppercase">
-                ShuffledStock
-              </span>
-            </div>
-
-            <p className="text-white/50 max-w-sm">
-              Premium digital assets for the modern creator. High-quality
-              wallpapers, custom icon sets, and curated stickers.
-            </p>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-6">Product</h4>
-            <ul className="space-y-4 text-white/50 text-sm">
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Wallpapers
-                </a>
-              </li>
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Instagram Icons
-                </a>
-              </li>
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  iOS Stickers
-                </a>
-              </li>
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Pricing
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-6">Legal</h4>
-            <ul className="space-y-4 text-white/50 text-sm">
-              <li>
-                <a className="text-white font-bold" href="#">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Terms of Service
-                </a>
-              </li>
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  Cookie Policy
-                </a>
-              </li>
-              <li>
-                <a className="hover:text-white transition-colors" href="#">
-                  License Agreement
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </footer>
 
       <FooterHomePage />
       <button
