@@ -26,13 +26,15 @@ export const Header = () => {
         </div>
         <div className="hidden md:flex items-center gap-8">
           <CustomLink to="/wallpapers">Wallpaper</CustomLink>
-          <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
+          {/* <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
             Instagram Icons
-          </a>
+          </a> */}
+          <CustomLink to="/instagramicons">Instagram Icons</CustomLink>
           <CustomLink to="/stickers">Stickers</CustomLink>
-          <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
+          {/* <a className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors" href="#">
             Collections
-          </a>
+          </a> */}
+          <CustomLink to="/collections">Collections</CustomLink>
         </div>
       </div>
       <div className="flex flex-1 justify-end items-center gap-4">

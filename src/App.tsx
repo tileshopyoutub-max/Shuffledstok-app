@@ -10,6 +10,8 @@ import HomePage from './pages/user/HomePage'
 import Auth0ProviderWithNavigate from './user/auth0/auth0-provider'
 import { WallpapersPage } from './pages/user/WallpapersPage'
 import { StickersPage } from './pages/user/StickersPage'
+import { InstagramIconsPage } from './pages/user/InstagramIconsPage'
+import { CollectionsPage } from './pages/user/CollectionsPage'
 import { useHideHeroOnNavigate } from './utils/useHideHero'
 import AllMedia from './pages/admin/AllMedia'
 import { AdminRoute } from './pages/admin/AdminRoute'
@@ -22,6 +24,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/wallpapers" element={<WallpapersPage category="wallpapers"/>} />
         <Route path="/stickers" element={<StickersPage category="stickers"/>} />
+        <Route path="/instagramicons" element={<InstagramIconsPage category="instagramicons"/>} />
+        <Route path="/collections" element={<CollectionsPage category="collections"/>}/>
 
         <Route element={<AdminRoute />}>
         
