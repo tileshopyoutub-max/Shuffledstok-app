@@ -5,7 +5,7 @@ import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
 import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
 import { ModalDownload } from '../../user/components/modal/ModalDownload'
 
-export const StickersPage = ({ category }: CategoryPageProps) => {
+export const InstagramIconsPage = ({ category }: CategoryPageProps) => {
   const dispatch = useTypedDispatch()
   const { isOpen, selectedImage } = useTypedSelector(state => state.imageModal)
   const filteredImages = useFilterPage({ category })
@@ -20,7 +20,7 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
               {/* <!-- PageHeading --> */}
               <div className="flex flex-wrap justify-between gap-3 p-4 md:p-10">
                 <h1 className="text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] min-w-72">
-                  Stickers
+                  Instagram Icons
                 </h1>
               </div>
               {/* <!-- ImageGrid --> */}
