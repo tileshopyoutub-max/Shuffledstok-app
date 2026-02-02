@@ -1,10 +1,6 @@
-import { Header } from "../../user/components/homePage/HeaderHome";
-import { FooterHomePage } from "../../user/components/homePage/FooterHome";
-
 export default function AboutPage() {
   return (
     <>
-      <Header />
       <div className="font-display flex-grow pt-40 pb-20 px-6 bg-black">
         <div className="max-w-3xl mx-auto space-y-16">
           <div className="text-center space-y-4">
@@ -66,7 +62,6 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-      <FooterHomePage />
     </>
   );
 }

@@ -16,24 +16,27 @@ import { AdminRoute } from "./pages/admin/AdminRoute";
 import AboutPage from "./pages/user/AboutPage";
 import ContactPage from "./pages/user/ContactPage";
 import PrivacyPolicyPage from "./pages/user/PrivacyPolicyPage";
+import UserLayout from "./user/layouts/UserLayout";
 
 function App() {
   useHideHeroOnNavigate("/");
   return (
     <Auth0ProviderWithNavigate>
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route
-          path="/wallpapers"
-          element={<WallpapersPage category="wallpapers" />}
-        />
-        <Route
-          path="/stickers"
-          element={<StickersPage category="stickers" />}
-        />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/privacy" element={<PrivacyPolicyPage />} />
-        <Route path="/contact" element={<ContactPage />} />
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/wallpapers"
+            element={<WallpapersPage category="wallpapers" />}
+          />
+          <Route
+            path="/stickers"
+            element={<StickersPage category="stickers" />}
+          />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+        </Route>
 
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminLayout />}>

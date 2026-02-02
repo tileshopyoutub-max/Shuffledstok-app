@@ -1,5 +1,3 @@
-import { Header } from "../../user/components/homePage/HeaderHome";
-import { FooterHomePage } from "../../user/components/homePage/FooterHome";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
 
@@ -44,7 +42,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <main className="font-display  bg-black pt-40 pb-20 px-6">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 space-y-4">
@@ -156,10 +154,9 @@ export default function ContactPage() {
       </main>
       {showTooltip && (
         <div className="fixed top-6 right-6 z-50 rounded-xl bg-black/90 border border-white/10 px-6 py-3 text-white shadow-lg">
-          Письмо отправлено
+          Message sent
         </div>
       )}
-      <FooterHomePage />
     </>
   );
 }

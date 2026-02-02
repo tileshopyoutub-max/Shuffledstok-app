@@ -1,37 +1,37 @@
-import { Header } from '../../user/components/homePage/HeaderHome'
-import { FooterHomePage } from '../../user/components/homePage/FooterHome'
-import { ModalDownload } from '../../user/components/modal/ModalDownload'
-import { Slider } from '../../user/components/homePage/Slider'
-import { useTypedDispatch, useTypedSelector } from '../../shared/hooks/redux'
-import { closeImageModal, openImageModal } from '../../store/slices/imageModalSlice'
-import { hideHero } from '../../store/slices/heroSlice'
-import { toggleTag } from '../../store/slices/imagesFilterSlice'
-import { useGetTagsQuery } from '../../shared/api/tagsApi'
-import { useFilteredMedia } from '../../user/hooks/useFilteredMedia'
-import { addViewedImage } from '../../store/slices/viewedImagesSlice'
-import { ViewedImagesSlider } from '../../user/components/homePage/ViewedImagesSlider'
-
-import { useFeaturedMedia } from '../../user/hooks/useFeaturedMedia'
-import { Sidebar } from '../../user/components/sidebar/Sidebar'
+import { ModalDownload } from "../../user/components/modal/ModalDownload";
+import { Slider } from "../../user/components/homePage/Slider";
+import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
+import {
+  closeImageModal,
+  openImageModal,
+} from "../../store/slices/imageModalSlice";
+import { hideHero } from "../../store/slices/heroSlice";
+import { toggleTag } from "../../store/slices/imagesFilterSlice";
+import { useGetTagsQuery } from "../../shared/api/tagsApi";
+import { useFilteredMedia } from "../../user/hooks/useFilteredMedia";
+import { addViewedImage } from "../../store/slices/viewedImagesSlice";
+import { ViewedImagesSlider } from "../../user/components/homePage/ViewedImagesSlider";
+import { useFeaturedMedia } from "../../user/hooks/useFeaturedMedia";
 
 export default function HomePage() {
-  const dispatch = useTypedDispatch()
-  const { isOpen, selectedImage } = useTypedSelector(state => state.imageModal)
-  const { selectedTags } = useTypedSelector(state => state.imagesFilter)
-  const { data: tags = [] } = useGetTagsQuery()
-  const { isVisible } = useTypedSelector(state => state.hero)
+  const dispatch = useTypedDispatch();
+  const { isOpen, selectedImage } = useTypedSelector(
+    (state) => state.imageModal
+  );
+  const { selectedTags } = useTypedSelector((state) => state.imagesFilter);
+  const { data: tags = [] } = useGetTagsQuery();
+  const { isVisible } = useTypedSelector((state) => state.hero);
 
-  const filteredImages = useFilteredMedia()
-  const { featuredMedia } = useFeaturedMedia()
+  const filteredImages = useFilteredMedia();
+  const { featuredMedia } = useFeaturedMedia();
 
   return (
     <div className="font-display bg-black">
-      <Header />
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
           {/* HEADER */}
           <div className="flex overflow-hidden">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <main className="flex flex-1 justify-center py-5 min-w-0">
               <div className="layout-content-container flex flex-col w-full max-w-7xl">
                 {isVisible && (
@@ -41,14 +41,16 @@ export default function HomePage() {
                         Elevate Your Digital Space
                       </h1>
                       <h2 className="text-gray-400 text-base font-normal leading-normal max-w-3xl mx-auto md:text-lg">
-                        Discover high-quality wallpapers, icons, and stickers curated for modern creators.
+                        Discover high-quality wallpapers, icons, and stickers
+                        curated for modern creators.
                       </h2>
                     </div>
 
                     {/* SLIDER */}
                     <div
                       className="relative w-full max-w-5xl mx-auto overflow-hidden"
-                      style={{ perspective: '2000px' }}>
+                      style={{ perspective: "2000px" }}
+                    >
                       <Slider images={featuredMedia} />
                     </div>
                   </div>
@@ -64,8 +66,9 @@ export default function HomePage() {
                 </h2>
                 <div
                   className="flex flex-nowrap gap-2 ml-3 lg:flex-wrap overflow-x-auto"
-                  style={{ scrollbarWidth: 'none' }}>
-                  {tags.map(t => (
+                  style={{ scrollbarWidth: "none" }}
+                >
+                  {tags.map((t) => (
                     <label key={t.id} className="cursor-pointer group">
                       <input
                         className="peer sr-only"
@@ -83,36 +86,43 @@ export default function HomePage() {
                 {/* GRID */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
                   {filteredImages.length === 0 ? (
-                    <p className="text-gray-400 col-span-full">Images not found</p>
+                    <p className="text-gray-400 col-span-full">
+                      Images not found
+                    </p>
                   ) : (
-                    filteredImages.map(img => {
+                    filteredImages.map((img) => {
                       return (
                         <div
                           key={`${img.type}-${img.id}`}
                           onClick={() => {
-                            dispatch(hideHero())
-                            dispatch(openImageModal(img))
-                            dispatch(addViewedImage(img))
+                            dispatch(hideHero());
+                            dispatch(openImageModal(img));
+                            dispatch(addViewedImage(img));
                           }}
                           className="relative group aspect-[3/4] rounded-lg overflow-hidden bg-center bg-cover flex flex-col justify-end gap-3"
                           data-alt="Minimalist desk setup with a laptop"
                           style={{
                             backgroundImage: `url(${img?.url})`,
-                          }}>
+                          }}
+                        >
                           {/* Hover gradient overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         </div>
-                      )
+                      );
                     })
                   )}
                 </div>
-                {isOpen && <ModalDownload onClose={() => dispatch(closeImageModal())} file={selectedImage!} />}
+                {isOpen && (
+                  <ModalDownload
+                    onClose={() => dispatch(closeImageModal())}
+                    file={selectedImage!}
+                  />
+                )}
               </div>
             </main>
           </div>
-          <FooterHomePage />
         </div>
       </div>
     </div>
-  )
+  );
 }

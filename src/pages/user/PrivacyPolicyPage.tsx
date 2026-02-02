@@ -1,12 +1,8 @@
-import { Header } from "../../user/components/homePage/HeaderHome";
-import { FooterHomePage } from "../../user/components/homePage/FooterHome";
 import { Link } from "react-router-dom";
 
 export default function PrivacyPolicyPage() {
   return (
     <>
-      <Header />
-
       <div className="font-display flex-1 flex justify-center py-20 px-6 bg-black">
         <div className="max-w-[800px] w-full">
           <div className="mb-16">
@@ -217,7 +213,6 @@ export default function PrivacyPolicyPage() {
         </div>
       </div>
 
-      <FooterHomePage />
       <button
         className="fixed bottom-8 right-8 size-12 bg-white/10 hover:bg-primary backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center transition-all group"
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
