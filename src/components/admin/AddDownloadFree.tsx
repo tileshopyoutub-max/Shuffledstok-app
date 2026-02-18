@@ -1,14 +1,13 @@
 interface AddDownloadFreeProps {
-  selectedFile: File | null
-  checked: boolean
-  onChange: (value: boolean) => void
+  selectedFile: File | null;
+  checked: boolean;
+  onChange: (value: boolean) => void;
 }
 
-export default function AddDownloadFree({ 
-  selectedFile,
+export default function AddDownloadFree({
   checked,
-  onChange, }: AddDownloadFreeProps) {
-
+  onChange,
+}: AddDownloadFreeProps) {
   return (
     <>
       <div className="relative inline-flex items-start rounded-lg border border-border bg-background p-4">
@@ -20,12 +19,14 @@ export default function AddDownloadFree({
             name="watermark"
             type="checkbox"
             checked={checked}
-            disabled={!selectedFile}
             onChange={(e) => onChange(e.target.checked)}
           />
         </div>
         <div className="ml-3 text-sm leading-6">
-          <label className="font-medium text-text-primary" htmlFor="download-free">
+          <label
+            className="font-medium text-text-primary"
+            htmlFor="download-free"
+          >
             Download Free
           </label>
           <p className="text-text-secondary" id="download-free-description">
@@ -34,5 +35,5 @@ export default function AddDownloadFree({
         </div>
       </div>
     </>
-  )
+  );
 }

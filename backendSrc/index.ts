@@ -33,7 +33,7 @@ function handleCors(request: Request) {
 
   const headers = {
     "Access-Control-Allow-Origin": isAllowed ? origin : "null",
-    "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
   };
 

@@ -1,10 +1,11 @@
-import type { Env } from '../../..'
+import type { Env } from "../../..";
 
 export async function GetImagesApi(_: Request, env: Env) {
   try {
     const { results } = await env.DB.prepare(
       `
       SELECT
+      i.price_cents,
         i.id,
         i.key,
         i.title,
@@ -23,31 +24,35 @@ export async function GetImagesApi(_: Request, env: Env) {
       GROUP BY i.id
       ORDER BY i.created_at DESC
       LIMIT 100
-    `).all();
-    
+    `
+    ).all();
+
     const images = results.map((img: any) => {
-      const {
-        download_free,
-        featured, 
-        ...rest
-      } = img
+      const { download_free, featured, price_cents, ...rest } = img;
 
       return {
         ...rest,
         downloadFree: !!Number(download_free),
+        priceCents: Number(price_cents) || 0,
         featured: Number(featured) || 0,
-        tags: img.tags ? img.tags.split(',').map((tag: string) => tag.trim()) : [],
-        categories: img.categories ? img.categories.split(',').map((c: string) => c.trim()) : [],
+        tags: img.tags
+          ? img.tags.split(",").map((tag: string) => tag.trim())
+          : [],
+        categories: img.categories
+          ? img.categories.split(",").map((c: string) => c.trim())
+          : [],
         url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${img.key}`,
-      }})
+      };
+    });
 
     return new Response(JSON.stringify(images), {
-      headers: { 'Content-Type': 'application/json' },
-    })
+      headers: { "Content-Type": "application/json" },
+    });
   } catch (err) {
+    console.error("Get images error:", err);
     return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    })
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

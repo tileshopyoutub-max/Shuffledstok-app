@@ -1,0 +1,3 @@
+
+ALTER TABLE archives ADD COLUMN price_cents INTEGER DEFAULT 0;
+ALTER TABLE images ADD COLUMN price_cents INTEGER DEFAULT 0;

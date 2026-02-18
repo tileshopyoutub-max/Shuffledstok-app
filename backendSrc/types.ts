@@ -23,4 +23,6 @@ export interface ArchiveRow {
   categories: string | null;
   featured?: number;
   preview_image_id?: number;
+
+  price_cents: number;
 }

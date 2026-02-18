@@ -15,7 +15,10 @@ export function WallpapersPage({ category }: CategoryPageProps) {
   const { isOpen, selectedImage } = useTypedSelector(
     (state) => state.imageModal
   );
-  const filteredImages = useFilterPage({ category });
+
+  const { filteredImages, isLoading } = useFilterPage({ category });
+
+  const showLoader = isLoading;
 
   return (
     <div className="font-display bg-black">
@@ -27,7 +30,7 @@ export function WallpapersPage({ category }: CategoryPageProps) {
             <div className="layout-content-container flex flex-col w-full max-w-7xl px-4 sm:px-10">
               <div className="flex flex-wrap justify-between gap-3 p-4">
                 <div className="flex min-w-72 flex-col gap-3">
-                  <p className="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">
+                  <p className="text-slate-900 text-white text-4xl font-black leading-tight tracking-[-0.033em]">
                     Wallpapers
                   </p>
                   <p className="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">
@@ -59,19 +62,22 @@ export function WallpapersPage({ category }: CategoryPageProps) {
                   file={selectedImage!}
                 />
               )}
-              <div className="flex flex-col gap-3 p-4 my-10">
-                <div className="flex gap-6 justify-between">
-                  <p className="text-slate-900 dark:text-white text-base font-medium leading-normal">
-                    Loading new wallpapers...
-                  </p>
+
+              {showLoader && (
+                <div className="flex flex-col gap-3 p-4 my-10">
+                  <div className="flex gap-6 justify-between">
+                    <p className="text-slate-900 text-white text-base font-medium leading-normal">
+                      Loading new wallpapers...
+                    </p>
+                  </div>
+                  <div className="rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                    <div
+                      className="h-2 rounded-full bg-primary animate-pulse"
+                      style={{ width: "100%" }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-                  <div
-                    className="h-2 rounded-full bg-primary animate-pulse"
-                    style={{ width: "100%" }}
-                  ></div>
-                </div>
-              </div>
+              )}
             </div>
           </main>
         </div>

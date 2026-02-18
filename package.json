@@ -10,7 +10,10 @@
     "preview": "vite preview",
     "deploy": "tsc -b && vite build && wrangler deploy && wrangler d1 migrations apply shuffledstok-db --remote",
     "dev:api": "wrangler dev --remote",
-    "start": "concurrently \"npm run dev\" \"npm run dev:api\""
+    "start": "concurrently \"npm run dev\" \"npm run dev:api\"",
+    "migrate:local": "wrangler d1 migrations apply shuffledstok-db --local",
+  "migrate:remote": "wrangler d1 migrations apply shuffledstok-db --remote"
+
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.10.0",
