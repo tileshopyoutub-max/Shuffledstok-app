@@ -15,11 +15,14 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
   const { isOpen, selectedImage } = useTypedSelector(
     (state) => state.imageModal
   );
-  const filteredImages = useFilterPage({ category });
+
+  const { filteredImages, isLoading } = useFilterPage({ category });
+
+  const showLoader = isLoading;
 
   return (
     <div className="font-display bg-black">
-      <div className="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+      <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
           <div className="px-4 sm:px-10 md:px-20 lg:px-40 flex flex-1 justify-center py-5">
             <div className="layout-content-container flex flex-col w-full max-w-screen-xl flex-1">
@@ -54,19 +57,21 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
                 />
               )}
               {/* <!-- ProgressBar / Loading Indicator --> */}
-              <div className="flex flex-col gap-3 p-4 md:p-10">
-                <div className="flex gap-6 justify-between">
-                  <p className="text-white text-base font-medium leading-normal">
-                    Loading more stickers...
-                  </p>
+              {showLoader && (
+                <div className="flex flex-col gap-3 p-4 md:p-10">
+                  <div className="flex gap-6 justify-between">
+                    <p className="text-white text-base font-medium leading-normal">
+                      Loading more stickers...
+                    </p>
+                  </div>
+                  <div className="rounded-full bg-[#3c4753]">
+                    <div
+                      className="h-2 rounded-full bg-primary"
+                      style={{ width: "100%" }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="rounded-full bg-[#3c4753]">
-                  <div
-                    className="h-2 rounded-full bg-primary"
-                    style={{ width: "100%" }}
-                  ></div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

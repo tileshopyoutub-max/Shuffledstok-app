@@ -1,10 +1,9 @@
-import AdminPageHeader from '../../components/admin/layout/AdminPageHeader'
-import AddWatermark from '../../components/admin/AddWatermark'
-import { useAddFile } from '../../components/admin/hooks/useAddFile'
-import DropdownSelect from '../../components/admin/DropdownSelect'
-import FileDropzone from '../../components/admin/FileDropzone';
-import AddDownloadFree from '../../components/admin/AddDownloadFree'
-
+import AdminPageHeader from "../../components/admin/layout/AdminPageHeader";
+import AddWatermark from "../../components/admin/AddWatermark";
+import { useAddFile } from "../../components/admin/hooks/useAddFile";
+import DropdownSelect from "../../components/admin/DropdownSelect";
+import FileDropzone from "../../components/admin/FileDropzone";
+import AddDownloadFree from "../../components/admin/AddDownloadFree";
 
 export default function AddNewFile() {
   const {
@@ -45,15 +44,18 @@ export default function AddNewFile() {
     removeArchiveImage,
     downloadFree,
     setDownloadFree,
+    price,
+    setPrice,
   } = useAddFile();
-
 
   return (
     <>
       <AdminPageHeader title="Add New File" />
-      <p className="text-text-secondary mt-1">Upload a new media file to the ShuffledStock library.</p>
+      <p className="text-text-secondary mt-1">
+        Upload a new media file to the ShuffledStock library.
+      </p>
       <div className="bg-surface p-8 rounded-lg border border-border">
-        <form className="space-y-3" onSubmit={handleSubmit}>
+        <form className="space-y-3" onSubmit={(e) => handleSubmit(e, price)}>
           <FileDropzone
             inputId="main-file-upload"
             file={file}
@@ -64,9 +66,10 @@ export default function AddNewFile() {
             onDragEnter={handleDrag}
             onDragOver={handleDrag}
             onDragLeave={handleLeave}
-            onDrop={handleDrop} />
+            onDrop={handleDrop}
+          />
 
-          {fileType === 'archive' && (
+          {fileType === "archive" && (
             <>
               <FileDropzone
                 file={archiveImages[0]}
@@ -77,9 +80,13 @@ export default function AddNewFile() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   if (!e.target.files) return;
                   const filesArray = Array.from(e.target.files);
-                  setArchiveImages(prev => {
+                  setArchiveImages((prev) => {
                     const newFiles = filesArray.filter(
-                      f => !prev.some(existing => existing.name === f.name && existing.size === f.size)
+                      (f) =>
+                        !prev.some(
+                          (existing) =>
+                            existing.name === f.name && existing.size === f.size
+                        )
                     );
                     return [...prev, ...newFiles];
                   });
@@ -91,7 +98,6 @@ export default function AddNewFile() {
                 label="Upload images for the current archive"
                 description="Upload images for the current archive"
               />
-
 
               <div className="mt-2 text-sm text-text-secondary flex flex-wrap gap-2">
                 {archiveImages.map((file, index) => (
@@ -106,7 +112,9 @@ export default function AddNewFile() {
                       onClick={() => removeArchiveImage(index)}
                     >
                       <span className="sr-only">Remove</span>
-                      <span className="material-symbols-outlined text-[14px]">close</span>
+                      <span className="material-symbols-outlined text-[14px]">
+                        close
+                      </span>
                     </button>
                   </span>
                 ))}
@@ -115,7 +123,10 @@ export default function AddNewFile() {
           )}
 
           <div>
-            <label className="block text-sm font-medium leading-6 text-text-secondary" htmlFor="title">
+            <label
+              className="block text-sm font-medium leading-6 text-text-secondary"
+              htmlFor="title"
+            >
               Title
             </label>
             <div className="mt-2">
@@ -126,12 +137,17 @@ export default function AddNewFile() {
                 placeholder="e.g. Vibrant abstract sticker"
                 type="text"
                 value={title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setTitle(e.target.value)
+                }
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium leading-6 text-text-secondary" htmlFor="description">
+            <label
+              className="block text-sm font-medium leading-6 text-text-secondary"
+              htmlFor="description"
+            >
               Description
             </label>
             <div className="mt-2">
@@ -142,7 +158,10 @@ export default function AddNewFile() {
                 placeholder="A short description of the media file."
                 rows={3}
                 value={description}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDescription(e.target.value)}></textarea>
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setDescription(e.target.value)
+                }
+              ></textarea>
             </div>
           </div>
 
@@ -150,8 +169,8 @@ export default function AddNewFile() {
             data={availableTags}
             selectedItems={selectedTags}
             setSelectedItems={setSelectedTags}
-            getId={t => t.id}
-            getLabel={t => t.name}
+            getId={(t) => t.id}
+            getLabel={(t) => t.name}
             label="Tags"
             placeholder="Select a tag..."
             multiple
@@ -160,20 +179,73 @@ export default function AddNewFile() {
             data={availableCategories}
             selectedItems={selectedCategories}
             setSelectedItems={setSelectedCategories}
-            getId={c => c.id}
-            getLabel={c => c.name}
+            getId={(c) => c.id}
+            getLabel={(c) => c.name}
             label="Categories"
             placeholder="Select a category..."
           />
 
-          <AddDownloadFree selectedFile={file} checked={downloadFree} onChange={setDownloadFree} />
+          <div>
+            <label
+              className="block text-sm font-medium leading-6 text-text-secondary"
+              htmlFor="price"
+            >
+              Price
+            </label>
+
+            <div className="mt-2 relative">
+              <input
+                id="price"
+                name="price"
+                type="text"
+                inputMode="decimal"
+                placeholder="0.00"
+                value={downloadFree ? "—" : price}
+                onChange={(e) => setPrice(e.target.value)}
+                disabled={downloadFree}
+                className={`block w-full rounded-md border-0 py-2.5 pl-3 pr-10 bg-background text-text-primary placeholder:text-text-placeholder shadow-sm ring-1 ring-inset ring-border focus:ring-2 focus:ring-inset focus:ring-primary-DEFAULT sm:text-sm sm:leading-6 ${
+                  downloadFree ? "opacity-60 cursor-not-allowed" : ""
+                }`}
+              />
+
+              {!downloadFree && (
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-text-placeholder text-sm font-mono">
+                  $
+                </span>
+              )}
+            </div>
+
+            {downloadFree ? (
+              <p className="mt-1 text-xs text-text-secondary">
+                Price is disabled for Free access.
+              </p>
+            ) : (
+              <p className="mt-1 text-xs text-text-secondary">
+                Enter price for Premium access.
+              </p>
+            )}
+          </div>
+
+          <AddDownloadFree
+            selectedFile={file}
+            checked={downloadFree}
+            onChange={(next) => {
+              setDownloadFree(next);
+              if (next) setPrice("");
+              else if (!price) setPrice("");
+            }}
+          />
+
           {/*Окно добавления watermark*/}
-          {fileType === 'image' && file && (
+          {fileType === "image" && file && (
             <AddWatermark selectedFile={file} watermarkFile={watermarkFile} />
           )}
 
-          {fileType === 'archive' && archiveImages.length > 0 && (
-            <AddWatermark selectedFilesArr={archiveImages} watermarkFilesArr={watermarkFileArchive} />
+          {fileType === "archive" && archiveImages.length > 0 && (
+            <AddWatermark
+              selectedFilesArr={archiveImages}
+              watermarkFilesArr={watermarkFileArchive}
+            />
           )}
 
           <div className="pt-4 flex justify-end gap-4">
@@ -182,18 +254,20 @@ export default function AddNewFile() {
               <button
                 className="rounded-md bg-surface-accent px-4 py-2 text-sm font-semibold text-text-primary shadow-sm hover:bg-border transition-colors"
                 type="button"
-                onClick={resetForm}>
+                onClick={resetForm}
+              >
                 Reset
               </button>
             )}
             <button
               className="rounded-md bg-primary-DEFAULT px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-DEFAULT transition-colors"
-              type="submit">
+              type="submit"
+            >
               Upload File
             </button>
           </div>
         </form>
       </div>
     </>
-  )
+  );
 }

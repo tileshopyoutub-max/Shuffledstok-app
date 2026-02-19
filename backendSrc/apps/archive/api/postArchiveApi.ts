@@ -1,4 +1,4 @@
-import type { Env } from '../../..'
+import type { Env } from "../../..";
 
 interface ArchiveImage {
   id: number;
@@ -9,127 +9,171 @@ interface ArchiveImage {
 
 export async function postArchiveApi(request: Request, env: Env) {
   try {
-    const formData = await request.formData()
+    const formData = await request.formData();
 
-    const archiveFile = formData.get('archive') as File | null
+    const archiveFile = formData.get("archive") as File | null;
     if (!archiveFile) {
       return new Response(
-        JSON.stringify({ error: 'Archive file is required' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
-      )
+        JSON.stringify({ error: "Archive file is required" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
     }
 
-    const title = (formData.get('title') as string) || ''
-    const description = (formData.get('description') as string) || ''
-    const downloadFreeInput = formData.get('downloadFree') as string | null
-    const downloadFree = downloadFreeInput === 'true' ? 1 : 0
+    const title = (formData.get("title") as string) || "";
+    const description = (formData.get("description") as string) || "";
+    const downloadFreeInput = formData.get("downloadFree") as string | null;
+    const downloadFree = downloadFreeInput === "true" ? 1 : 0;
 
-    const tagsInput = formData.get('tags') as string
-    const selectedTagIds: number[] = tagsInput ? JSON.parse(tagsInput) : []
+    //
+    const priceInput = formData.get("price") as string | null;
+    let price_cents = 0;
 
-    const categoriesInput = formData.get('categories') as string
-    const selectedCategoryIds: number[] = categoriesInput ? JSON.parse(categoriesInput) : []
+    if (!downloadFree && priceInput) {
+      const normalized = priceInput.replace(",", ".").trim();
+      const value = Number(normalized);
+      if (Number.isFinite(value) && value >= 0) {
+        price_cents = Math.round(value * 100);
+      }
+    }
+    //
 
-    const archiveExt = archiveFile.name.split('.').pop()
-    const archiveKey = crypto.randomUUID() + '.' + archiveExt
-    const archiveBuffer = await archiveFile.arrayBuffer()
+    const tagsInput = formData.get("tags") as string;
+    const selectedTagIds: number[] = tagsInput ? JSON.parse(tagsInput) : [];
+
+    const categoriesInput = formData.get("categories") as string;
+    const selectedCategoryIds: number[] = categoriesInput
+      ? JSON.parse(categoriesInput)
+      : [];
+
+    const archiveExt = archiveFile.name.split(".").pop();
+    const archiveKey = crypto.randomUUID() + "." + archiveExt;
+    const archiveBuffer = await archiveFile.arrayBuffer();
 
     await env.PRIVATE_BUCKET.put(archiveKey, archiveBuffer, {
-      httpMetadata: { contentType: archiveFile.type }
-    })
+      httpMetadata: { contentType: archiveFile.type },
+    });
 
-    const archiveResult = await env.DB.prepare(`
-      INSERT INTO archives (key, title, description, download_free)
-      VALUES (?, ?, ?, ?)
-    `).bind(archiveKey, title, description, downloadFree).run()
+    const archiveResult = await env.DB.prepare(
+      `
+      INSERT INTO archives (key, title, description, download_free, price_cents)
+      VALUES (?, ?, ?, ?, ?)
+    `
+    )
+      .bind(archiveKey, title, description, downloadFree, price_cents)
+      .run();
 
-    const archiveId = archiveResult.meta.last_row_id
+    const archiveId = archiveResult.meta.last_row_id;
 
-    const watermarkImages = formData.getAll('archiveImagesWatermark') as File[];
-    const compressedImages = formData.getAll('archiveCompressedImages') as File[];
+    const watermarkImages = formData.getAll("archiveImagesWatermark") as File[];
+    const compressedImages = formData.getAll(
+      "archiveCompressedImages"
+    ) as File[];
 
-    const archiveImagesFiles = watermarkImages.length > 0 ? watermarkImages : compressedImages;
-    const prefix = watermarkImages.length > 0 ? 'wm_' : 'compressed_';
+    const archiveImagesFiles =
+      watermarkImages.length > 0 ? watermarkImages : compressedImages;
+    const prefix = watermarkImages.length > 0 ? "wm_" : "compressed_";
 
     if (archiveImagesFiles.length === 0) {
       return new Response(
-        JSON.stringify({ error: 'No preview images provided' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } }
+        JSON.stringify({ error: "No preview images provided" }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
-    const savedImages: ArchiveImage[] = []
+    const savedImages: ArchiveImage[] = [];
 
     for (let i = 0; i < archiveImagesFiles.length; i++) {
-      const img = archiveImagesFiles[i]
-      const ext = img.name.split('.').pop()
+      const img = archiveImagesFiles[i];
+      const ext = img.name.split(".").pop();
       const key = `${prefix}${crypto.randomUUID()}.${ext}`;
-      const buffer = await img.arrayBuffer()
+      const buffer = await img.arrayBuffer();
 
       await env.PUBLIC_WATERMARKED_BUCKET.put(key, buffer, {
-        httpMetadata: { contentType: img.type }
-      })
+        httpMetadata: { contentType: img.type },
+      });
 
-      const imgResult = await env.DB.prepare(`
+      const imgResult = await env.DB.prepare(
+        `
         INSERT INTO archive_images (archive_id, key, sort_order)
         VALUES (?, ?, ?)
-      `).bind(archiveId, key, i).run()
+      `
+      )
+        .bind(archiveId, key, i)
+        .run();
 
       savedImages.push({
         id: imgResult.meta.last_row_id,
         key,
         archiveId,
         sortOrder: i,
-      })
+      });
     }
 
-    const previewImageId = savedImages[0]?.id ?? null
-    await env.DB.prepare(`
+    const previewImageId = savedImages[0]?.id ?? null;
+    await env.DB.prepare(
+      `
       UPDATE archives SET preview_image_id = ? WHERE id = ?
-    `).bind(previewImageId, archiveId).run()
+    `
+    )
+      .bind(previewImageId, archiveId)
+      .run();
 
     const imagesWithRelations = savedImages.map((img) => ({
       ...img,
       relatedPhotos: savedImages
-        .filter(other => other.id !== img.id)
-        .map(other => ({
+        .filter((other) => other.id !== img.id)
+        .map((other) => ({
           id: other.id,
           key: other.key,
           archiveId,
-          sortOrder: other.sortOrder
-        }))
-    }))
-
+          sortOrder: other.sortOrder,
+        })),
+    }));
 
     if (selectedTagIds.length > 0) {
       for (const tagId of selectedTagIds) {
-        await env.DB.prepare(`INSERT INTO archive_tags (archive_id, tag_id) VALUES (?, ?)`)
-          .bind(archiveId, tagId).run()
-        await env.DB.prepare(`UPDATE tags SET usage_count = usage_count + 1 WHERE id = ?`)
-          .bind(tagId).run()
+        await env.DB.prepare(
+          `INSERT INTO archive_tags (archive_id, tag_id) VALUES (?, ?)`
+        )
+          .bind(archiveId, tagId)
+          .run();
+        await env.DB.prepare(
+          `UPDATE tags SET usage_count = usage_count + 1 WHERE id = ?`
+        )
+          .bind(tagId)
+          .run();
       }
     }
 
     if (selectedCategoryIds.length > 0) {
       for (const categoryId of selectedCategoryIds) {
-        await env.DB.prepare(`INSERT INTO archive_categories (archive_id, category_id) VALUES (?, ?)`)
-          .bind(archiveId, categoryId).run()
-        await env.DB.prepare(`UPDATE categories SET usage_count = usage_count + 1 WHERE id = ?`)
-          .bind(categoryId).run()
+        await env.DB.prepare(
+          `INSERT INTO archive_categories (archive_id, category_id) VALUES (?, ?)`
+        )
+          .bind(archiveId, categoryId)
+          .run();
+        await env.DB.prepare(
+          `UPDATE categories SET usage_count = usage_count + 1 WHERE id = ?`
+        )
+          .bind(categoryId)
+          .run();
       }
     }
 
-    return new Response(JSON.stringify({
-      success: true,
-      archive: {
-        id: archiveId,
-        preview_image_id: previewImageId,
-        images: imagesWithRelations
-      }
-    }), { headers: { 'Content-Type': 'application/json' } })
+    return new Response(
+      JSON.stringify({
+        success: true,
+        archive: {
+          id: archiveId,
+          preview_image_id: previewImageId,
+          images: imagesWithRelations,
+        },
+      }),
+      { headers: { "Content-Type": "application/json" } }
+    );
   } catch (err) {
     return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+      headers: { "Content-Type": "application/json" },
+    });
   }
 }

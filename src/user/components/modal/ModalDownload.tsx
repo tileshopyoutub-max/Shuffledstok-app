@@ -1,28 +1,34 @@
-import { useRef } from 'react'
-import { findSimilarImages } from '../../utils/FilterSimilarContent'
-import { closeImageModal, openImageModal } from '../../../store/slices/imageModalSlice'
-import { useTypedDispatch } from '../../../shared/hooks/redux'
-import { toggleTag } from '../../../store/slices/imagesFilterSlice'
-import { useImageModal } from './hooks/useImageModal'
-import { useAllMedia, type MediaItem } from '../../../components/admin/hooks/useAllMedia'
-import { ArchiveSlider } from './ArchiveSlider'
-import { useExpandableText } from '../../hooks/useExpandableText'
-import { FiArrowDown } from 'react-icons/fi'
+import { useRef } from "react";
+import { findSimilarImages } from "../../utils/FilterSimilarContent";
+import {
+  closeImageModal,
+  openImageModal,
+} from "../../../store/slices/imageModalSlice";
+import { useTypedDispatch } from "../../../shared/hooks/redux";
+import { toggleTag } from "../../../store/slices/imagesFilterSlice";
+import { useImageModal } from "./hooks/useImageModal";
+import {
+  useAllMedia,
+  type MediaItem,
+} from "../../../components/admin/hooks/useAllMedia";
+import { ArchiveSlider } from "./ArchiveSlider";
+import { useExpandableText } from "../../hooks/useExpandableText";
+import { FiArrowDown } from "react-icons/fi";
 
 interface ModalTypes {
-  onClose: () => void
-  file: MediaItem
+  onClose: () => void;
+  file: MediaItem;
 }
 
 export const ModalDownload = ({ onClose, file }: ModalTypes) => {
-  const modalRef = useRef<HTMLDivElement>(null)
-  const dispatch = useTypedDispatch()
-  const { allMedia } = useAllMedia()
+  const modalRef = useRef<HTMLDivElement>(null);
+  const dispatch = useTypedDispatch();
+  const { allMedia } = useAllMedia();
 
-  const isArchive = file.type === 'archive'
+  const isArchive = file.type === "archive";
   const image = isArchive
     ? file.original.images[0] // обложка архива
-    : file.original
+    : file.original;
 
   const { key, url, title, description, tags, downloadFree } = isArchive
     ? {
@@ -33,17 +39,18 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
         tags: file.original.tags,
         downloadFree: file.original.downloadFree,
       }
-    : file.original
+    : file.original;
 
   const { isPurchased, handleBuy, handleDownload } = useImageModal({
     modalRef,
     onClose,
     fileKey: key,
-  })
+  });
 
-  const { textRef, maxHeight, expanded, isOverflowing, toggle } = useExpandableText()
+  const { textRef, maxHeight, expanded, isOverflowing, toggle } =
+    useExpandableText();
 
-  const similarImages = findSimilarImages(allMedia, file)
+  const similarImages = findSimilarImages(allMedia, file);
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
@@ -51,15 +58,22 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
       <div
         ref={modalRef}
         className="bg-background-dark text-gray-100 w-full max-w-4xl rounded-2xl shadow-xl overflow-hidden overflow-y-auto relative max-h-[90vh]"
-        style={{ scrollbarWidth: 'none' }}>
+        style={{ scrollbarWidth: "none" }}
+      >
         {/* Кнопка закрытия */}
         <div className="sticky top-4 z-10 flex justify-end px-4">
-          <button onClick={onClose} className="text-blue-500 hover:text-blue-400 transition hidden lg:inline-flex">
+          <button
+            onClick={onClose}
+            className="text-blue-500 hover:text-blue-400 transition hidden lg:inline-flex"
+          >
             <span className="material-symbols-outlined text-3xl">close</span>
           </button>
         </div>
         <div className="sticky top-0 flex justify-end flex-shrink-0 lg:hidden max-h-[30px]">
-          <button onClick={onClose} className="text-blue-500 hover:text-blue-400 transition p-1">
+          <button
+            onClick={onClose}
+            className="text-blue-500 hover:text-blue-400 transition p-1"
+          >
             <span className="material-symbols-outlined text-2xl">close</span>
           </button>
         </div>
@@ -73,7 +87,11 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
               ) : (
                 <div className="relative w-full max-w-2xl group">
                   <div className="aspect-[3/4] w-full max-h-[65vh] overflow-hidden rounded-xl">
-                    <img alt="Preview" className="h-full w-full object-cover" src={url} />
+                    <img
+                      alt="Preview"
+                      className="h-full w-full object-cover"
+                      src={url}
+                    />
                   </div>
                 </div>
               )}
@@ -88,16 +106,21 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                 <p
                   ref={textRef}
                   className="text-gray-400 overflow-hidden transition-[max-height] duration-1000 ease-in-out"
-                  style={{ maxHeight }}>
+                  style={{ maxHeight }}
+                >
                   {description}
                 </p>
                 {isOverflowing && (
                   <div
                     className={`flex gap-2 items-center shadow-[0_-14px_20px_0_rgba(17,25,33,0.9)] ${
-                      expanded ? 'mt-1' : ''
-                    }`}>
-                    <button onClick={toggle} className="self-start text-blue-500 hover:text-blue-400 text-sm">
-                      {expanded ? 'Скрыть' : 'Читать далее'}
+                      expanded ? "mt-1" : ""
+                    }`}
+                  >
+                    <button
+                      onClick={toggle}
+                      className="self-start text-blue-500 hover:text-blue-400 text-sm"
+                    >
+                      {expanded ? "Hide" : "Read more"}
                     </button>
                     <span
                       className={`
@@ -105,8 +128,9 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                         text-blue-500
                         transition-transform duration-1000 ease-in-out
                         origin-center
-                        ${expanded ? 'rotate-180' : 'rotate-0'}
-                      `}>
+                        ${expanded ? "rotate-180" : "rotate-0"}
+                      `}
+                    >
                       <FiArrowDown />
                     </span>
                   </div>
@@ -117,7 +141,8 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                 {downloadFree && (
                   <button
                     onClick={handleDownload}
-                    className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold">
+                    className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold"
+                  >
                     Download for free
                   </button>
                 )}
@@ -126,7 +151,8 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                   <>
                     <button
                       onClick={handleBuy}
-                      className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold">
+                      className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold"
+                    >
                       Buy for $2.99
                     </button>
 
@@ -136,9 +162,10 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                       className={`w-full h-12 rounded-lg font-bold transition-colors
                         ${
                           isPurchased
-                            ? 'bg-primary hover:bg-primary/90 text-white'
-                            : 'bg-gray-700 text-gray-400 cursor-not-allowed'
-                        }`}>
+                            ? "bg-primary hover:bg-primary/90 text-white"
+                            : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        }`}
+                    >
                       Download file
                     </button>
                   </>
@@ -152,16 +179,18 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                       <div
                         key={i}
                         onClick={() => {
-                          dispatch(toggleTag(tag)), dispatch(closeImageModal())
+                          dispatch(toggleTag(tag)), dispatch(closeImageModal());
                         }}
-                        className="flex flex-wrap gap-2">
+                        className="flex flex-wrap gap-2"
+                      >
                         <a
                           className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full hover:bg-gray-700 transition-colors"
-                          href="#">
+                          href="#"
+                        >
                           {tag}
                         </a>
                       </div>
-                    )
+                    );
                   })}
                 </div>
               </div>
@@ -172,35 +201,36 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
               Similar content
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 p-4">
-              {similarImages.map(img => {
+              {similarImages.map((img) => {
                 const mediaItem: MediaItem = {
                   id: img.id,
-                  type: 'image',
-                  title: img.title || 'Untitled Image',
+                  type: "image",
+                  title: img.title || "Untitled Image",
                   url: img.url,
                   categories: img.categories || [],
                   tags: img.tags || [],
                   created_at: img.created_at,
                   original: img,
-                }
+                };
                 return (
                   <div
                     key={img.key}
                     onClick={() => {
-                      dispatch(openImageModal(mediaItem))
+                      dispatch(openImageModal(mediaItem));
                     }}
                     className="relative group bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end aspect-[3/4] overflow-hidden"
                     style={{
                       backgroundImage: `url(${img.url})`,
-                    }}>
+                    }}
+                  >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </div>
-                )
+                );
               })}
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

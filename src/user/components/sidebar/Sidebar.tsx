@@ -40,8 +40,8 @@ export const Sidebar = () => {
   return (
     <aside
       className={`
+        z-[100]
         fixed top-[64px] h-[calc(100vh-64px)]
-        h-screen
         w-[100vw] max-w-[430px] md:w-[430px]
         bg-black border-r border-white/10
         transition-transform duration-300 ease-in-out

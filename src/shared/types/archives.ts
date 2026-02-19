@@ -20,4 +20,6 @@ export interface ArchiveItem {
   created_at?: string;
   featured?: number;
   preview_image_id?: number;
+
+  priceCents: number;
 }
