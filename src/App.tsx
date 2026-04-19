@@ -17,6 +17,12 @@ import AboutPage from "./pages/user/AboutPage";
 import ContactPage from "./pages/user/ContactPage";
 import PrivacyPolicyPage from "./pages/user/PrivacyPolicyPage";
 import UserLayout from "./user/layouts/UserLayout";
+import Blog from "./pages/Blog";
+import BestWallpapers2026 from "./pages/BestWallpapers2026";
+import InstagramHighlightIcons from "./pages/InstagramHighlightIcons";
+import ChooseWallpaperIphone from "./pages/ChooseWallpaperIphone";
+import CuteWallpapers from "./pages/CuteWallpapers";
+import MinimalInstagramIcons from "./pages/MinimalInstagramIcons";
 
 function App() {
   useHideHeroOnNavigate("/");
@@ -36,6 +42,24 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route
+            path="/blog/best-wallpapers-2026"
+            element={<BestWallpapers2026 />}
+          />
+          <Route
+            path="/blog/how-to-use-instagram-highlight-icons"
+            element={<InstagramHighlightIcons />}
+          />
+          <Route
+            path="/blog/how-to-choose-wallpaper-for-iphone"
+            element={<ChooseWallpaperIphone />}
+          />
+          <Route path="/blog/cute-wallpapers" element={<CuteWallpapers />} />
+          <Route
+            path="/blog/minimal-instagram-icons"
+            element={<MinimalInstagramIcons />}
+          />
         </Route>
 
         <Route element={<AdminRoute />}>

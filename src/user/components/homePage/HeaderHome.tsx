@@ -36,6 +36,7 @@ export const Header = () => {
             Instagram Icons
           </a> */}
           <CustomLink to="/stickers">Stickers</CustomLink>
+          <CustomLink to="/blog">Blog</CustomLink>
           {/* <a
             className="text-gray-400 text-sm font-medium hover:text-gray-100 transition-colors"
             href="#"
