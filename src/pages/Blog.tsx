@@ -123,6 +123,39 @@ const Blog = () => {
               </Link>
             </div>
           </article>
+
+          <article className="group bg-surface-container-low rounded-xl overflow-hidden border border-gray-800/80 transition-all duration-500 hover:-translate-y-2 hover:-rotate-1 neon-glow">
+            <div className="aspect-[16/10] overflow-hidden">
+              <img
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                data-alt="A clean and aesthetic iPhone home screen layout with minimalist widgets and coordinated app icons"
+                src="/images/01-cover-iphone-home-screen.jpg"
+              />
+            </div>
+            <div className="p-6">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="px-3 py-1 text-[10px] uppercase font-bold tracking-widest bg-tertiary/20 text-tertiary rounded-full">
+                  Guide
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-50 mb-3 group-hover:text-secondary transition-colors">
+                How to Create an Aesthetic iPhone Home Screen
+              </h3>
+              <p className="text-on-surface-variant text-sm line-clamp-2 mb-6">
+                Step-by-step guide to creating a clean and aesthetic iPhone home
+                screen.
+              </p>
+              <Link
+                to="/blog/create-aesthetic-iphone-home-screen"
+                className="flex items-center text-secondary font-bold text-sm group/btn"
+              >
+                Read more{" "}
+                <span className="material-symbols-outlined ml-1 text-lg group-hover/btn:translate-x-1 transition-transform">
+                  arrow_right_alt
+                </span>
+              </Link>
+            </div>
+          </article>
         </div>
       </section>
 

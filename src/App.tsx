@@ -23,6 +23,7 @@ import InstagramHighlightIcons from "./pages/InstagramHighlightIcons";
 import ChooseWallpaperIphone from "./pages/ChooseWallpaperIphone";
 import CuteWallpapers from "./pages/CuteWallpapers";
 import MinimalInstagramIcons from "./pages/MinimalInstagramIcons";
+import CreateAestheticIphoneHomeScreen from "./pages/CreateAestheticIphoneHomeScreen";
 
 function App() {
   useHideHeroOnNavigate("/");
@@ -54,6 +55,10 @@ function App() {
           <Route
             path="/blog/how-to-choose-wallpaper-for-iphone"
             element={<ChooseWallpaperIphone />}
+          />
+          <Route
+            path="/blog/create-aesthetic-iphone-home-screen"
+            element={<CreateAestheticIphoneHomeScreen />}
           />
           <Route path="/blog/cute-wallpapers" element={<CuteWallpapers />} />
           <Route
