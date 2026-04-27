@@ -2,7 +2,7 @@ import {
   useFilterPage,
   type CategoryPageProps,
 } from "../../user/hooks/useFilterPage";
-
+import { Link } from "react-router-dom";
 import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
 import {
   closeImageModal,
@@ -15,7 +15,6 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
   const { isOpen, selectedImage } = useTypedSelector(
     (state) => state.imageModal
   );
-
   const { filteredImages, isLoading } = useFilterPage({ category });
 
   const showLoader = isLoading;
@@ -28,9 +27,19 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
             <div className="layout-content-container flex flex-col w-full max-w-screen-xl flex-1">
               {/* <!-- PageHeading --> */}
               <div className="flex flex-wrap justify-between gap-3 p-4 md:p-10">
-                <h1 className="text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] min-w-72">
-                  Stickers
-                </h1>
+                <div className="min-w-72 max-w-4xl">
+                  <h1 className="text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em]">
+                    Stickers
+                  </h1>
+                  <p className="text-slate-300 text-base leading-relaxed mt-4">
+                    Browse digital stickers made for planners, social media stories, moodboards,
+                    and personal creative projects. This collection includes minimalist, aesthetic,
+                    and expressive sticker styles that can be layered into templates, collages, and
+                    visual journals. If you want fast creative assets that still look intentional,
+                    these sticker downloads help you build consistent layouts without starting from
+                    scratch.
+                  </p>
+                </div>
               </div>
               {/* <!-- ImageGrid --> */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 md:p-10">
@@ -41,7 +50,6 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
                       dispatch(openImageModal(img));
                     }}
                     className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-square group relative"
-                    data-alt="Vibrant abstract sticker with swirling colors"
                     style={{
                       backgroundImage: `url(${img.url})`,
                     }}
@@ -56,6 +64,28 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
                   file={selectedImage!}
                 />
               )}
+              <section className="px-4 md:px-10 pb-8">
+                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
+                  <h2 className="text-2xl font-bold text-white mb-3">
+                    How to choose and use digital stickers
+                  </h2>
+                  <p className="text-slate-300 leading-relaxed">
+                    Pick sticker sets by purpose first: subtle elements for clean planning pages,
+                    bold pieces for social media stories, or textured styles for moodboards. Keep
+                    your palette consistent so pages and slides feel cohesive. You can drag these
+                    files into design apps, journaling tools, and template editors, then scale and
+                    layer them with text or photos.
+                  </p>
+                </div>
+              </section>
+              <section className="px-4 md:px-10 pb-8">
+                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
+                  <h2 className="text-2xl font-bold text-white mb-3">Related guides</h2>
+                  <Link className="text-primary hover:underline" to="/blog/create-aesthetic-iphone-home-screen">
+                    How to Create an Aesthetic iPhone Home Screen
+                  </Link>
+                </div>
+              </section>
               {/* <!-- ProgressBar / Loading Indicator --> */}
               {showLoader && (
                 <div className="flex flex-col gap-3 p-4 md:p-10">

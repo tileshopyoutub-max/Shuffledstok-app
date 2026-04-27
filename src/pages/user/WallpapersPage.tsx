@@ -3,6 +3,7 @@ import {
   closeImageModal,
   openImageModal,
 } from "../../store/slices/imageModalSlice";
+import { Link } from "react-router-dom";
 
 import { ModalDownload } from "../../user/components/modal/ModalDownload";
 import {
@@ -30,12 +31,15 @@ export function WallpapersPage({ category }: CategoryPageProps) {
             <div className="layout-content-container flex flex-col w-full max-w-7xl px-4 sm:px-10">
               <div className="flex flex-wrap justify-between gap-3 p-4">
                 <div className="flex min-w-72 flex-col gap-3">
-                  <p className="text-slate-900 text-white text-4xl font-black leading-tight tracking-[-0.033em]">
+                  <h1 className="text-slate-900 text-white text-4xl font-black leading-tight tracking-[-0.033em]">
                     Wallpapers
-                  </p>
-                  <p className="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">
-                    Explore an endless collection of high-quality wallpapers for
-                    your desktop.
+                  </h1>
+                  <p className="text-slate-300 text-base font-normal leading-relaxed max-w-4xl">
+                    Discover free phone wallpapers for iPhone and Android in minimal, dark, and
+                    aesthetic styles. Each wallpaper is designed for lock screen and home screen
+                    setups, with color palettes that work well with widgets and icon themes. If
+                    you want a cleaner daily phone look, this collection helps you pick visuals
+                    that match your mood, from calm neutrals to bold contrast designs.
                   </p>
                 </div>
               </div>
@@ -50,18 +54,37 @@ export function WallpapersPage({ category }: CategoryPageProps) {
                   >
                     <img
                       className="w-full h-full object-cover aspect-[3/4] transition-transform duration-300 group-hover:scale-105"
-                      data-alt="Abstract swirling colors of pink and blue paint in water."
+                      alt={img.title}
                       src={img.url}
                     />
                   </div>
                 ))}
               </div>
-              {isOpen && (
-                <ModalDownload
-                  onClose={() => dispatch(closeImageModal())}
-                  file={selectedImage!}
-                />
-              )}
+              {isOpen && <ModalDownload onClose={() => dispatch(closeImageModal())} file={selectedImage!} />}
+
+              <section className="px-4 py-8 mt-4 mb-8 rounded-xl border border-white/10 bg-white/[0.02]">
+                <h2 className="text-2xl font-bold text-white mb-3">How to choose and use wallpapers</h2>
+                <p className="text-slate-300 leading-relaxed">
+                  Choose a wallpaper based on your icon style, widget contrast, and how readable
+                  your lock screen text remains during the day. Dark OLED tones help reduce glare,
+                  while lighter palettes create a softer home screen mood. After downloading, open
+                  your iPhone or Android wallpaper settings and set it for lock screen, home screen,
+                  or both.
+                </p>
+              </section>
+              <section className="px-4 pb-8">
+                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
+                  <h2 className="text-2xl font-bold text-white mb-3">Related guides</h2>
+                  <div className="flex flex-col gap-2">
+                    <Link className="text-primary hover:underline" to="/blog/how-to-choose-wallpaper-for-iphone">
+                      How to Choose Wallpaper for iPhone
+                    </Link>
+                    <Link className="text-primary hover:underline" to="/blog/create-aesthetic-iphone-home-screen">
+                      How to Create an Aesthetic iPhone Home Screen
+                    </Link>
+                  </div>
+                </div>
+              </section>
 
               {showLoader && (
                 <div className="flex flex-col gap-3 p-4 my-10">

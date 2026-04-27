@@ -24,6 +24,8 @@ import ChooseWallpaperIphone from "./pages/ChooseWallpaperIphone";
 import CuteWallpapers from "./pages/CuteWallpapers";
 import MinimalInstagramIcons from "./pages/MinimalInstagramIcons";
 import CreateAestheticIphoneHomeScreen from "./pages/CreateAestheticIphoneHomeScreen";
+import { IconsPage } from "./pages/user/IconsPage";
+import AssetDownloadPage from "./pages/user/AssetDownloadPage";
 
 function App() {
   useHideHeroOnNavigate("/");
@@ -40,6 +42,8 @@ function App() {
             path="/stickers"
             element={<StickersPage category="stickers" />}
           />
+          <Route path="/icons" element={<IconsPage category="icons" />} />
+          <Route path="/download/:id" element={<AssetDownloadPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/contact" element={<ContactPage />} />
