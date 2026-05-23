@@ -18,7 +18,12 @@ export function resolvePrimaryCategory(
   const normalized = categoryNames.map((name) => name.trim().toLowerCase());
 
   if (normalized.includes("stickers")) return "stickers";
-  if (normalized.includes("icons")) return "icons";
+  if (
+    normalized.includes("icons") ||
+    normalized.includes("instagramicons")
+  ) {
+    return "icons";
+  }
   if (normalized.includes("wallpapers")) return "wallpapers";
 
   return "wallpapers";

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Navigate, Routes, Route } from "react-router-dom";
 import AdminLayout from "./components/admin/layout/AdminLayout";
 import UserManagement from "./pages/admin/UserManagement";
 import Categories from "./pages/admin/Categories";
@@ -59,6 +59,10 @@ function App() {
           <Route path="/download/:id" element={<AssetDownloadPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route
+            path="/privacy-policy"
+            element={<Navigate to="/privacy" replace />}
+          />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/blog" element={<Blog />} />
           <Route
