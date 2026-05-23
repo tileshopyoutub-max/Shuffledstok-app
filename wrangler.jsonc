@@ -11,7 +11,8 @@
     "not_found_handling": "single-page-application"
   },
   "vars": {
-    "CANVAS_BACKEND": "skia"
+    "CANVAS_BACKEND": "skia",
+    "PUBLIC_SITE_ORIGIN": "https://www.shuffledstock.com"
   },
   "observability": {
     "enabled": true

@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://shuffledstok-app.tileshopyoutub.workers.dev/sitemap.xml"
+    },
     { "source": "/(.*)", "destination": "/" }
   ]
 }

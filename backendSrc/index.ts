@@ -13,6 +13,7 @@ export type Env = {
   ASSETS: Fetcher;
   PUBLIC_WATERMARKED_BUCKET: R2Bucket;
   PRIVATE_BUCKET: R2Bucket;
+  PUBLIC_SITE_ORIGIN?: string;
 };
 
 function handleCors(request: Request) {

@@ -10,9 +10,15 @@ function escapeXml(value: string) {
     .replaceAll("'", "&apos;");
 }
 
+function resolveSiteOrigin(request: Request, env: Env): string {
+  const configured = env.PUBLIC_SITE_ORIGIN?.trim().replace(/\/$/, "");
+  if (configured) return configured;
+  return new URL(request.url).origin;
+}
+
 export default function registerSitemapRoutes(router: RouterType) {
   router.get("/sitemap.xml", async (request: Request, env: Env) => {
-    const origin = new URL(request.url).origin;
+    const origin = resolveSiteOrigin(request, env);
 
     const staticPaths = [
       "/",
