@@ -15,9 +15,12 @@ export async function getArchivesApi(request: Request, env: Env) {
         a.created_at,
         a.featured,
         a.preview_image_id,
+        pl.slug AS listing_slug,
+        pl.primary_category AS primary_category,
         GROUP_CONCAT(DISTINCT t.name) AS tags,
         GROUP_CONCAT(DISTINCT c.name) AS categories
       FROM archives a
+      LEFT JOIN public_listings pl ON pl.entity_type = 'archive' AND pl.entity_id = a.id
       LEFT JOIN archive_tags at ON a.id = at.archive_id
       LEFT JOIN tags t ON t.id = at.tag_id
       LEFT JOIN archive_categories ac ON a.id = ac.archive_id
@@ -70,6 +73,8 @@ export async function getArchivesApi(request: Request, env: Env) {
         categories: archive.categories ? archive.categories.split(",") : [],
         images: imageList,
         preview_image_id: archive.preview_image_id ?? imageList[0]?.id,
+        slug: archive.listing_slug ?? null,
+        primaryCategory: archive.primary_category ?? null,
       });
     }
 

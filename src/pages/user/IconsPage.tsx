@@ -1,18 +1,9 @@
 import { Link } from "react-router-dom";
 import { useAllMedia } from "../../components/admin/hooks/useAllMedia";
 import type { CategoryPageProps } from "../../user/hooks/useFilterPage";
-import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
-import {
-  closeImageModal,
-  openImageModal,
-} from "../../store/slices/imageModalSlice";
-import { ModalDownload } from "../../user/components/modal/ModalDownload";
+import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
 
 export function IconsPage({ category }: CategoryPageProps) {
-  const dispatch = useTypedDispatch();
-  const { isOpen, selectedImage } = useTypedSelector(
-    (state) => state.imageModal
-  );
   const { allMedia, isLoading } = useAllMedia();
   const filteredImages = allMedia.filter((img) => {
     const source = `${img.title} ${img.tags.join(" ")} ${img.categories.join(" ")}`.toLowerCase();
@@ -41,31 +32,23 @@ export function IconsPage({ category }: CategoryPageProps) {
 
             <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 p-4">
               {filteredImages.map((img) => (
-                <div
+                <AssetCardLink
                   key={`${img.type}-${img.id}`}
-                  onClick={() => {
-                    dispatch(openImageModal(img));
-                  }}
-                  className="relative group image-card overflow-hidden rounded-lg border border-white/10"
+                  item={img}
+                  className="relative group image-card overflow-hidden rounded-lg border border-white/10 block"
                 >
                   <img
                     className="w-full h-full object-cover aspect-square transition-transform duration-300 group-hover:scale-105"
                     alt={img.title}
                     src={img.url}
                   />
-                </div>
+                </AssetCardLink>
               ))}
             </div>
             {filteredImages.length === 0 && !isLoading && (
               <p className="px-4 text-slate-400">
                 No icon assets found yet. Try again after adding assets tagged or categorized for icons.
               </p>
-            )}
-            {isOpen && (
-              <ModalDownload
-                onClose={() => dispatch(closeImageModal())}
-                file={selectedImage!}
-              />
             )}
 
             <section className="px-4 py-8 mb-8 rounded-xl border border-white/10 bg-white/[0.02]">

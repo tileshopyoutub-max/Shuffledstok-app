@@ -1,4 +1,5 @@
 import type { Env } from '../../..'
+import { deletePublicListing } from '../../../shared/listings'
 
 export async function deleteArchiveApi(request: Request, env: Env) {
   try {
@@ -49,6 +50,8 @@ export async function deleteArchiveApi(request: Request, env: Env) {
       )
     `).bind(archiveId).run();
     
+    await deletePublicListing(env, 'archive', archiveId);
+
     await env.DB.prepare('DELETE FROM archive_images WHERE archive_id = ?').bind(archiveId).run();
     await env.DB.prepare('DELETE FROM archive_tags WHERE archive_id = ?').bind(archiveId).run();
     await env.DB.prepare('DELETE FROM archive_categories WHERE archive_id = ?').bind(archiveId).run();

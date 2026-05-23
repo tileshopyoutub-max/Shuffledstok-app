@@ -8,6 +8,8 @@ export interface ArchiveImage {
   featured?: number;
 }
 
+import type { PrimaryCategory } from "./listing";
+
 export interface ArchiveItem {
   id: number;
   key: string;
@@ -20,6 +22,7 @@ export interface ArchiveItem {
   created_at?: string;
   featured?: number;
   preview_image_id?: number;
-
   priceCents: number;
+  slug?: string | null;
+  primaryCategory?: PrimaryCategory | null;
 }

@@ -1,4 +1,3 @@
-import { openImageModal } from "../../../store/slices/imageModalSlice";
 import {
   useTypedDispatch,
   useTypedSelector,
@@ -6,6 +5,7 @@ import {
 import { useSwipeable } from "react-swipeable";
 import { useEffect, useState } from "react";
 import { hideHero } from "../../../store/slices/heroSlice";
+import { AssetCardLink } from "../asset/AssetCardLink";
 
 export const ViewedImagesSlider = () => {
   const { viewed } = useTypedSelector((state) => state.viewedImages);
@@ -42,9 +42,9 @@ export const ViewedImagesSlider = () => {
 
   if (!viewed.length) return null;
 
-  const cardWidth = 230; // фиксированная ширина карточки
-  const cardHeight = 300; // фиксированная высота карточки
-  const gap = 12; // фиксированное расстояние между карточками
+  const cardWidth = 230;
+  const cardHeight = 300;
+  const gap = 12;
   let maxVisible: number;
 
   if (screen === "mobile") {
@@ -52,7 +52,6 @@ export const ViewedImagesSlider = () => {
   } else if (screen === "tablet") {
     maxVisible = isOpen ? 0 : 1;
   } else {
-    // десктоп
     maxVisible = isOpen ? 1 : 2;
   }
 
@@ -61,7 +60,6 @@ export const ViewedImagesSlider = () => {
       className="relative w-full overflow-hidden flex items-center"
       {...handlers}
     >
-      {/* Кнопки снаружи слайдера */}
       {(screen === "tablet" || screen === "desktop") && (
         <>
           <button
@@ -83,17 +81,14 @@ export const ViewedImagesSlider = () => {
         </>
       )}
 
-      {/* Слайды */}
       <div className="relative w-full h-[350px] flex items-center justify-center">
         {images.map((img, i) => {
           const total = images.length;
           let offset = i - index;
 
-          // Оборачиваем индекс для бесконечного эффекта
           if (offset > total / 2) offset -= total;
           if (offset < -total / 2) offset += total;
 
-          // Показываем только ближайшие карточки
           if (Math.abs(offset) > 3) return null;
 
           const x = offset * (cardWidth + gap);
@@ -109,18 +104,21 @@ export const ViewedImagesSlider = () => {
               }}
             >
               <div
-                className="rounded-lg overflow-hidden cursor-pointer shadow-lg"
-                style={{
-                  width: cardWidth,
-                  height: cardHeight,
-                  backgroundImage: `url(${img.url})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-                onClick={() => {
-                  dispatch(openImageModal(img)), dispatch(hideHero());
-                }}
-              />
+                style={{ width: cardWidth, height: cardHeight }}
+              >
+                <AssetCardLink
+                  item={img}
+                  className="rounded-lg overflow-hidden shadow-lg block w-full h-full"
+                  onNavigate={() => dispatch(hideHero())}
+                >
+                  <div
+                    className="w-full h-full bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url(${img.url})`,
+                    }}
+                  />
+                </AssetCardLink>
+              </div>
             </div>
           );
         })}

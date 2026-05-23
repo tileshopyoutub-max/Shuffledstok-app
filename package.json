@@ -12,7 +12,9 @@
     "dev:api": "wrangler dev --remote",
     "start": "concurrently \"npm run dev\" \"npm run dev:api\"",
     "migrate:local": "wrangler d1 migrations apply shuffledstok-db --local",
-  "migrate:remote": "wrangler d1 migrations apply shuffledstok-db --remote"
+    "migrate:remote": "wrangler d1 migrations apply shuffledstok-db --remote",
+    "backfill:listings:local": "npx tsx backendSrc/scripts/backfillPublicListings.ts --local",
+    "backfill:listings:remote": "npx tsx backendSrc/scripts/backfillPublicListings.ts --remote --confirm-remote"
 
   },
   "dependencies": {

@@ -3,6 +3,7 @@ import { imagesApi } from '../shared/api/imagesApi'
 import { tagsApi } from '../shared/api/tagsApi'
 import { categoriesApi } from '../shared/api/categoriesApi'
 import { archivesApi } from '../shared/api/archivesApi'
+import { publicListingApi } from '../shared/api/publicListingApi'
 import { type PersistConfig } from 'redux-persist'
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
@@ -23,7 +24,7 @@ export const store = configureStore({
        getDefaultMiddleware({
       serializableCheck: false, 
     })
-      .concat(imagesApi.middleware).concat(tagsApi.middleware).concat(categoriesApi.middleware).concat(archivesApi.middleware),
+      .concat(imagesApi.middleware).concat(tagsApi.middleware).concat(categoriesApi.middleware).concat(archivesApi.middleware).concat(publicListingApi.middleware),
   })
 
 export const persistor = persistStore(store)

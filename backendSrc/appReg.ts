@@ -3,6 +3,7 @@ import registerImagesRoutes from "./apps/images/urls";
 import registerTagsRouter from "./apps/tags/registerTags";
 import registerArchiveRoutes from "./apps/archive/registerArchive";
 import registerSitemapRoutes from "./apps/sitemap/registerSitemap";
+import registerListingsRoutes from "./apps/listings/registerListings";
 import { RouterType } from "./router";
 
 export function registerAllRoutes(router: RouterType) {
@@ -10,5 +11,6 @@ export function registerAllRoutes(router: RouterType) {
   registerTagsRouter(router)
   registerCategoriesRouter(router)
   registerArchiveRoutes(router)
+  registerListingsRoutes(router)
   registerSitemapRoutes(router)
 }

@@ -1,10 +1,5 @@
-import { ModalDownload } from "../../user/components/modal/ModalDownload";
 import { Slider } from "../../user/components/homePage/Slider";
 import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
-import {
-  closeImageModal,
-  openImageModal,
-} from "../../store/slices/imageModalSlice";
 import { hideHero } from "../../store/slices/heroSlice";
 import { toggleTag } from "../../store/slices/imagesFilterSlice";
 import { useGetTagsQuery } from "../../shared/api/tagsApi";
@@ -12,12 +7,10 @@ import { useFilteredMedia } from "../../user/hooks/useFilteredMedia";
 import { addViewedImage } from "../../store/slices/viewedImagesSlice";
 import { ViewedImagesSlider } from "../../user/components/homePage/ViewedImagesSlider";
 import { useFeaturedMedia } from "../../user/hooks/useFeaturedMedia";
+import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
 
 export default function HomePage() {
   const dispatch = useTypedDispatch();
-  const { isOpen, selectedImage } = useTypedSelector(
-    (state) => state.imageModal
-  );
   const { selectedTags } = useTypedSelector((state) => state.imagesFilter);
   const { data: tags = [] } = useGetTagsQuery();
   const { isVisible } = useTypedSelector((state) => state.hero);
@@ -29,9 +22,7 @@ export default function HomePage() {
     <div className="font-display bg-black">
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
         <div className="layout-container flex h-full grow flex-col">
-          {/* HEADER */}
           <div className="flex overflow-hidden">
-            {/* <Sidebar /> */}
             <main className="flex flex-1 justify-center py-5 min-w-0">
               <div className="layout-content-container flex flex-col w-full max-w-7xl">
                 {isVisible && (
@@ -46,7 +37,6 @@ export default function HomePage() {
                       </h2>
                     </div>
 
-                    {/* SLIDER */}
                     <div
                       className="relative w-full max-w-5xl mx-auto overflow-hidden"
                       style={{ perspective: "2000px" }}
@@ -55,12 +45,10 @@ export default function HomePage() {
                     </div>
                   </div>
                 )}
-                {/* Slider */}
                 <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
                   Previous Images
                 </h2>
                 <ViewedImagesSlider />
-                {/* MEDIA GRID TITLE */}
                 <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
                   All Media
                 </h2>
@@ -83,41 +71,31 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                {/* GRID */}
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
                   {filteredImages.length === 0 ? (
                     <p className="text-gray-400 col-span-full">
                       Images not found
                     </p>
                   ) : (
-                    filteredImages.map((img) => {
-                      return (
+                    filteredImages.map((img) => (
+                      <AssetCardLink
+                        key={`${img.type}-${img.id}`}
+                        item={img}
+                        className="relative group aspect-[3/4] rounded-lg overflow-hidden block"
+                        onNavigate={() => {
+                          dispatch(hideHero());
+                          dispatch(addViewedImage(img));
+                        }}
+                      >
                         <div
-                          key={`${img.type}-${img.id}`}
-                          onClick={() => {
-                            dispatch(hideHero());
-                            dispatch(openImageModal(img));
-                            dispatch(addViewedImage(img));
-                          }}
-                          className="relative group aspect-[3/4] rounded-lg overflow-hidden bg-center bg-cover flex flex-col justify-end gap-3"
-                          data-alt="Minimalist desk setup with a laptop"
-                          style={{
-                            backgroundImage: `url(${img?.url})`,
-                          }}
-                        >
-                          {/* Hover gradient overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </div>
-                      );
-                    })
+                          className="absolute inset-0 bg-center bg-cover"
+                          style={{ backgroundImage: `url(${img?.url})` }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </AssetCardLink>
+                    ))
                   )}
                 </div>
-                {isOpen && (
-                  <ModalDownload
-                    onClose={() => dispatch(closeImageModal())}
-                    file={selectedImage!}
-                  />
-                )}
               </div>
             </main>
           </div>

@@ -1,4 +1,8 @@
 import type { Env } from "../../..";
+import {
+  createPublicListing,
+  getCategoryNamesByIds,
+} from "../../../shared/listings";
 import { normalizeText } from "../normalizeText";
 
 export async function PostImageApi(request: Request, env: Env) {
@@ -119,12 +123,22 @@ export async function PostImageApi(request: Request, env: Env) {
       }
     }
 
+    const categoryNames = await getCategoryNamesByIds(env, selectedCategoryIds);
+    const listing = await createPublicListing(env, {
+      entityType: "image",
+      entityId: Number(imageId),
+      title,
+      categoryNames,
+    });
+
     return new Response(
       JSON.stringify({
         success: true,
         key: publicKey,
         id: imageId,
         featured: 0,
+        slug: listing.slug,
+        primaryCategory: listing.primary_category,
       }),
       { headers: { "Content-Type": "application/json" } }
     );

@@ -1,4 +1,5 @@
 import type { Env } from "../../..";
+import { deletePublicListing } from "../../../shared/listings";
 
 export async function DeleteImageApi(request: Request, env: Env) {
     try {
@@ -60,6 +61,8 @@ export async function DeleteImageApi(request: Request, env: Env) {
             SELECT category_id FROM image_categories WHERE image_id = ?
         )
         `).bind(id).run();
+
+        await deletePublicListing(env, "image", id);
 
         await env.DB.prepare(`
             DELETE from images

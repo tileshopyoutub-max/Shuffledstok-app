@@ -1,32 +1,18 @@
-import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
-import {
-  closeImageModal,
-  openImageModal,
-} from "../../store/slices/imageModalSlice";
 import { Link } from "react-router-dom";
-
-import { ModalDownload } from "../../user/components/modal/ModalDownload";
 import {
   useFilterPage,
   type CategoryPageProps,
 } from "../../user/hooks/useFilterPage";
+import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
 
 export function WallpapersPage({ category }: CategoryPageProps) {
-  const dispatch = useTypedDispatch();
-  const { isOpen, selectedImage } = useTypedSelector(
-    (state) => state.imageModal
-  );
-
   const { filteredImages, isLoading } = useFilterPage({ category });
-
   const showLoader = isLoading;
 
   return (
     <div className="font-display bg-black">
       <div className="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden font-display bg-black">
         <div className="layout-container flex h-full grow flex-col">
-          {/* HEADER */}
-          {/* MAIN */}
           <main className="flex flex-1 justify-center py-5">
             <div className="layout-content-container flex flex-col w-full max-w-7xl px-4 sm:px-10">
               <div className="flex flex-wrap justify-between gap-3 p-4">
@@ -45,22 +31,19 @@ export function WallpapersPage({ category }: CategoryPageProps) {
               </div>
               <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
                 {filteredImages.map((img) => (
-                  <div
+                  <AssetCardLink
                     key={`${img.type}-${img.id}`}
-                    onClick={() => {
-                      dispatch(openImageModal(img));
-                    }}
-                    className="relative group image-card overflow-hidden rounded-lg"
+                    item={img}
+                    className="relative group image-card overflow-hidden rounded-lg block"
                   >
                     <img
                       className="w-full h-full object-cover aspect-[3/4] transition-transform duration-300 group-hover:scale-105"
                       alt={img.title}
                       src={img.url}
                     />
-                  </div>
+                  </AssetCardLink>
                 ))}
               </div>
-              {isOpen && <ModalDownload onClose={() => dispatch(closeImageModal())} file={selectedImage!} />}
 
               <section className="px-4 py-8 mt-4 mb-8 rounded-xl border border-white/10 bg-white/[0.02]">
                 <h2 className="text-2xl font-bold text-white mb-3">How to choose and use wallpapers</h2>

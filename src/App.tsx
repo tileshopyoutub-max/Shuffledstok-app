@@ -26,6 +26,7 @@ import MinimalInstagramIcons from "./pages/MinimalInstagramIcons";
 import CreateAestheticIphoneHomeScreen from "./pages/CreateAestheticIphoneHomeScreen";
 import { IconsPage } from "./pages/user/IconsPage";
 import AssetDownloadPage from "./pages/user/AssetDownloadPage";
+import AssetPage from "./pages/user/AssetPage";
 
 function App() {
   useHideHeroOnNavigate("/");
@@ -34,15 +35,27 @@ function App() {
       <Routes>
         <Route element={<UserLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route
-            path="/wallpapers"
-            element={<WallpapersPage category="wallpapers" />}
-          />
-          <Route
-            path="/stickers"
-            element={<StickersPage category="stickers" />}
-          />
-          <Route path="/icons" element={<IconsPage category="icons" />} />
+          <Route path="/wallpapers">
+            <Route index element={<WallpapersPage category="wallpapers" />} />
+            <Route
+              path=":slug"
+              element={<AssetPage expectedCategory="wallpapers" />}
+            />
+          </Route>
+          <Route path="/stickers">
+            <Route index element={<StickersPage category="stickers" />} />
+            <Route
+              path=":slug"
+              element={<AssetPage expectedCategory="stickers" />}
+            />
+          </Route>
+          <Route path="/icons">
+            <Route index element={<IconsPage category="icons" />} />
+            <Route
+              path=":slug"
+              element={<AssetPage expectedCategory="icons" />}
+            />
+          </Route>
           <Route path="/download/:id" element={<AssetDownloadPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />

@@ -14,9 +14,12 @@ export async function GetImagesApi(_: Request, env: Env) {
         i.created_at,
         i.download_free,
         i.featured,
+        pl.slug AS listing_slug,
+        pl.primary_category AS primary_category,
         GROUP_CONCAT(DISTINCT t.name) AS tags,
         GROUP_CONCAT(DISTINCT c.name) AS categories
       FROM images i
+      LEFT JOIN public_listings pl ON pl.entity_type = 'image' AND pl.entity_id = i.id
       LEFT JOIN image_tags it ON i.id = it.image_id
       LEFT JOIN tags t ON t.id = it.tag_id
       LEFT JOIN image_categories ic ON i.id = ic.image_id
@@ -41,6 +44,8 @@ export async function GetImagesApi(_: Request, env: Env) {
         categories: img.categories
           ? img.categories.split(",").map((c: string) => c.trim())
           : [],
+        slug: img.listing_slug ?? null,
+        primaryCategory: img.primary_category ?? null,
         url: `https://shuffledstok-app.tileshopyoutub.workers.dev/image/${img.key}`,
       };
     });

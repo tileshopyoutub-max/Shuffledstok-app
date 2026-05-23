@@ -6,6 +6,7 @@ import { useGetCategoriesQuery } from "../../../shared/api/categoriesApi";
 import { useGetArchivesQuery } from "../../../shared/api/archivesApi";
 import type { ArchiveItem } from "../../../shared/types/archives";
 import type { ImageItems } from "../../../shared/types/images";
+import type { PrimaryCategory } from "../../../shared/types/listing";
 import { useUpdateFeaturedMutation as useUpdateImageFeatured } from "../../../shared/api/imagesApi";
 import { useUpdateFeaturedMutation as useUpdateArchiveFeatured } from "../../../shared/api/archivesApi";
 import { useUpdateArchivePreviewMutation } from "../../../shared/api/archivesApi";
@@ -16,6 +17,8 @@ export type MediaItem =
       type: "image";
       title: string;
       url?: string;
+      slug: string | null;
+      primaryCategory: PrimaryCategory | null;
       categories: string[];
       tags: string[];
       created_at: string;
@@ -27,6 +30,8 @@ export type MediaItem =
       type: "archive";
       title: string;
       url?: string;
+      slug: string | null;
+      primaryCategory: PrimaryCategory | null;
       categories: string[];
       tags: string[];
       created_at: string;
@@ -58,6 +63,8 @@ export function useAllMedia() {
       type: "image" as const,
       title: img.title || "Untitled Image",
       url: img.url,
+      slug: img.slug ?? null,
+      primaryCategory: img.primaryCategory ?? null,
       categories: img.categories || [],
       tags: img.tags || [],
       created_at: img.created_at,
@@ -77,6 +84,8 @@ export function useAllMedia() {
         id: archive.id,
         type: "archive" as const,
         title: archive.title || "Untitled Archive",
+        slug: archive.slug ?? null,
+        primaryCategory: archive.primaryCategory ?? null,
         categories: archive.categories || [],
         tags: archive.tags || [],
         created_at: archive.created_at || new Date().toISOString(),

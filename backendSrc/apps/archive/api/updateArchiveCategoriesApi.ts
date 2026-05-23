@@ -1,4 +1,8 @@
 import type { Env } from "../../..";
+import {
+  getCategoryNamesForArchive,
+  updatePublicListingCategory,
+} from "../../../shared/listings";
 
 export async function updateArchiveCategoriesApi(request: Request, env: Env) {
   try {
@@ -37,6 +41,9 @@ export async function updateArchiveCategoriesApi(request: Request, env: Env) {
         .bind(id, categoryId)
         .run();
     }
+
+    const categoryNames = await getCategoryNamesForArchive(env, id);
+    await updatePublicListingCategory(env, "archive", id, categoryNames);
 
     return new Response(JSON.stringify({ success: true, id, categoryIds }), {
       headers: { "Content-Type": "application/json" },

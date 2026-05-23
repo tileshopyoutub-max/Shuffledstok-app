@@ -207,6 +207,8 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                   type: "image",
                   title: img.title || "Untitled Image",
                   url: img.url,
+                  slug: img.slug ?? null,
+                  primaryCategory: img.primaryCategory ?? null,
                   categories: img.categories || [],
                   tags: img.tags || [],
                   created_at: img.created_at,

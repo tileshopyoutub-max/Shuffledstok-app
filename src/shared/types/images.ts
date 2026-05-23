@@ -1,3 +1,5 @@
+import type { PrimaryCategory } from "./listing";
+
 export interface ImageItems {
   id: number;
   key: string;
@@ -11,4 +13,6 @@ export interface ImageItems {
   url: string;
   featured?: number;
   priceCents: number;
+  slug?: string | null;
+  primaryCategory?: PrimaryCategory | null;
 }

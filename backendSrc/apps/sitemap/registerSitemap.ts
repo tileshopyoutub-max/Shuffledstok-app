@@ -28,24 +28,33 @@ export default function registerSitemapRoutes(router: RouterType) {
       "/blog/minimal-instagram-icons",
     ];
 
-    const staticUrls = staticPaths.map((path) => `${origin}${path}`);
+    const staticUrlEntries = staticPaths.map(
+      (path) => `  <url>\n    <loc>${escapeXml(`${origin}${path}`)}</loc>\n  </url>`
+    );
 
     const { results } = await env.DB.prepare(
-      "SELECT id FROM images ORDER BY created_at DESC"
-    ).all<{ id: number }>();
+      `
+      SELECT primary_category, slug, updated_at
+      FROM public_listings
+      ORDER BY created_at DESC
+      `
+    ).all<{
+      primary_category: string;
+      slug: string;
+      updated_at: string;
+    }>();
 
-    const assetUrls = (results || []).map((row) => `${origin}/download/${row.id}`);
-    const allUrls = [...staticUrls, ...assetUrls];
+    const listingUrlEntries = (results || []).map((row) => {
+      const loc = `${origin}/${row.primary_category}/${row.slug}`;
+      const lastmod = row.updated_at
+        ? `\n    <lastmod>${escapeXml(row.updated_at.slice(0, 10))}</lastmod>`
+        : "";
+      return `  <url>\n    <loc>${escapeXml(loc)}</loc>${lastmod}\n  </url>`;
+    });
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allUrls
-  .map(
-    (url) => `  <url>
-    <loc>${escapeXml(url)}</loc>
-  </url>`
-  )
-  .join("\n")}
+${[...staticUrlEntries, ...listingUrlEntries].join("\n")}
 </urlset>`;
 
     return new Response(xml, {

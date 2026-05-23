@@ -1,4 +1,8 @@
 import type { Env } from "../../..";
+import {
+  createPublicListing,
+  getCategoryNamesByIds,
+} from "../../../shared/listings";
 
 interface ArchiveImage {
   id: number;
@@ -159,6 +163,14 @@ export async function postArchiveApi(request: Request, env: Env) {
       }
     }
 
+    const categoryNames = await getCategoryNamesByIds(env, selectedCategoryIds);
+    const listing = await createPublicListing(env, {
+      entityType: "archive",
+      entityId: Number(archiveId),
+      title,
+      categoryNames,
+    });
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -167,6 +179,8 @@ export async function postArchiveApi(request: Request, env: Env) {
           preview_image_id: previewImageId,
           images: imagesWithRelations,
         },
+        slug: listing.slug,
+        primaryCategory: listing.primary_category,
       }),
       { headers: { "Content-Type": "application/json" } }
     );

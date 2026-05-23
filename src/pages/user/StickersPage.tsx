@@ -3,18 +3,9 @@ import {
   type CategoryPageProps,
 } from "../../user/hooks/useFilterPage";
 import { Link } from "react-router-dom";
-import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
-import {
-  closeImageModal,
-  openImageModal,
-} from "../../store/slices/imageModalSlice";
-import { ModalDownload } from "../../user/components/modal/ModalDownload";
+import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
 
 export const StickersPage = ({ category }: CategoryPageProps) => {
-  const dispatch = useTypedDispatch();
-  const { isOpen, selectedImage } = useTypedSelector(
-    (state) => state.imageModal
-  );
   const { filteredImages, isLoading } = useFilterPage({ category });
 
   const showLoader = isLoading;
@@ -44,26 +35,19 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
               {/* <!-- ImageGrid --> */}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 md:p-10">
                 {filteredImages.map((img) => (
-                  <div
+                  <AssetCardLink
                     key={`${img.type}-${img.id}`}
-                    onClick={() => {
-                      dispatch(openImageModal(img));
-                    }}
-                    className="bg-cover bg-center flex flex-col gap-3 rounded-lg justify-end p-4 aspect-square group relative"
-                    style={{
-                      backgroundImage: `url(${img.url})`,
-                    }}
+                    item={img}
+                    className="relative aspect-square rounded-lg overflow-hidden block group"
                   >
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
-                  </div>
+                    <div
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${img.url})` }}
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+                  </AssetCardLink>
                 ))}
               </div>
-              {isOpen && (
-                <ModalDownload
-                  onClose={() => dispatch(closeImageModal())}
-                  file={selectedImage!}
-                />
-              )}
               <section className="px-4 md:px-10 pb-8">
                 <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6">
                   <h2 className="text-2xl font-bold text-white mb-3">

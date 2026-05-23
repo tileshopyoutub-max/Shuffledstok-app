@@ -8,6 +8,7 @@ import heroReducer from './slices/heroSlice'
 import { categoriesApi } from '../shared/api/categoriesApi'
 import sidebarReducer from './slices/sidebarSlice'
 import { archivesApi } from '../shared/api/archivesApi'
+import { publicListingApi } from '../shared/api/publicListingApi'
 import viewedImagesReducer from './slices/viewedImagesSlice'
 
 export const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers({
   [tagsApi.reducerPath]: tagsApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
   [archivesApi.reducerPath]: archivesApi.reducer,
+  [publicListingApi.reducerPath]: publicListingApi.reducer,
   watermark: watermarkReducer,
   imagesFilter: imagesFilterReducer,
   imageModal: imageModalReducer,
