@@ -30,6 +30,7 @@ auth0export/config-source.json
 !.dev.vars.example
 .env*
 !.env.example
+!.env.production
 .wrangler/
 .github/
 
