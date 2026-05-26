@@ -14,7 +14,10 @@
     "migrate:local": "wrangler d1 migrations apply shuffledstok-db --local",
     "migrate:remote": "wrangler d1 migrations apply shuffledstok-db --remote",
     "backfill:listings:local": "npx tsx backendSrc/scripts/backfillPublicListings.ts --local",
-    "backfill:listings:remote": "npx tsx backendSrc/scripts/backfillPublicListings.ts --remote --confirm-remote"
+    "backfill:listings:remote": "npx tsx backendSrc/scripts/backfillPublicListings.ts --remote --confirm-remote",
+    "audit:sticker-previews:remote": "npx tsx backendSrc/scripts/auditStickerPreviewsDryRun.ts --remote --confirm-remote",
+    "backfill:sticker-preview:dry-run": "npx tsx backendSrc/scripts/stickerPreviewBackfillDryRun.ts --remote --confirm-remote",
+    "backfill:sticker-preview:apply-all": "npx tsx backendSrc/scripts/stickerPreviewBackfillDryRun.ts --remote --confirm-remote --all --apply --confirm-apply"
 
   },
   "dependencies": {

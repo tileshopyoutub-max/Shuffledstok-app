@@ -32,5 +32,6 @@ auth0export/config-source.json
 !.env.example
 !.env.production
 .wrangler/
+backfill-out/
 .github/
 
