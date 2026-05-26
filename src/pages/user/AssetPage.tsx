@@ -6,6 +6,7 @@ import { useImageModal } from "../../user/components/modal/hooks/useImageModal";
 import { ArchiveSlider } from "../../user/components/modal/ArchiveSlider";
 import { useSeoMeta } from "../../user/hooks/useSeoMeta";
 import { getCategoryIndexPath } from "../../user/utils/assetUrl";
+import { stickerPreviewTileClass } from "../../user/utils/stickerPreviewBg";
 
 interface AssetPageProps {
   expectedCategory: PrimaryCategory;
@@ -79,7 +80,11 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
         </Link>
 
         <div className="grid lg:grid-cols-2 gap-10">
-          <div className="rounded-xl overflow-hidden border border-white/10 flex flex-col items-center p-4">
+          <div
+            className={`rounded-xl overflow-hidden border border-white/10 flex flex-col items-center w-full ${
+              listing.primaryCategory === "stickers" ? "p-1" : "p-4"
+            }`}
+          >
             {asset.type === "archive" ? (
               <>
                 <ArchiveSlider
@@ -92,6 +97,16 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
                   {asset.images.length} items in this pack
                 </p>
               </>
+            ) : listing.primaryCategory === "stickers" ? (
+              <div
+                className={`flex w-full items-center justify-center py-3 rounded-lg ${stickerPreviewTileClass}`}
+              >
+                <img
+                  src={asset.url}
+                  alt={asset.title || "Asset preview"}
+                  className="block max-h-[min(50vh,400px)] max-w-full w-auto h-auto object-contain"
+                />
+              </div>
             ) : (
               <img
                 src={asset.url}

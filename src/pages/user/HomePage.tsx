@@ -8,6 +8,16 @@ import { addViewedImage } from "../../store/slices/viewedImagesSlice";
 import { ViewedImagesSlider } from "../../user/components/homePage/ViewedImagesSlider";
 import { useFeaturedMedia } from "../../user/hooks/useFeaturedMedia";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
+import type { MediaItem } from "../../components/admin/hooks/useAllMedia";
+import { stickerPreviewTileClass } from "../../user/utils/stickerPreviewBg";
+
+function isStickerMediaItem(img: MediaItem): boolean {
+  if (img.type === "archive") return false;
+  return (
+    img.primaryCategory === "stickers" ||
+    img.categories.some((c) => c.toLowerCase() === "stickers")
+  );
+}
 
 export default function HomePage() {
   const dispatch = useTypedDispatch();
@@ -77,23 +87,45 @@ export default function HomePage() {
                       Images not found
                     </p>
                   ) : (
-                    filteredImages.map((img) => (
-                      <AssetCardLink
-                        key={`${img.type}-${img.id}`}
-                        item={img}
-                        className="relative group aspect-[3/4] rounded-lg overflow-hidden block"
-                        onNavigate={() => {
-                          dispatch(hideHero());
-                          dispatch(addViewedImage(img));
-                        }}
-                      >
-                        <div
-                          className="absolute inset-0 bg-center bg-cover"
-                          style={{ backgroundImage: `url(${img?.url})` }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </AssetCardLink>
-                    ))
+                    filteredImages.map((img) => {
+                      const isSticker = isStickerMediaItem(img);
+                      return (
+                        <AssetCardLink
+                          key={`${img.type}-${img.id}`}
+                          item={img}
+                          className={
+                            isSticker
+                              ? "relative group rounded-lg overflow-hidden block ring-1 ring-white/10"
+                              : "relative group aspect-[3/4] rounded-lg overflow-hidden block"
+                          }
+                          onNavigate={() => {
+                            dispatch(hideHero());
+                            dispatch(addViewedImage(img));
+                          }}
+                        >
+                          {isSticker ? (
+                            <div
+                              className={`relative flex w-full aspect-[4/5] max-h-[220px] items-center justify-center overflow-hidden ${stickerPreviewTileClass}`}
+                            >
+                              <img
+                                src={img.url}
+                                alt={img.title || "Media asset"}
+                                loading="lazy"
+                                className="max-h-full max-w-full object-contain scale-[1.12] transition-transform duration-300 group-hover:scale-[1.16]"
+                              />
+                            </div>
+                          ) : (
+                            <>
+                              <div
+                                className="absolute inset-0 bg-center bg-cover"
+                                style={{ backgroundImage: `url(${img?.url})` }}
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </>
+                          )}
+                        </AssetCardLink>
+                      );
+                    })
                   )}
                 </div>
               </div>

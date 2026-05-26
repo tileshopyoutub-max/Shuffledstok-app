@@ -4,6 +4,7 @@ import {
 } from "../../user/hooks/useFilterPage";
 import { Link } from "react-router-dom";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
+import { stickerPreviewTileClass } from "../../user/utils/stickerPreviewBg";
 
 export const StickersPage = ({ category }: CategoryPageProps) => {
   const { filteredImages, isLoading } = useFilterPage({ category });
@@ -38,13 +39,18 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
                   <AssetCardLink
                     key={`${img.type}-${img.id}`}
                     item={img}
-                    className="relative aspect-square rounded-lg overflow-hidden block group"
+                    className="block rounded-lg overflow-hidden ring-1 ring-white/10 group"
                   >
                     <div
-                      className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${img.url})` }}
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+                      className={`relative flex w-full aspect-[4/5] max-h-[220px] items-center justify-center overflow-hidden ${stickerPreviewTileClass}`}
+                    >
+                      <img
+                        src={img.url}
+                        alt={img.title || "Sticker"}
+                        loading="lazy"
+                        className="max-h-full max-w-full object-contain scale-[1.12] transition-transform duration-300 group-hover:scale-[1.16]"
+                      />
+                    </div>
                   </AssetCardLink>
                 ))}
               </div>
