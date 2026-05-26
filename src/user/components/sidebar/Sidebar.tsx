@@ -5,7 +5,7 @@ import {
 } from "../../../shared/hooks/redux";
 import { closeSidebar } from "../../../store/slices/sidebarSlice";
 import { useGetCategoriesQuery } from "../../../shared/api/categoriesApi";
-import { useGetTagsQuery } from "../../../shared/api/tagsApi";
+import { TagFilterList } from "../TagFilterList";
 import { sumUsageCount } from "./utils/totalCount";
 import { BurgerButton } from "./BurgerButton";
 import {
@@ -14,15 +14,13 @@ import {
   toggleAccessType,
   toggleCategory,
   togglePhotoType,
-  toggleTag,
 } from "../../../store/slices/imagesFilterSlice";
 
 export const Sidebar = () => {
-  const { selectedCategories, selectedTags, accessType, photoType } =
+  const { selectedCategories, accessType, photoType } =
     useTypedSelector((state) => state.imagesFilter);
   const { isOpen } = useTypedSelector((state) => state.sidebar);
   const { data: categories = [] } = useGetCategoriesQuery();
-  const { data: tags = [] } = useGetTagsQuery();
   const dispatch = useTypedDispatch();
   const totalCount = sumUsageCount(categories);
 
@@ -196,21 +194,7 @@ export const Sidebar = () => {
             <h2 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4">
               Popular Tags
             </h2>
-            <div className="flex flex-wrap gap-2">
-              {tags.map((t) => (
-                <label key={t.id} className="cursor-pointer group">
-                  <input
-                    className="peer sr-only"
-                    type="checkbox"
-                    checked={selectedTags.includes(t.name)}
-                    onChange={() => dispatch(toggleTag(t.name))}
-                  />
-                  <span className="inline-flex items-center rounded-full border border-white/20 bg-transparent px-3 py-1.5 text-xs font-medium text-gray-400 transition-all peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary group-hover:border-white/40 group-hover:text-gray-200">
-                    #{t.name}
-                  </span>
-                </label>
-              ))}
-            </div>
+            <TagFilterList />
           </div>
         </div>
       </div>

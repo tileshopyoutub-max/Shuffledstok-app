@@ -1,28 +1,105 @@
 import { Slider } from "../../user/components/homePage/Slider";
 import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
 import { hideHero } from "../../store/slices/heroSlice";
-import { toggleTag } from "../../store/slices/imagesFilterSlice";
-import { useGetTagsQuery } from "../../shared/api/tagsApi";
+import { TagFilterList } from "../../user/components/TagFilterList";
 import { useFilteredMedia } from "../../user/hooks/useFilteredMedia";
 import { addViewedImage } from "../../store/slices/viewedImagesSlice";
 import { ViewedImagesSlider } from "../../user/components/homePage/ViewedImagesSlider";
 import { useFeaturedMedia } from "../../user/hooks/useFeaturedMedia";
+import { HomeBrowseByUseCase } from "../../user/components/homePage/HomeBrowseByUseCase";
+import { HomeBrowseByStyle } from "../../user/components/homePage/HomeBrowseByStyle";
+import { HomeFeaturedWallpapers } from "../../user/components/homePage/HomeFeaturedWallpapers";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
 import type { MediaItem } from "../../components/admin/hooks/useAllMedia";
 import { stickerPreviewTileClass } from "../../user/utils/stickerPreviewBg";
 
-function isStickerMediaItem(img: MediaItem): boolean {
-  if (img.type === "archive") return false;
+type HomeCardVariant = "sticker" | "wallpaper" | "icon-pack";
+
+function getHomeCardVariant(item: MediaItem): HomeCardVariant {
+  if (item.type === "archive") return "icon-pack";
+
+  if (
+    item.primaryCategory === "stickers" ||
+    item.categories.some((c) => c.toLowerCase() === "stickers")
+  ) {
+    return "sticker";
+  }
+
+  if (
+    item.primaryCategory === "icons" ||
+    item.categories.some((c) => /icon/i.test(c))
+  ) {
+    return "icon-pack";
+  }
+
+  return "wallpaper";
+}
+
+function HomeMasonryCard({
+  item,
+  onNavigate,
+}: {
+  item: MediaItem;
+  onNavigate: () => void;
+}) {
+  const variant = getHomeCardVariant(item);
+  const alt = item.title || "Media asset";
+  const baseLinkClass = "block mb-3 break-inside-avoid rounded-lg overflow-hidden";
+
+  if (variant === "sticker") {
+    return (
+      <AssetCardLink
+        item={item}
+        className={`${baseLinkClass} group ring-1 ring-white/10`}
+        onNavigate={onNavigate}
+      >
+        <div
+          className={`relative flex w-full aspect-[4/5] max-h-[200px] sm:max-h-[220px] items-center justify-center overflow-hidden rounded-lg ${stickerPreviewTileClass}`}
+        >
+          <img
+            className="max-h-full max-w-full object-contain scale-[1.12] transition-transform duration-300 group-hover:scale-[1.16]"
+            src={item.url}
+            alt={alt}
+            loading="lazy"
+          />
+        </div>
+      </AssetCardLink>
+    );
+  }
+
+  if (variant === "icon-pack") {
+    return (
+      <AssetCardLink
+        item={item}
+        className={`${baseLinkClass} bg-neutral-900/90 ring-1 ring-white/10`}
+        onNavigate={onNavigate}
+      >
+        <div className="flex items-center justify-center p-3 max-h-[220px] md:max-h-[300px] bg-neutral-800/60">
+          <img
+            className="max-h-[180px] md:max-h-[260px] max-w-full w-auto object-contain"
+            src={item.url}
+            alt={alt}
+            loading="lazy"
+          />
+        </div>
+      </AssetCardLink>
+    );
+  }
+
   return (
-    img.primaryCategory === "stickers" ||
-    img.categories.some((c) => c.toLowerCase() === "stickers")
+    <AssetCardLink item={item} className={baseLinkClass} onNavigate={onNavigate}>
+      <img
+        className="block w-full h-auto"
+        src={item.url}
+        alt={alt}
+        loading="lazy"
+      />
+    </AssetCardLink>
   );
 }
 
 export default function HomePage() {
   const dispatch = useTypedDispatch();
-  const { selectedTags } = useTypedSelector((state) => state.imagesFilter);
-  const { data: tags = [] } = useGetTagsQuery();
   const { isVisible } = useTypedSelector((state) => state.hero);
 
   const filteredImages = useFilteredMedia();
@@ -34,100 +111,75 @@ export default function HomePage() {
         <div className="layout-container flex h-full grow flex-col">
           <div className="flex overflow-hidden">
             <main className="flex flex-1 justify-center py-5 min-w-0">
-              <div className="layout-content-container flex flex-col w-full max-w-7xl">
-                {isVisible && (
-                  <div className="px-4 py-10 md:py-3 flex flex-col gap-1 items-center text-center hidden sm:block">
-                    <div className="flex flex-col gap-4 text-center">
-                      <h1 className="text-gray-50 text-4xl font-black leading-tight tracking-tighter md:text-6xl">
-                        Elevate Your Digital Space
-                      </h1>
-                      <h2 className="text-gray-400 text-base font-normal leading-normal max-w-3xl mx-auto md:text-lg">
-                        Discover high-quality wallpapers, icons, and stickers
-                        curated for modern creators.
-                      </h2>
-                    </div>
+              <div className="layout-content-container flex flex-col w-full">
+                <div className="w-full max-w-7xl mx-auto">
+                  {isVisible && (
+                    <div className="px-4 py-10 md:py-3 flex flex-col gap-1 items-center text-center hidden sm:block">
+                      <div className="flex flex-col gap-4 text-center">
+                        <h1 className="text-gray-50 text-4xl font-black leading-tight tracking-tighter md:text-6xl">
+                          Elevate Your Digital Space
+                        </h1>
+                        <h2 className="text-gray-400 text-base font-normal leading-normal max-w-3xl mx-auto md:text-lg">
+                          Discover high-quality wallpapers, icons, and stickers
+                          curated for modern creators.
+                        </h2>
+                      </div>
 
-                    <div
-                      className="relative w-full max-w-5xl mx-auto overflow-hidden"
-                      style={{ perspective: "2000px" }}
-                    >
-                      <Slider images={featuredMedia} />
+                      <div
+                        className="relative w-full max-w-5xl mx-auto overflow-hidden"
+                        style={{ perspective: "2000px" }}
+                      >
+                        <Slider images={featuredMedia} />
+                      </div>
                     </div>
-                  </div>
-                )}
-                <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
-                  Previous Images
-                </h2>
-                <ViewedImagesSlider />
-                <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
-                  All Media
-                </h2>
-                <div
-                  className="flex flex-nowrap gap-2 ml-3 lg:flex-wrap overflow-x-auto"
-                  style={{ scrollbarWidth: "none" }}
-                >
-                  {tags.map((t) => (
-                    <label key={t.id} className="cursor-pointer group">
-                      <input
-                        className="peer sr-only"
-                        type="checkbox"
-                        checked={selectedTags.includes(t.name)}
-                        onChange={() => dispatch(toggleTag(t.name))}
-                      />
-                      <span className="inline-flex items-center rounded-full border border-white/20 bg-transparent px-3 py-1.5 text-xs font-medium text-gray-400 transition-all peer-checked:border-primary peer-checked:bg-primary/10 peer-checked:text-primary group-hover:border-white/40 group-hover:text-gray-200">
-                        #{t.name}
-                      </span>
-                    </label>
-                  ))}
+                  )}
+                  <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
+                    Previous Images
+                  </h2>
+                  <ViewedImagesSlider />
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 p-4">
+                <div className="w-full max-w-screen-2xl mx-auto min-w-0">
+                  <HomeBrowseByUseCase />
+                  <HomeFeaturedWallpapers
+                    onItemNavigate={(item) => {
+                      dispatch(hideHero());
+                      dispatch(addViewedImage(item));
+                    }}
+                  />
+                  <HomeBrowseByStyle />
+                </div>
+
+                <section className="w-full max-w-none min-w-0">
+                  <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-2 sm:px-3 pb-3 pt-5">
+                    All Media
+                  </h2>
+                  <div
+                    className="px-2 sm:px-3"
+                    style={{ scrollbarWidth: "none" }}
+                  >
+                    <TagFilterList listClassName="flex flex-nowrap gap-2 lg:flex-wrap overflow-x-auto" />
+                  </div>
+
                   {filteredImages.length === 0 ? (
-                    <p className="text-gray-400 col-span-full">
+                    <p className="text-gray-400 px-2 sm:px-3 pb-6">
                       Images not found
                     </p>
                   ) : (
-                    filteredImages.map((img) => {
-                      const isSticker = isStickerMediaItem(img);
-                      return (
-                        <AssetCardLink
+                    <div className="w-full columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 2xl:columns-7 gap-2 sm:gap-3 px-2 sm:px-3 pb-6">
+                      {filteredImages.map((img) => (
+                        <HomeMasonryCard
                           key={`${img.type}-${img.id}`}
                           item={img}
-                          className={
-                            isSticker
-                              ? "relative group rounded-lg overflow-hidden block ring-1 ring-white/10"
-                              : "relative group aspect-[3/4] rounded-lg overflow-hidden block"
-                          }
                           onNavigate={() => {
                             dispatch(hideHero());
                             dispatch(addViewedImage(img));
                           }}
-                        >
-                          {isSticker ? (
-                            <div
-                              className={`relative flex w-full aspect-[4/5] max-h-[220px] items-center justify-center overflow-hidden ${stickerPreviewTileClass}`}
-                            >
-                              <img
-                                src={img.url}
-                                alt={img.title || "Media asset"}
-                                loading="lazy"
-                                className="max-h-full max-w-full object-contain scale-[1.12] transition-transform duration-300 group-hover:scale-[1.16]"
-                              />
-                            </div>
-                          ) : (
-                            <>
-                              <div
-                                className="absolute inset-0 bg-center bg-cover"
-                                style={{ backgroundImage: `url(${img?.url})` }}
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </>
-                          )}
-                        </AssetCardLink>
-                      );
-                    })
+                        />
+                      ))}
+                    </div>
                   )}
-                </div>
+                </section>
               </div>
             </main>
           </div>
