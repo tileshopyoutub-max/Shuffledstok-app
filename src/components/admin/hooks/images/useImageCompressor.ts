@@ -1,66 +1,103 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-export function useImageCompressor(file: File | null) {
-    const [compressedFile, setCompressedFile] = useState<File | null>(null);
+export type ImageCompressorOptions = {
+  /** Sticker uploads: PNG preview with alpha preserved */
+  preserveAlpha?: boolean;
+};
 
-    useEffect(() => {
-        if (!file) {
-            setCompressedFile(null);
-            return;
-        }
-        
-        const objectUrl = URL.createObjectURL(file);
-        const img = new Image();
-        img.src = objectUrl;
+export function useImageCompressor(
+  file: File | null,
+  options?: ImageCompressorOptions
+) {
+  const preserveAlpha = options?.preserveAlpha ?? false;
+  const [compressedFile, setCompressedFile] = useState<File | null>(null);
+  const generationRef = useRef(0);
 
-        img.onload = () => {
-            const canvas = document.createElement("canvas");
+  useEffect(() => {
+    if (!file) {
+      return;
+    }
 
-            // Ограничение размера (макс ширина/высота)
-            const maxWidth = 1920;
-            const maxHeight = 1080;
-            let width = img.width;
-            let height = img.height;
+    const generation = ++generationRef.current;
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+    img.src = objectUrl;
 
-            if (width > maxWidth || height > maxHeight) {
-                const ratio = Math.min(maxWidth / width, maxHeight / height);
-                width = width * ratio;
-                height = height * ratio;
-            }
+    const applyResult = (next: File | null) => {
+      if (generation !== generationRef.current) return;
+      setCompressedFile(next);
+    };
 
-            canvas.width = width;
-            canvas.height = height;
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
 
-            const ctx = canvas.getContext("2d");
-            if (!ctx) return;
+      const maxWidth = 1920;
+      const maxHeight = 1080;
+      let width = img.width;
+      let height = img.height;
 
-            ctx.drawImage(img, 0, 0, width, height);
+      if (width > maxWidth || height > maxHeight) {
+        const ratio = Math.min(maxWidth / width, maxHeight / height);
+        width = width * ratio;
+        height = height * ratio;
+      }
 
-            const type = "image/jpeg";
-            const quality = 0.6;
+      canvas.width = width;
+      canvas.height = height;
 
-            const fileName = file.name.replace(/\.\w+$/, '');
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        URL.revokeObjectURL(objectUrl);
+        applyResult(file);
+        return;
+      }
 
-            canvas.toBlob(
-                (blob) => {
-                    if (blob) {
-                        // Если сжатый файл больше исходного — используем исходный
-                        if (blob.size >= file.size) {
-                            setCompressedFile(file);
-                        } else {
-                            const compressed = new File([blob], `${fileName}.jpeg`, { type });
-                            setCompressedFile(compressed);
-                        }
-                    }
-                    URL.revokeObjectURL(objectUrl);
-                }, type, quality
-            );
-        };
+      ctx.drawImage(img, 0, 0, width, height);
 
-        return () => {
+      const type = preserveAlpha ? "image/png" : "image/jpeg";
+      const quality = preserveAlpha ? undefined : 0.6;
+      const extension = preserveAlpha ? "png" : "jpeg";
+      const fileName = file.name.replace(/\.\w+$/, "");
+
+      canvas.toBlob(
+        (blob) => {
+          if (generation !== generationRef.current) {
             URL.revokeObjectURL(objectUrl);
-        };
-    }, [file]);
+            return;
+          }
 
-    return compressedFile;
+          if (blob) {
+            if (blob.size >= file.size) {
+              applyResult(file);
+            } else {
+              applyResult(
+                new File([blob], `${fileName}.${extension}`, { type })
+              );
+            }
+          } else {
+            applyResult(file);
+          }
+          URL.revokeObjectURL(objectUrl);
+        },
+        type,
+        quality
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      applyResult(file);
+    };
+
+    return () => {
+      generationRef.current += 1;
+      URL.revokeObjectURL(objectUrl);
+    };
+  }, [file, preserveAlpha]);
+
+  if (!file) {
+    return null;
+  }
+
+  return compressedFile;
 }

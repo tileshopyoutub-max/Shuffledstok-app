@@ -34,8 +34,13 @@ export function useAddFile() {
   const { data: availableTags = [] } = useGetTagsQuery();
   const { data: availableCategories = [] } = useGetCategoriesQuery();
 
+  const isStickerUpload = selectedCategories.some(
+    (c) => c.name.trim().toLowerCase() === "stickers"
+  );
+
   const compressorFile = useImageCompressor(
-    fileInput.fileType === "image" ? fileInput.file : null
+    fileInput.fileType === "image" ? fileInput.file : null,
+    { preserveAlpha: isStickerUpload }
   );
 
   const compressorFileArchive = useArchiveImagesCompressor(
@@ -43,7 +48,11 @@ export function useAddFile() {
   );
 
   const watermarkFile = useAddWatermark(
-    fileInput.fileType === "image" && settings.enabled ? compressorFile : null,
+    fileInput.fileType === "image" &&
+      settings.enabled &&
+      !isStickerUpload
+      ? compressorFile
+      : null,
     settings
   );
 
