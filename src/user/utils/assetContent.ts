@@ -1,6 +1,19 @@
 import type { MediaItem } from "../../components/admin/hooks/useAllMedia";
+import type { EntityType, PrimaryCategory } from "../../shared/types/listing";
 
 export type AssetType = "wallpaper" | "icon" | "sticker";
+
+const FILE_TYPE_BY_CATEGORY: Record<PrimaryCategory, string> = {
+  wallpapers: "Wallpaper",
+  icons: "Icon",
+  stickers: "Sticker",
+};
+
+const CATEGORY_LABELS: Record<PrimaryCategory, string> = {
+  wallpapers: "Wallpapers",
+  icons: "Icons",
+  stickers: "Stickers",
+};
 
 interface AssetContent {
   type: AssetType;
@@ -75,6 +88,55 @@ function inferMood(tags: string[]): string {
 
 export function getLicenseNote() {
   return LICENSE_NOTE;
+}
+
+export function getFileTypeLabel(
+  category: PrimaryCategory,
+  entityType: EntityType
+): string {
+  if (entityType === "archive") return "Archive pack";
+  return FILE_TYPE_BY_CATEGORY[category];
+}
+
+export function getCategoryLabel(category: PrimaryCategory): string {
+  return CATEGORY_LABELS[category];
+}
+
+export function getAccessLabel(downloadFree: boolean): string {
+  return downloadFree ? "Free" : "Premium";
+}
+
+export function getFormatFromKeyOrUrl(source: string): string | null {
+  const match = source.match(/\.([a-z0-9]{2,5})(?:\?|#|$)/i);
+  if (!match) return null;
+  const ext = match[1].toLowerCase();
+  if (ext === "jpeg") return "JPEG";
+  if (ext === "jpg") return "JPG";
+  return ext.toUpperCase();
+}
+
+export function getHowToUseByPrimaryCategory(category: PrimaryCategory): string[] {
+  switch (category) {
+    case "stickers":
+      return [
+        "Download the PNG sticker file to your device.",
+        "Use it in Canva, social posts, or digital planners.",
+        "Place and resize it over photos, backgrounds, or layouts.",
+      ];
+    case "icons":
+      return [
+        "Download the icon and save it to your phone.",
+        "Use it for Instagram Story Highlight covers or profile branding.",
+        "Set it as a highlight cover or match it with your profile aesthetic.",
+      ];
+    case "wallpapers":
+    default:
+      return [
+        "Download the wallpaper to your phone gallery.",
+        "Open wallpaper settings on iPhone or Android.",
+        "Set the image as your lock screen, home screen, or both.",
+      ];
+  }
 }
 
 export function buildAssetContent(asset: MediaItem): AssetContent {
