@@ -36,6 +36,12 @@ export const FooterHomePage = () => {
         >
           Privacy Policy
         </Link>
+        <Link
+          to="/license"
+          className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
+        >
+          License
+        </Link>
       </div>
       <div className="flex flex-wrap justify-center gap-4">
         <a

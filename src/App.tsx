@@ -16,6 +16,7 @@ import { AdminRoute } from "./pages/admin/AdminRoute";
 import AboutPage from "./pages/user/AboutPage";
 import ContactPage from "./pages/user/ContactPage";
 import PrivacyPolicyPage from "./pages/user/PrivacyPolicyPage";
+import LicensePage from "./pages/user/LicensePage";
 import UserLayout from "./user/layouts/UserLayout";
 import Blog from "./pages/Blog";
 import BestWallpapers2026 from "./pages/BestWallpapers2026";
@@ -59,6 +60,7 @@ function App() {
           <Route path="/download/:id" element={<AssetDownloadPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/license" element={<LicensePage />} />
           <Route
             path="/privacy-policy"
             element={<Navigate to="/privacy" replace />}
