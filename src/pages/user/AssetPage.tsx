@@ -33,6 +33,10 @@ const categoryLabels: Record<PrimaryCategory, string> = {
   stickers: "Stickers",
 };
 
+const infoCardClass =
+  "rounded-xl border border-white/10 bg-white/[0.02] p-5 sm:p-6";
+const infoCardTitleClass = "text-base font-semibold text-gray-50 tracking-tight";
+
 function resolveAssetFormat(
   asset: PublicImageAsset | PublicArchiveAsset
 ): string | null {
@@ -108,6 +112,7 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
   }
 
   const primaryCategory = listing.primaryCategory;
+  const isSticker = primaryCategory === "stickers";
   const fileTypeLabel = getFileTypeLabel(primaryCategory, listing.entityType);
   const accessLabel = getAccessLabel(asset.downloadFree);
   const formatLabel = resolveAssetFormat(asset);
@@ -115,96 +120,104 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
 
   return (
     <div className="bg-black min-h-screen text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8" ref={modalRef}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8" ref={modalRef}>
         <Link
-          className="text-primary hover:underline text-sm mb-6 inline-block"
+          className="text-primary hover:underline text-sm mb-5 sm:mb-6 inline-block"
           to={getCategoryIndexPath(expectedCategory)}
         >
           ← Back to {categoryLabels[expectedCategory]}
         </Link>
 
-        <div className="grid lg:grid-cols-2 gap-10">
-          <div
-            className={`rounded-xl overflow-hidden border border-white/10 flex flex-col items-center w-full ${
-              primaryCategory === "stickers" ? "p-1" : "p-4"
-            }`}
-          >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 lg:items-start">
+          <div className="w-full lg:sticky lg:top-8">
             {asset.type === "archive" ? (
-              <>
+              <div
+                className={`${infoCardClass} flex flex-col items-center w-full`}
+              >
                 <ArchiveSlider
                   images={asset.images.map((img) => ({
                     url: img.url,
                     key: img.key,
                   }))}
                 />
-                <p className="text-gray-400 text-sm mt-4">
+                <p className="text-gray-400 text-sm mt-4 w-full text-center">
                   {asset.images.length} items in this pack
                 </p>
-              </>
-            ) : primaryCategory === "stickers" ? (
-              <div
-                className={`flex w-full items-center justify-center py-3 rounded-lg ${stickerPreviewTileClass}`}
-              >
+              </div>
+            ) : isSticker ? (
+              <div className="mx-auto w-full max-w-md">
+                <div
+                  className={`rounded-xl overflow-hidden border border-white/10 ${stickerPreviewTileClass}`}
+                >
+                  <div className="flex items-center justify-center px-5 py-6 sm:px-6 sm:py-8 min-h-[200px]">
+                    <img
+                      src={asset.url}
+                      alt={asset.title || "Asset preview"}
+                      className="block w-full h-auto max-h-[min(52vh,380px)] object-contain"
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl overflow-hidden border border-white/10 bg-neutral-950/30">
                 <img
                   src={asset.url}
                   alt={asset.title || "Asset preview"}
-                  className="block max-h-[min(50vh,400px)] max-w-full w-auto h-auto object-contain"
+                  className="block w-full h-auto"
                 />
               </div>
-            ) : (
-              <img
-                src={asset.url}
-                alt={asset.title || "Asset preview"}
-                className="w-full h-full object-cover aspect-[3/4] rounded-lg"
-              />
             )}
           </div>
 
-          <div className="space-y-6">
-            <h1 className="text-3xl md:text-4xl font-black">
-              {asset.title || "Untitled"}
-            </h1>
+          <div className="flex flex-col gap-5 sm:gap-6 min-w-0">
+            <div className="space-y-4">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight">
+                {asset.title || "Untitled"}
+              </h1>
 
-            {asset.description && (
-              <p className="text-gray-300 leading-7">{asset.description}</p>
-            )}
+              {asset.description && (
+                <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                  {asset.description}
+                </p>
+              )}
 
-            {asset.type === "image" && (
-              <div className="space-y-4">
-                {asset.downloadFree ? (
-                  <button
-                    onClick={handleDownload}
-                    className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold"
-                  >
-                    Download for free
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={handleBuy}
-                      className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold"
-                    >
-                      Buy for $2.99
-                    </button>
+              {asset.type === "image" && (
+                <div className="pt-1">
+                  {asset.downloadFree ? (
                     <button
                       onClick={handleDownload}
-                      disabled={!isPurchased}
-                      className={`w-full h-12 rounded-lg font-bold transition-colors ${
-                        isPurchased
-                          ? "bg-primary hover:bg-primary/90 text-white"
-                          : "bg-gray-700 text-gray-400 cursor-not-allowed"
-                      }`}
+                      className="w-full h-12 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold transition-colors"
                     >
-                      Download file
+                      Download for free
                     </button>
-                  </>
-                )}
-              </div>
-            )}
+                  ) : (
+                    <div className="space-y-3">
+                      <button
+                        onClick={handleBuy}
+                        className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold transition-colors"
+                      >
+                        Buy for $2.99
+                      </button>
+                      <button
+                        onClick={handleDownload}
+                        disabled={!isPurchased}
+                        className={`w-full h-12 rounded-lg font-bold transition-colors ${
+                          isPurchased
+                            ? "bg-primary hover:bg-primary/90 text-white"
+                            : "bg-gray-700 text-gray-400 cursor-not-allowed"
+                        }`}
+                      >
+                        Download file
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
 
             {asset.type === "archive" && (
-              <div className="rounded-xl border border-white/10 p-5">
-                <p className="text-gray-300">
+              <div className={infoCardClass}>
+                <p className="text-gray-300 text-sm leading-relaxed">
                   {asset.downloadFree
                     ? "This pack is marked as free. Pack download will be available in a future update."
                     : "Premium pack — purchase flow coming soon."}
@@ -212,112 +225,118 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
               </div>
             )}
 
-            {asset.categories.length > 0 && (
-              <div className="rounded-xl border border-white/10 p-5">
-                <h2 className="text-lg font-bold mb-2">Categories</h2>
-                <div className="flex flex-wrap gap-2">
-                  {asset.categories.map((cat) => (
-                    <span
-                      key={cat}
-                      className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full"
-                    >
-                      {cat}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {asset.tags.length > 0 && (
-              <div className="rounded-xl border border-white/10 p-5">
-                <h2 className="text-lg font-bold mb-2">Tags</h2>
-                <div className="flex flex-wrap gap-2">
-                  {asset.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full"
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            <div className="rounded-xl border border-white/10 p-5 space-y-3">
-              <h2 className="text-xl font-bold">File details</h2>
-              <dl className="text-sm space-y-2">
-                <div className="flex justify-between gap-4">
-                  <dt className="text-gray-400">Type</dt>
-                  <dd className="text-gray-200 text-right">{fileTypeLabel}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-gray-400">Access</dt>
-                  <dd className="text-gray-200 text-right">{accessLabel}</dd>
-                </div>
-                {formatLabel && (
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-gray-400">Format</dt>
-                    <dd className="text-gray-200 text-right">{formatLabel}</dd>
+            <div className="flex flex-col gap-4">
+              {asset.categories.length > 0 && (
+                <div className={infoCardClass}>
+                  <h2 className={`${infoCardTitleClass} mb-3`}>Categories</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {asset.categories.map((cat) => (
+                      <span
+                        key={cat}
+                        className="px-3 py-1 bg-gray-800/80 text-gray-300 text-sm rounded-full"
+                      >
+                        {cat}
+                      </span>
+                    ))}
                   </div>
-                )}
-                <div className="flex justify-between gap-4">
-                  <dt className="text-gray-400">Category</dt>
-                  <dd className="text-gray-200 text-right">
-                    {getCategoryLabel(primaryCategory)}
-                  </dd>
                 </div>
-                {asset.type === "archive" && (
-                  <div className="flex justify-between gap-4">
-                    <dt className="text-gray-400">Items count</dt>
+              )}
+
+              {asset.tags.length > 0 && (
+                <div className={infoCardClass}>
+                  <h2 className={`${infoCardTitleClass} mb-3`}>Tags</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {asset.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-3 py-1 bg-gray-800/80 text-gray-300 text-sm rounded-full"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className={`${infoCardClass} space-y-3`}>
+                <h2 className={infoCardTitleClass}>File details</h2>
+                <dl className="text-sm space-y-2.5">
+                  <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                    <dt className="text-gray-400">Type</dt>
+                    <dd className="text-gray-200 text-right">{fileTypeLabel}</dd>
+                  </div>
+                  <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                    <dt className="text-gray-400">Access</dt>
+                    <dd className="text-gray-200 text-right">{accessLabel}</dd>
+                  </div>
+                  {formatLabel && (
+                    <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                      <dt className="text-gray-400">Format</dt>
+                      <dd className="text-gray-200 text-right">{formatLabel}</dd>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                    <dt className="text-gray-400">Category</dt>
                     <dd className="text-gray-200 text-right">
-                      {asset.images.length}
+                      {getCategoryLabel(primaryCategory)}
                     </dd>
                   </div>
-                )}
-              </dl>
-            </div>
+                  {asset.type === "archive" && (
+                    <div className="flex justify-between gap-4">
+                      <dt className="text-gray-400">Items count</dt>
+                      <dd className="text-gray-200 text-right">
+                        {asset.images.length}
+                      </dd>
+                    </div>
+                  )}
+                </dl>
+              </div>
 
-            <div className="rounded-xl border border-white/10 p-5 space-y-4">
-              <h2 className="text-xl font-bold">How to use</h2>
-              <ol className="text-gray-300 space-y-2 list-decimal list-inside">
-                {howToUseSteps.map((step) => (
-                  <li key={step}>{step}</li>
-                ))}
-              </ol>
-            </div>
+              <div className={`${infoCardClass} space-y-3`}>
+                <h2 className={infoCardTitleClass}>How to use</h2>
+                <ol className="text-gray-300 text-sm leading-relaxed space-y-2 list-decimal list-inside">
+                  {howToUseSteps.map((step) => (
+                    <li key={step}>{step}</li>
+                  ))}
+                </ol>
+              </div>
 
-            <div className="rounded-xl border border-white/10 p-5">
-              <h2 className="text-xl font-bold mb-2">License note</h2>
-              <p className="text-gray-300">
-                {getLicenseNote()}{" "}
-                <Link
-                  to="/license"
-                  className="text-primary hover:underline font-medium"
-                >
-                  View full license
-                </Link>
-              </p>
+              <div className={infoCardClass}>
+                <h2 className={`${infoCardTitleClass} mb-3`}>License note</h2>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {getLicenseNote()}{" "}
+                  <Link
+                    to="/license"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    View full license
+                  </Link>
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {relatedAssets.length > 0 && (
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold mb-4">Related assets</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <section className="mt-12 sm:mt-14 pt-8 sm:pt-10 border-t border-white/10">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-50 mb-5 sm:mb-6">
+              Related assets
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
               {relatedAssets.map((item) => (
                 <AssetCardLink
                   key={`${item.type}-${item.id}`}
                   item={item}
-                  className="group rounded-lg overflow-hidden border border-white/10 block"
+                  className="group block rounded-lg overflow-hidden border border-white/10 bg-white/[0.02] ring-1 ring-transparent hover:ring-white/15 transition-all"
                 >
-                  <img
-                    src={item.url}
-                    alt={item.title || "Related asset"}
-                    className="w-full aspect-[3/4] object-cover transition-transform duration-300 group-hover:scale-105"
-                    loading="lazy"
-                  />
+                  <div className="aspect-[3/4] overflow-hidden bg-neutral-900/60">
+                    <img
+                      src={item.url}
+                      alt={item.title || "Related asset"}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      loading="lazy"
+                    />
+                  </div>
                 </AssetCardLink>
               ))}
             </div>
