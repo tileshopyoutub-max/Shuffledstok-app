@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Slider } from "../../user/components/homePage/Slider";
 import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
 import { hideHero } from "../../store/slices/heroSlice";
@@ -35,6 +36,49 @@ function getHomeCardVariant(item: MediaItem): HomeCardVariant {
   return "wallpaper";
 }
 
+const MASONRY_BUCKET_ORDER: HomeCardVariant[] = [
+  "wallpaper",
+  "sticker",
+  "icon-pack",
+];
+
+/** Stable round-robin mix — wallpapers, stickers, and icon packs are not grouped in blocks. */
+function interleaveAllMedia(items: MediaItem[]): MediaItem[] {
+  if (items.length <= 1) return items;
+
+  const buckets: Record<HomeCardVariant, MediaItem[]> = {
+    wallpaper: [],
+    sticker: [],
+    "icon-pack": [],
+  };
+
+  for (const item of items) {
+    buckets[getHomeCardVariant(item)].push(item);
+  }
+
+  const activeBuckets = MASONRY_BUCKET_ORDER.filter(
+    (variant) => buckets[variant].length > 0
+  );
+  const maxLen = Math.max(...activeBuckets.map((v) => buckets[v].length));
+  const mixed: MediaItem[] = [];
+
+  for (let i = 0; i < maxLen; i++) {
+    for (const variant of activeBuckets) {
+      const item = buckets[variant][i];
+      if (item) mixed.push(item);
+    }
+  }
+
+  return mixed;
+}
+
+function getStickerTileMinHeightClass(id: number): string {
+  const tier = id % 3;
+  if (tier === 0) return "min-h-[140px] sm:min-h-[180px]";
+  if (tier === 1) return "min-h-[180px] sm:min-h-[220px]";
+  return "min-h-[220px] sm:min-h-[260px]";
+}
+
 function HomeMasonryCard({
   item,
   onNavigate,
@@ -44,7 +88,8 @@ function HomeMasonryCard({
 }) {
   const variant = getHomeCardVariant(item);
   const alt = item.title || "Media asset";
-  const baseLinkClass = "block mb-3 break-inside-avoid rounded-lg overflow-hidden";
+  const baseLinkClass =
+    "block mb-2 sm:mb-3 break-inside-avoid rounded-lg overflow-hidden";
 
   if (variant === "sticker") {
     return (
@@ -54,10 +99,10 @@ function HomeMasonryCard({
         onNavigate={onNavigate}
       >
         <div
-          className={`relative flex w-full aspect-[4/5] max-h-[200px] sm:max-h-[220px] items-center justify-center overflow-hidden rounded-lg ${stickerPreviewTileClass}`}
+          className={`flex w-full items-center justify-center px-3 py-4 sm:px-4 sm:py-5 ${getStickerTileMinHeightClass(item.id)} ${stickerPreviewTileClass}`}
         >
           <img
-            className="max-h-full max-w-full object-contain scale-[1.12] transition-transform duration-300 group-hover:scale-[1.16]"
+            className="block w-full h-auto max-w-full object-contain scale-[1.1] transition-transform duration-300 group-hover:scale-[1.14]"
             src={item.url}
             alt={alt}
             loading="lazy"
@@ -74,9 +119,9 @@ function HomeMasonryCard({
         className={`${baseLinkClass} bg-neutral-900/90 ring-1 ring-white/10`}
         onNavigate={onNavigate}
       >
-        <div className="flex items-center justify-center p-3 max-h-[220px] md:max-h-[300px] bg-neutral-800/60">
+        <div className="flex items-center justify-center p-3 sm:p-4 bg-neutral-800/60">
           <img
-            className="max-h-[180px] md:max-h-[260px] max-w-full w-auto object-contain"
+            className="block w-full h-auto"
             src={item.url}
             alt={alt}
             loading="lazy"
@@ -103,6 +148,10 @@ export default function HomePage() {
   const { isVisible } = useTypedSelector((state) => state.hero);
 
   const filteredImages = useFilteredMedia();
+  const masonryMedia = useMemo(
+    () => interleaveAllMedia(filteredImages),
+    [filteredImages]
+  );
   const { featuredMedia } = useFeaturedMedia();
 
   return (
@@ -167,7 +216,7 @@ export default function HomePage() {
                     </p>
                   ) : (
                     <div className="w-full columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 2xl:columns-7 gap-2 sm:gap-3 px-2 sm:px-3 pb-6">
-                      {filteredImages.map((img) => (
+                      {masonryMedia.map((img) => (
                         <HomeMasonryCard
                           key={`${img.type}-${img.id}`}
                           item={img}
