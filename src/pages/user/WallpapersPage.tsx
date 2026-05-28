@@ -29,6 +29,23 @@ export function WallpapersPage({ category }: CategoryPageProps) {
                   </p>
                 </div>
               </div>
+
+              <section className="mx-4 mb-2 rounded-xl border border-white/10 bg-white/[0.02] p-6">
+                <h2 className="text-lg font-bold text-white mb-2">
+                  Who this collection is for
+                </h2>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  Creators building aesthetic phone setups, small brands polishing
+                  social visuals, and anyone who wants free wallpapers for personal
+                  projects—lock screens, home screens, moodboards, and content
+                  backgrounds. Browse by style, then check our{" "}
+                  <Link to="/license" className="text-primary hover:underline">
+                    license
+                  </Link>{" "}
+                  before commercial use.
+                </p>
+              </section>
+
               <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 p-4">
                 {filteredImages.map((img) => (
                   <AssetCardLink

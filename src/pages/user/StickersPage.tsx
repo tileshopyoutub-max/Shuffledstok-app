@@ -33,7 +33,19 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
                   </p>
                 </div>
               </div>
-              {/* <!-- ImageGrid --> */}
+
+              <section className="mx-4 md:mx-10 mb-4 rounded-xl border border-white/10 bg-white/[0.02] p-6">
+                <h2 className="text-lg font-bold text-white mb-2">
+                  Who this collection is for
+                </h2>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  Planners, journal makers, social content creators, and small
+                  brands who need ready-made PNG stickers for layouts, stories,
+                  and collages. Use them in personal projects today; printable
+                  templates and shop packs are planned for later.
+                </p>
+              </section>
+
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 p-4 md:p-10">
                 {filteredImages.map((img) => (
                   <AssetCardLink

@@ -62,6 +62,22 @@ export function IconsPage(_props: CategoryPageProps) {
               </div>
             </div>
 
+            <section className="mx-4 mb-4 rounded-xl border border-white/10 bg-white/[0.02] p-6">
+              <h2 className="text-lg font-bold text-white mb-2">
+                Who this collection is for
+              </h2>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                Creators, bloggers, and small brands organizing Instagram
+                highlights, plus anyone building a cohesive social or phone
+                aesthetic. Icon packs are free to download for permitted personal
+                use—see our{" "}
+                <Link to="/license" className="text-primary hover:underline">
+                  license
+                </Link>{" "}
+                for details.
+              </p>
+            </section>
+
             <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 p-4">
               {filteredImages.map((img) => (
                 <AssetCardLink

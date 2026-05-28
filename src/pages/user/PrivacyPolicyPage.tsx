@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 export default function PrivacyPolicyPage() {
   return (
     <>
@@ -14,10 +12,10 @@ export default function PrivacyPolicyPage() {
                 <span className="material-symbols-outlined text-[18px]">
                   history
                 </span>
-                Last updated: June 15, 2024
+                Last updated: May 28, 2026
               </span>
               <span className="w-1 h-1 bg-white/20 rounded-full"></span>
-              <span className="text-white/40">Version 3.0.0</span>
+              <span className="text-white/40">ShuffledStock.com</span>
             </div>
           </div>
           <section className="text-white space-y-16">
@@ -62,7 +60,25 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                2. Cookies and Tracking Technologies
+                2. How We Use Information
+              </h2>
+              <div className="text-body text-lg space-y-4">
+                <p>
+                  We use collected information to operate ShuffledStock, improve
+                  our asset library, respond to support requests, prevent abuse,
+                  and understand which pages and categories are most useful. We
+                  do not sell your personal information.
+                </p>
+                <p>
+                  Download history and access records for digital products may
+                  be stored to enforce license terms, prevent fraud, and
+                  provide customer support.
+                </p>
+              </div>
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
+                3. Cookies and Tracking Technologies
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -82,30 +98,84 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                3. Google AdSense and Third-Party Advertising
+                4. Analytics (Google Analytics)
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
-                  We may use Google AdSense and other third-party advertising
-                  companies to serve ads when you visit our website. These
-                  companies may use information about your visits to this and
-                  other websites in order to provide advertisements about goods
-                  and services of interest to you.
+                  We use Google Analytics (Google tag / gtag.js) to measure site
+                  traffic, page views, and general usage patterns. Google may
+                  collect device and browser information, approximate location,
+                  and interaction data through cookies or similar technologies.
                 </p>
-                <div className="bg-primary/5 p-6 rounded-xl border border-primary/20">
+                <p>
+                  You can learn how Google uses data at{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Google&apos;s Privacy Policy
+                  </a>
+                  . You may install the{" "}
+                  <a
+                    href="https://tools.google.com/dlpage/gaoptout"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Google Analytics Opt-out Browser Add-on
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+            <div>
+              <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
+                5. Google AdSense and Third-Party Advertising
+              </h2>
+              <div className="text-body text-lg space-y-4">
+                <p>
+                  We use Google AdSense and may work with other ad partners to
+                  display advertisements on ShuffledStock. These partners may use
+                  cookies and similar technologies to show ads based on your
+                  visits to this site and other websites.
+                </p>
+                <div className="bg-primary/5 p-6 rounded-xl border border-primary/20 space-y-3">
+                  <p className="text-sm">
+                    You can manage personalized advertising through Google&apos;s
+                    Ad Settings:{" "}
+                    <a
+                      href="https://adssettings.google.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      adssettings.google.com
+                    </a>
+                  </p>
+                  <p className="text-sm">
+                    Learn more about how Google uses data for ads:{" "}
+                    <a
+                      href="https://policies.google.com/technologies/ads"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Google Advertising Policies
+                    </a>
+                  </p>
                   <p className="text-sm italic">
-                    Google's use of the DART cookie enables it to serve ads to
-                    our users based on their visit to our site and other sites
-                    on the Internet. Users may opt out of the use of the DART
-                    cookie by visiting the Google Ad and Content Network privacy
-                    policy.
+                    Third-party vendors, including Google, use cookies to serve
+                    ads based on a user&apos;s prior visits to your website or
+                    other websites.
                   </p>
                 </div>
               </div>
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                4. Third-Party Services
+                6. Third-Party Services
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -124,7 +194,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                5. Digital Products
+                7. Digital Products
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -138,7 +208,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                6. Data Security
+                8. Data Security
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -152,7 +222,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                7. Children’s Information
+                9. Children’s Information
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -166,7 +236,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                8. User Consent
+                10. User Consent
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -179,7 +249,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                9. Changes to This Privacy Policy
+                11. Changes to This Privacy Policy
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
@@ -193,7 +263,7 @@ export default function PrivacyPolicyPage() {
             </div>
             <div className="bg-primary/10 border border-primary/20 rounded-2xl p-10 mt-10">
               <h2 className="text-3xl font-bold mb-4 text-white">
-                10. Contact Information
+                12. Contact Information
               </h2>
               <p className="text-body text-lg mb-8">
                 If you have any questions or concerns regarding this Privacy
@@ -201,12 +271,12 @@ export default function PrivacyPolicyPage() {
                 all inquiries within 48 business hours.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/contact"
+                <a
+                  href="mailto:shuffledstock.com@outlook.com"
                   className="flex items-center justify-center gap-2 bg-primary text-white px-8 py-4 rounded-xl font-bold hover:scale-[1.02] transition-transform"
                 >
                   shuffledstock.com@outlook.com
-                </Link>
+                </a>
               </div>
             </div>
           </section>

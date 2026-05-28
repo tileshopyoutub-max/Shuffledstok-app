@@ -16,25 +16,17 @@ export const FooterHomePage = () => {
         >
           Contact
         </Link>
-
-        {/* <a
-          className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
-          href="#"
-        >
-          FAQ
-        </a>
-        <a
-          className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
-          href="#"
-        >
-          Terms of Service
-        </a> */}
-
         <Link
           to="/privacy"
           className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
         >
           Privacy Policy
+        </Link>
+        <Link
+          to="/terms"
+          className="text-gray-400 text-sm font-normal leading-normal hover:text-gray-100 transition-colors"
+        >
+          Terms
         </Link>
         <Link
           to="/license"
@@ -76,7 +68,7 @@ export const FooterHomePage = () => {
         </a>
       </div>
       <p className="text-gray-400 text-sm font-normal leading-normal">
-        © 2024 ShuffledStock. All rights reserved.
+        © 2026 ShuffledStock. All rights reserved.
       </p>
     </footer>
   );

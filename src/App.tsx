@@ -17,6 +17,7 @@ import AboutPage from "./pages/user/AboutPage";
 import ContactPage from "./pages/user/ContactPage";
 import PrivacyPolicyPage from "./pages/user/PrivacyPolicyPage";
 import LicensePage from "./pages/user/LicensePage";
+import TermsPage from "./pages/user/TermsPage";
 import UserLayout from "./user/layouts/UserLayout";
 import Blog from "./pages/Blog";
 import BestWallpapers2026 from "./pages/BestWallpapers2026";
@@ -61,6 +62,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/license" element={<LicensePage />} />
+          <Route path="/terms" element={<TermsPage />} />
           <Route
             path="/privacy-policy"
             element={<Navigate to="/privacy" replace />}

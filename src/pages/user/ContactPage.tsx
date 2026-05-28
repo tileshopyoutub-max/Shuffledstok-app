@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import emailjs from "@emailjs/browser";
+
+const CONTACT_EMAIL = "shuffledstock.com@outlook.com";
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -42,20 +46,54 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* <Header /> */}
-      <main className="font-display  bg-black pt-40 pb-20 px-6">
+      <main className="font-display bg-black pt-40 pb-20 px-6">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-16 space-y-4">
+          <div className="text-center mb-10 space-y-4">
             <span className="text-primary uppercase tracking-[0.3em] text-xs font-bold">
-              Contact Support
+              Contact
             </span>
-
             <h1 className="text-white text-5xl md:text-7xl font-bold leading-tight tracking-tight pt-2">
               Get in Touch
             </h1>
+            <p className="text-slate-300 text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+              Reach ShuffledStock for general questions, content takedown requests,
+              or licensing clarifications. We read every message and aim to reply
+              within a few business days.
+            </p>
           </div>
 
-          <div className="mt-12 bg-[#0A0A0A] border border-white/5 rounded-2xl p-8 md:p-12 shadow-2xl">
+          <section className="mb-10 rounded-2xl border border-white/10 bg-white/[0.02] p-8 md:p-10">
+            <h2 className="text-xl font-bold text-white mb-4">Email</h2>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="text-2xl font-semibold text-primary hover:underline break-all"
+            >
+              {CONTACT_EMAIL}
+            </a>
+            <ul className="mt-6 space-y-3 text-slate-300 leading-relaxed list-disc pl-5">
+              <li>
+                <strong className="text-white font-medium">General questions</strong>{" "}
+                — site features, downloads, or asset categories
+              </li>
+              <li>
+                <strong className="text-white font-medium">Takedown / copyright</strong>{" "}
+                — report content you believe infringes your rights (include URLs and details)
+              </li>
+              <li>
+                <strong className="text-white font-medium">Licensing</strong>{" "}
+                — commercial use, attribution, or premium asset terms (
+                <Link to="/license" className="text-primary hover:underline">
+                  view license
+                </Link>
+                )
+              </li>
+            </ul>
+            <p className="mt-6 text-sm text-slate-400">
+              Prefer the form below? Include a clear subject so we can route your request faster.
+            </p>
+          </section>
+
+          <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-8 md:p-12 shadow-2xl">
             <form onSubmit={handleSubmit} className="space-y-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
@@ -91,7 +129,7 @@ export default function ContactPage() {
                 </label>
                 <input
                   className="w-full bg-black border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-white/20 focus:border-[#3b82f6] focus:shadow-[0_0_0_1px_#3b82f6] focus:outline-none"
-                  placeholder="What is this regarding?"
+                  placeholder="Question, takedown, or licensing"
                   type="text"
                   name="subject"
                   required
@@ -128,25 +166,17 @@ export default function ContactPage() {
             </form>
           </div>
 
-          <div className="text-white mt-20 flex flex-wrap justify-center gap-12 opacity-40">
+          <div className="text-white mt-16 flex flex-wrap justify-center gap-12 opacity-40">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">
-                verified
-              </span>
+              <span className="material-symbols-outlined text-primary">verified</span>
               <span className="text-sm">Verified Support</span>
             </div>
-
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">
-                schedule
-              </span>
-              <span className="text-sm">24h Response Goal</span>
+              <span className="material-symbols-outlined text-primary">schedule</span>
+              <span className="text-sm">48h Response Goal</span>
             </div>
-
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">
-                security
-              </span>
+              <span className="material-symbols-outlined text-primary">security</span>
               <span className="text-sm">Encrypted Connection</span>
             </div>
           </div>
