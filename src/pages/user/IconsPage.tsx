@@ -4,21 +4,7 @@ import type { CategoryPageProps } from "../../user/hooks/useFilterPage";
 import { useAllMedia } from "../../components/admin/hooks/useAllMedia";
 import { useTypedSelector } from "../../shared/hooks/redux";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
-import type { MediaItem } from "../../components/admin/hooks/useAllMedia";
-
-function isIconsOnlyAsset(item: MediaItem): boolean {
-  if (item.primaryCategory === "stickers" || item.primaryCategory === "wallpapers") {
-    return false;
-  }
-
-  if (item.primaryCategory === "icons") return true;
-
-  if (item.type === "archive") {
-    return item.categories.some((c) => c.toLowerCase() === "icons");
-  }
-
-  return item.categories.some((c) => c.toLowerCase() === "icons");
-}
+import { isIconsOnlyAsset } from "../../user/utils/iconCategoryFilter";
 
 export function IconsPage(_props: CategoryPageProps) {
   const { allMedia, isLoading } = useAllMedia();
