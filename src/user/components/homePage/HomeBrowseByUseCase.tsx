@@ -35,7 +35,7 @@ const USE_CASES = [
 
 export function HomeBrowseByUseCase() {
   return (
-    <section className="px-4 sm:px-6 pt-6 pb-2">
+    <section className="pt-6 pb-2">
       <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight pb-3">
         Browse by Use Case
       </h2>

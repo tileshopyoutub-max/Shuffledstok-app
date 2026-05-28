@@ -28,7 +28,7 @@ export const Header = () => {
           </h2>
         </div>
         <div className="hidden md:flex items-center gap-8">
-          <CustomLink to="/wallpapers">Wallpaper</CustomLink>
+          <CustomLink to="/wallpapers">Wallpapers</CustomLink>
           <CustomLink to="/icons">Icons</CustomLink>
           <CustomLink to="/stickers">Stickers</CustomLink>
           <CustomLink to="/blog">Blog</CustomLink>

@@ -1,18 +1,20 @@
-import { useMemo } from "react";
-import { Slider } from "../../user/components/homePage/Slider";
+import { useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useTypedDispatch, useTypedSelector } from "../../shared/hooks/redux";
-import { hideHero } from "../../store/slices/heroSlice";
+import { hideHero, showHero } from "../../store/slices/heroSlice";
 import { TagFilterList } from "../../user/components/TagFilterList";
 import { useFilteredMedia } from "../../user/hooks/useFilteredMedia";
 import { addViewedImage } from "../../store/slices/viewedImagesSlice";
-import { ViewedImagesSlider } from "../../user/components/homePage/ViewedImagesSlider";
-import { useFeaturedMedia } from "../../user/hooks/useFeaturedMedia";
-import { HomeBrowseByUseCase } from "../../user/components/homePage/HomeBrowseByUseCase";
-import { HomeBrowseByStyle } from "../../user/components/homePage/HomeBrowseByStyle";
 import { HomeFeaturedWallpapers } from "../../user/components/homePage/HomeFeaturedWallpapers";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
 import type { MediaItem } from "../../components/admin/hooks/useAllMedia";
 import { stickerPreviewTileClass } from "../../user/utils/stickerPreviewBg";
+import { HomeBrowseByAssetType } from "../../user/components/homePage/HomeBrowseByAssetType";
+import {
+  resetFilters,
+  setSearch,
+  toggleTag,
+} from "../../store/slices/imagesFilterSlice";
 
 type HomeCardVariant = "sticker" | "wallpaper" | "icon-pack";
 
@@ -145,6 +147,7 @@ function HomeMasonryCard({
 
 export default function HomePage() {
   const dispatch = useTypedDispatch();
+  const navigate = useNavigate();
   const { isVisible } = useTypedSelector((state) => state.hero);
 
   const filteredImages = useFilteredMedia();
@@ -152,7 +155,19 @@ export default function HomePage() {
     () => interleaveAllMedia(filteredImages),
     [filteredImages]
   );
-  const { featuredMedia } = useFeaturedMedia();
+  const applyStyleChip = (mode: "tag" | "search", value: string) => {
+    dispatch(resetFilters());
+    if (mode === "tag") {
+      dispatch(toggleTag(value));
+    } else {
+      dispatch(setSearch(value));
+    }
+    navigate("/wallpapers");
+  };
+
+  useEffect(() => {
+    dispatch(showHero());
+  }, [dispatch]);
 
   return (
     <div className="font-display bg-black">
@@ -161,61 +176,105 @@ export default function HomePage() {
           <div className="flex overflow-hidden">
             <main className="flex flex-1 justify-center py-5 min-w-0">
               <div className="layout-content-container flex flex-col w-full">
-                <div className="w-full max-w-7xl mx-auto">
+                <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 min-w-0">
                   {isVisible && (
-                    <div className="px-4 py-10 md:py-3 flex flex-col gap-1 items-center text-center hidden sm:block">
-                      <div className="flex flex-col gap-4 text-center">
-                        <h1 className="text-gray-50 text-4xl font-black leading-tight tracking-tighter md:text-6xl">
-                          Elevate Your Digital Space
-                        </h1>
-                        <h2 className="text-gray-400 text-base font-normal leading-normal max-w-3xl mx-auto md:text-lg">
-                          Discover high-quality wallpapers, icons, and stickers
-                          curated for modern creators.
-                        </h2>
-                      </div>
+                    <section className="pt-3 pb-5 border-b border-white/10">
+                      <h1 className="text-gray-50 text-3xl sm:text-4xl font-black leading-tight tracking-tight">
+                        Free digital assets for creative projects
+                      </h1>
+                      <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-3xl mt-2">
+                        Wallpapers, stickers, icons and print-friendly resources
+                        for personal use, social content and creative layouts.
+                      </p>
 
-                      <div
-                        className="relative w-full max-w-5xl mx-auto overflow-hidden"
-                        style={{ perspective: "2000px" }}
-                      >
-                        <Slider images={featuredMedia} />
+                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                        <Link
+                          to="/wallpapers"
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Wallpapers
+                        </Link>
+                        <Link
+                          to="/stickers"
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Stickers
+                        </Link>
+                        <Link
+                          to="/icons"
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Icons
+                        </Link>
+                        <Link
+                          to="/stickers"
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Print-friendly
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => applyStyleChip("tag", "minimal")}
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Minimal
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => applyStyleChip("search", "cute")}
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Cute
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => applyStyleChip("tag", "dark")}
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Dark
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => applyStyleChip("tag", "vintage")}
+                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                        >
+                          Vintage
+                        </button>
+                        <a
+                          href="#all-media"
+                          className="ml-1 inline-flex items-center justify-center rounded-full bg-primary px-3.5 py-1.5 text-xs font-semibold text-black hover:opacity-90 transition-opacity"
+                        >
+                          Explore free assets
+                        </a>
                       </div>
-                    </div>
+                    </section>
                   )}
-                  <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-4 pb-3 pt-5">
-                    Previous Images
-                  </h2>
-                  <ViewedImagesSlider />
-                </div>
 
-                <div className="w-full max-w-screen-2xl mx-auto min-w-0">
-                  <HomeBrowseByUseCase />
                   <HomeFeaturedWallpapers
                     onItemNavigate={(item) => {
                       dispatch(hideHero());
                       dispatch(addViewedImage(item));
                     }}
                   />
-                  <HomeBrowseByStyle />
+                  <HomeBrowseByAssetType />
                 </div>
 
-                <section className="w-full max-w-none min-w-0">
-                  <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight px-2 sm:px-3 pb-3 pt-5">
-                    All Media
-                  </h2>
-                  <div
-                    className="px-2 sm:px-3"
-                    style={{ scrollbarWidth: "none" }}
-                  >
-                    <TagFilterList listClassName="flex flex-nowrap gap-2 lg:flex-wrap overflow-x-auto" />
+                <section id="all-media" className="w-full min-w-0 max-w-none pt-2">
+                  <div className="w-full max-w-none px-2 sm:px-3 lg:px-4">
+                    <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight pb-3 pt-3">
+                      All Media
+                    </h2>
+                    <div className="w-full max-w-none" style={{ scrollbarWidth: "none" }}>
+                      <TagFilterList listClassName="flex flex-wrap gap-2 overflow-x-visible w-full max-w-none" />
+                    </div>
                   </div>
 
                   {filteredImages.length === 0 ? (
-                    <p className="text-gray-400 px-2 sm:px-3 pb-6">
+                    <p className="text-gray-400 w-full px-2 sm:px-3 lg:px-4 pb-6">
                       Images not found
                     </p>
                   ) : (
-                    <div className="w-full columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 2xl:columns-7 gap-2 sm:gap-3 px-2 sm:px-3 pb-6">
+                    <div className="w-full columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 2xl:columns-7 gap-2 sm:gap-3 px-2 sm:px-3 lg:px-4 pb-6">
                       {masonryMedia.map((img) => (
                         <HomeMasonryCard
                           key={`${img.type}-${img.id}`}

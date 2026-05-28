@@ -44,7 +44,7 @@ export function HomeBrowseByStyle() {
   };
 
   return (
-    <section className="px-4 sm:px-6 pt-4 pb-2">
+    <section className="pt-4 pb-2">
       <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight pb-3">
         Browse by Style
       </h2>
