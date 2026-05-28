@@ -29,6 +29,7 @@ import CreateAestheticIphoneHomeScreen from "./pages/CreateAestheticIphoneHomeSc
 import { IconsPage } from "./pages/user/IconsPage";
 import AssetDownloadPage from "./pages/user/AssetDownloadPage";
 import AssetPage from "./pages/user/AssetPage";
+import NotFoundPage from "./pages/user/NotFoundPage";
 
 function App() {
   useHideHeroOnNavigate("/");
@@ -90,6 +91,9 @@ function App() {
             path="/blog/minimal-instagram-icons"
             element={<MinimalInstagramIcons />}
           />
+          <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="/home/" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
 
         <Route element={<AdminRoute />}>
