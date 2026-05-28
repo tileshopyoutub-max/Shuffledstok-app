@@ -11,13 +11,12 @@ import { BurgerButton } from "./BurgerButton";
 import {
   clearCategories,
   resetFilters,
-  toggleAccessType,
   toggleCategory,
   togglePhotoType,
 } from "../../../store/slices/imagesFilterSlice";
 
 export const Sidebar = () => {
-  const { selectedCategories, accessType, photoType } =
+  const { selectedCategories, photoType } =
     useTypedSelector((state) => state.imagesFilter);
   const { isOpen } = useTypedSelector((state) => state.sidebar);
   const { data: categories = [] } = useGetCategoriesQuery();
@@ -69,47 +68,6 @@ export const Sidebar = () => {
           className="flex-1 overflow-y-auto px-6 pb-10 custom-scrollbar"
           style={{ scrollbarWidth: "none" }}
         >
-          {/* <!-- Access Type Section --> */}
-          <div className="py-4 border-b border-white/5">
-            <h2 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4 mt-4">
-              Access Type
-            </h2>
-            <div className="flex flex-col gap-3">
-              <label className="group relative flex items-center gap-4 rounded-lg border border-white/10 p-3 cursor-pointer hover:border-white/20 hover:bg-white/5 transition-all">
-                <input
-                  className="peer h-5 w-5 border-2 border-gray-600 bg-transparent text-primary focus:ring-0 focus:ring-offset-0 checked:border-primary checked:bg-primary"
-                  name="access_type"
-                  type="radio"
-                  checked={accessType === "free"}
-                  onChange={() => dispatch(toggleAccessType("free"))}
-                  value="free"
-                />
-                <div className="flex grow flex-col">
-                  <p className="text-white text-sm font-medium leading-normal group-hover:text-primary transition-colors">
-                    Free
-                  </p>
-                </div>
-              </label>
-              <label className="group relative flex items-center gap-4 rounded-lg border border-white/10 p-3 cursor-pointer hover:border-white/20 hover:bg-white/5 transition-all">
-                <input
-                  className="peer h-5 w-5 border-2 border-gray-600 bg-transparent text-primary focus:ring-0 focus:ring-offset-0 checked:border-primary checked:bg-primary"
-                  name="access_type"
-                  type="radio"
-                  checked={accessType === "premium"}
-                  onChange={() => dispatch(toggleAccessType("premium"))}
-                  value="premium"
-                />
-                <div className="flex grow flex-col">
-                  <p className="text-white text-sm font-medium leading-normal group-hover:text-primary transition-colors">
-                    Premium
-                  </p>
-                </div>
-                <span className="material-symbols-outlined text-amber-400 text-[18px]">
-                  workspace_premium
-                </span>
-              </label>
-            </div>
-          </div>
           {/* <!-- Photo Type Section --> */}
           <div className="py-6 border-b border-white/5">
             <h2 className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-4">

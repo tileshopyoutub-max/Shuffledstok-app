@@ -41,8 +41,8 @@ export const StickersPage = ({ category }: CategoryPageProps) => {
                 <p className="text-slate-300 text-sm leading-relaxed">
                   Planners, journal makers, social content creators, and small
                   brands who need ready-made PNG stickers for layouts, stories,
-                  and collages. Use them in personal projects today; printable
-                  templates and shop packs are planned for later.
+                  and collages. Many files are print-friendly PNGs suitable for
+                  personal layouts and journaling.
                 </p>
               </section>
 

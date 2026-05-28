@@ -40,11 +40,12 @@ export default function LicensePage() {
 
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white border-l-4 border-primary pl-6">
-                Premium assets
+                Commercial or restricted use
               </h2>
               <p className="text-lg text-white/90 leading-relaxed">
-                Premium assets are allowed according to the license and purchase
-                terms included at the time of download or checkout.
+                For commercial projects, resale, or any use beyond personal
+                creative projects, contact us before downloading or publishing.
+                We will confirm what is permitted for the specific asset.
               </p>
             </div>
 

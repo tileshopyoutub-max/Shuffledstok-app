@@ -96,7 +96,7 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
     return getApiFileSizeLabel(asset);
   }, [asset]);
 
-  const { isPurchased, handleBuy, handleDownload } = useImageModal({
+  const { handleDownload } = useImageModal({
     modalRef,
     onClose: () => undefined,
     fileKey,
@@ -249,25 +249,13 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
                       Download for free
                     </button>
                   ) : (
-                    <div className="space-y-3">
-                      <button
-                        onClick={handleBuy}
-                        className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold transition-colors"
-                      >
-                        Buy for $2.99
-                      </button>
-                      <button
-                        onClick={handleDownload}
-                        disabled={!isPurchased}
-                        className={`w-full h-12 rounded-lg font-bold transition-colors ${
-                          isPurchased
-                            ? "bg-primary hover:bg-primary/90 text-white"
-                            : "bg-gray-700 text-gray-400 cursor-not-allowed"
-                        }`}
-                      >
-                        Download file
-                      </button>
-                    </div>
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      This file is not listed as a free download.{" "}
+                      <Link to="/contact" className="text-primary hover:underline">
+                        Contact us
+                      </Link>{" "}
+                      for licensing questions.
+                    </p>
                   )}
                 </div>
               )}
@@ -276,9 +264,12 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
             {asset.type === "archive" && (
               <div className={infoCardClass}>
                 <p className="text-gray-300 text-sm leading-relaxed">
-                  {asset.downloadFree
-                    ? "This pack is marked as free. Pack download will be available in a future update."
-                    : "Premium pack — purchase flow coming soon."}
+                  Browse pack previews in the gallery above. Licensing for items
+                  in this pack is described on our{" "}
+                  <Link to="/license" className="text-primary hover:underline">
+                    license page
+                  </Link>
+                  .
                 </p>
               </div>
             )}

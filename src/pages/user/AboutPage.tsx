@@ -42,10 +42,8 @@ export default function AboutPage() {
               for planners, collages, stories, and visual journals
             </li>
             <li>
-              <Link to="/icons" className="text-primary hover:underline">
-                Icons
-              </Link>{" "}
-              and icon packs, including Instagram highlight covers
+              Print-friendly PNG resources for layouts, journaling, and
+              creative projects
             </li>
           </ul>
 
@@ -59,16 +57,6 @@ export default function AboutPage() {
             customize an iPhone home screen, design a highlight row, or layer
             assets into Canva and journaling apps, ShuffledStock is meant to
             feel like a focused creative toolbox.
-          </p>
-
-          <h2 className="text-2xl font-bold text-white !mt-10 !mb-3">
-            What&apos;s coming next
-          </h2>
-          <p>
-            We are expanding toward printable assets, templates, and a future
-            shop for premium packs. Free downloads will remain a core part of the
-            site; paid products will always show clear license terms at
-            checkout.
           </p>
 
           <h2 className="text-2xl font-bold text-white !mt-10 !mb-3">

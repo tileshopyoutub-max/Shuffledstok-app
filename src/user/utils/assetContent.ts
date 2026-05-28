@@ -103,7 +103,7 @@ export function getCategoryLabel(category: PrimaryCategory): string {
 }
 
 export function getAccessLabel(downloadFree: boolean): string {
-  return downloadFree ? "Free" : "Premium";
+  return downloadFree ? "Free" : "Contact for access";
 }
 
 export function getFormatFromKeyOrUrl(source: string): string | null {

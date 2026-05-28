@@ -57,13 +57,12 @@ export default function TermsPage() {
 
           <div>
             <h2 className="text-3xl font-bold mb-4 text-white border-l-4 border-primary pl-6">
-              Accounts and purchases
+              Accounts
             </h2>
             <p className="text-lg text-white/90 leading-relaxed">
-              Some features may require sign-in or future paid products. You
-              are responsible for keeping account credentials secure. Premium or
-              shop purchases, when available, will include separate checkout
-              terms shown at the time of purchase.
+              Some features may require sign-in. You are responsible for keeping
+              account credentials secure. Free downloads are governed by our
+              License and these Terms.
             </p>
           </div>
 

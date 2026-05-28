@@ -48,54 +48,6 @@ const ASSET_TYPES = [
     ),
   },
   {
-    title: "Icons",
-    typeLabel: "Pack",
-    description: "Icon sets for social layouts",
-    to: "/icons",
-    badgeClass:
-      "bg-gradient-to-br from-violet-500/25 to-blue-400/15 text-violet-200/60 group-hover:from-violet-500/35 group-hover:to-blue-400/25 group-hover:text-violet-100/75",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" className="size-[18px]" aria-hidden="true">
-        <rect
-          x="4"
-          y="4"
-          width="7"
-          height="7"
-          rx="1.5"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-        <rect
-          x="13"
-          y="4"
-          width="7"
-          height="7"
-          rx="1.5"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-        <rect
-          x="4"
-          y="13"
-          width="7"
-          height="7"
-          rx="1.5"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-        <rect
-          x="13"
-          y="13"
-          width="7"
-          height="7"
-          rx="1.5"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-      </svg>
-    ),
-  },
-  {
     title: "Printable assets",
     typeLabel: "Print",
     description: "Print-friendly PNG ideas",
@@ -140,7 +92,7 @@ export function HomeBrowseByAssetType() {
       <h2 className="text-gray-50 text-2xl font-bold leading-tight tracking-tight pb-3">
         Browse free assets
       </h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         {ASSET_TYPES.map((item) => (
           <Link
             key={item.title}

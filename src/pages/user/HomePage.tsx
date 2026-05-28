@@ -183,7 +183,7 @@ export default function HomePage() {
                         Free digital assets for creative projects
                       </h1>
                       <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-3xl mt-2">
-                        Wallpapers, stickers, icons and print-friendly resources
+                        Wallpapers, stickers, and print-friendly PNG resources
                         for personal use, social content and creative layouts.
                       </p>
 
@@ -199,12 +199,6 @@ export default function HomePage() {
                           className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
                         >
                           Stickers
-                        </Link>
-                        <Link
-                          to="/icons"
-                          className="rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
-                        >
-                          Icons
                         </Link>
                         <Link
                           to="/stickers"

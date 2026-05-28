@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { findSimilarImages } from "../../utils/FilterSimilarContent";
 import {
   closeImageModal,
@@ -41,7 +42,7 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
       }
     : file.original;
 
-  const { isPurchased, handleBuy, handleDownload } = useImageModal({
+  const { handleDownload } = useImageModal({
     modalRef,
     onClose,
     fileKey: key,
@@ -148,27 +149,13 @@ export const ModalDownload = ({ onClose, file }: ModalTypes) => {
                 )}
 
                 {!downloadFree && (
-                  <>
-                    <button
-                      onClick={handleBuy}
-                      className="w-full h-12 rounded-lg bg-yellow-400 hover:bg-yellow-500 text-yellow-950 font-bold"
-                    >
-                      Buy for $2.99
-                    </button>
-
-                    <button
-                      onClick={handleDownload}
-                      disabled={!isPurchased}
-                      className={`w-full h-12 rounded-lg font-bold transition-colors
-                        ${
-                          isPurchased
-                            ? "bg-primary hover:bg-primary/90 text-white"
-                            : "bg-gray-700 text-gray-400 cursor-not-allowed"
-                        }`}
-                    >
-                      Download file
-                    </button>
-                  </>
+                  <p className="text-gray-300 text-sm leading-relaxed">
+                    This file is not listed as a free download.{" "}
+                    <Link to="/contact" className="text-primary hover:underline">
+                      Contact us
+                    </Link>{" "}
+                    for licensing questions.
+                  </p>
                 )}
               </div>
               <div className="border-t border-gray-800 pt-6 flex flex-col gap-3">

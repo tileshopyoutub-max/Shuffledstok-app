@@ -186,9 +186,8 @@ export default function PrivacyPolicyPage() {
                   practices of any third-party services or sites.
                 </p>
                 <p>
-                  Payment processing for premium assets is handled via secure
-                  third-party gateways. ShuffledStock does not store your
-                  financial information on our servers.
+                  ShuffledStock does not collect payment card information. Free
+                  downloads do not require payment on this site.
                 </p>
               </div>
             </div>
@@ -198,8 +197,8 @@ export default function PrivacyPolicyPage() {
               </h2>
               <div className="text-body text-lg space-y-4">
                 <p>
-                  When you download or purchase digital products (wallpapers,
-                  icons, stickers), we record these transactions to manage your
+                  When you download digital products (wallpapers, stickers, and
+                  related assets), we may record download activity to manage your
                   access rights and provide customer support. These records are
                   kept strictly confidential and are used only for
                   administrative and licensing purposes.

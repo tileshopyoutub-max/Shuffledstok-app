@@ -81,7 +81,7 @@ export default function ContactPage() {
               </li>
               <li>
                 <strong className="text-white font-medium">Licensing</strong>{" "}
-                — commercial use, attribution, or premium asset terms (
+                — commercial use, attribution, or licensing questions (
                 <Link to="/license" className="text-primary hover:underline">
                   view license
                 </Link>
