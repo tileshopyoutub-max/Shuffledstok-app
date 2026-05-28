@@ -1,14 +1,46 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useAllMedia } from "../../components/admin/hooks/useAllMedia";
 import type { CategoryPageProps } from "../../user/hooks/useFilterPage";
+import { useAllMedia } from "../../components/admin/hooks/useAllMedia";
+import { useTypedSelector } from "../../shared/hooks/redux";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
+import type { MediaItem } from "../../components/admin/hooks/useAllMedia";
 
-export function IconsPage({ category }: CategoryPageProps) {
+function isIconsOnlyAsset(item: MediaItem): boolean {
+  if (item.primaryCategory === "stickers" || item.primaryCategory === "wallpapers") {
+    return false;
+  }
+
+  if (item.primaryCategory === "icons") return true;
+
+  if (item.type === "archive") {
+    return item.categories.some((c) => c.toLowerCase() === "icons");
+  }
+
+  return item.categories.some((c) => c.toLowerCase() === "icons");
+}
+
+export function IconsPage(_props: CategoryPageProps) {
   const { allMedia, isLoading } = useAllMedia();
-  const filteredImages = allMedia.filter((img) => {
-    const source = `${img.title} ${img.tags.join(" ")} ${img.categories.join(" ")}`.toLowerCase();
-    return source.includes(category) || source.includes("icon") || source.includes("instagram");
-  });
+  const { search, selectedTags } = useTypedSelector(
+    (state) => state.imagesFilter
+  );
+
+  const filteredImages = useMemo(() => {
+    return allMedia.filter((item) => {
+      if (!isIconsOnlyAsset(item)) return false;
+
+      const matchesTitle =
+        !search.trim() ||
+        item.title?.toLowerCase().includes(search.toLowerCase());
+
+      const matchesTags =
+        selectedTags.length === 0 ||
+        selectedTags.some((tag) => item.tags?.includes(tag));
+
+      return matchesTitle && matchesTags;
+    });
+  }, [allMedia, search, selectedTags]);
 
   return (
     <div className="font-display bg-black">
