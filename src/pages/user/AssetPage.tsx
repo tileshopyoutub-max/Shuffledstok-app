@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useAllMedia } from "../../components/admin/hooks/useAllMedia";
 import { useGetPublicListingQuery } from "../../shared/api/publicListingApi";
 import { AssetCardLink } from "../../user/components/asset/AssetCardLink";
@@ -48,6 +48,33 @@ function resolveAssetFormat(
   return getFormatFromKeyOrUrl(first.key) || getFormatFromKeyOrUrl(first.url);
 }
 
+function parsePositiveNumber(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) return value;
+  if (typeof value === "string") {
+    const n = Number(value);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  return null;
+}
+
+function formatFileSize(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (bytes >= 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${bytes} B`;
+}
+
+function getApiFileSizeLabel(
+  asset: PublicImageAsset | PublicArchiveAsset
+): string | null {
+  const source = asset as unknown as Record<string, unknown>;
+  const bytes =
+    parsePositiveNumber(source.fileSize) ??
+    parsePositiveNumber(source.size) ??
+    parsePositiveNumber(source.bytes);
+
+  return bytes ? formatFileSize(bytes) : null;
+}
+
 export default function AssetPage({ expectedCategory }: AssetPageProps) {
   const { slug } = useParams<{ slug: string }>();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -62,6 +89,12 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
   const listing = data?.listing;
   const isImage = asset?.type === "image";
   const fileKey = isImage ? asset.key : "";
+  const [previewDimensions, setPreviewDimensions] = useState<string | null>(null);
+
+  const apiFileSizeLabel = useMemo(() => {
+    if (!asset) return null;
+    return getApiFileSizeLabel(asset);
+  }, [asset]);
 
   const { isPurchased, handleBuy, handleDownload } = useImageModal({
     modalRef,
@@ -88,6 +121,31 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
       tags: asset.tags,
     });
   }, [allMedia, listing, asset]);
+
+  useEffect(() => {
+    if (!asset || asset.type !== "image" || !asset.url) {
+      setPreviewDimensions(null);
+      return;
+    }
+
+    let cancelled = false;
+    const img = new Image();
+
+    img.onload = () => {
+      if (cancelled) return;
+      if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+        setPreviewDimensions(`${img.naturalWidth} × ${img.naturalHeight} px`);
+      }
+    };
+    img.onerror = () => {
+      if (!cancelled) setPreviewDimensions(null);
+    };
+    img.src = asset.url;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [asset]);
 
   if (isLoading) {
     return (
@@ -281,6 +339,18 @@ export default function AssetPage({ expectedCategory }: AssetPageProps) {
                       {getCategoryLabel(primaryCategory)}
                     </dd>
                   </div>
+                  {previewDimensions && (
+                    <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                      <dt className="text-gray-400">Preview dimensions</dt>
+                      <dd className="text-gray-200 text-right">{previewDimensions}</dd>
+                    </div>
+                  )}
+                  {apiFileSizeLabel && (
+                    <div className="flex justify-between gap-4 border-b border-white/5 pb-2">
+                      <dt className="text-gray-400">File size</dt>
+                      <dd className="text-gray-200 text-right">{apiFileSizeLabel}</dd>
+                    </div>
+                  )}
                   {asset.type === "archive" && (
                     <div className="flex justify-between gap-4">
                       <dt className="text-gray-400">Items count</dt>
