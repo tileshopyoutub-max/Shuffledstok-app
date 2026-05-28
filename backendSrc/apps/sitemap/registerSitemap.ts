@@ -23,11 +23,12 @@ export default function registerSitemapRoutes(router: RouterType) {
     const staticPaths = [
       "/",
       "/wallpapers",
-      "/icons",
       "/stickers",
       "/about",
       "/contact",
       "/privacy",
+      "/terms",
+      "/license",
       "/blog",
       "/blog/how-to-choose-wallpaper-for-iphone",
       "/blog/create-aesthetic-iphone-home-screen",
