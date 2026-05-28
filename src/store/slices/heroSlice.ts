@@ -15,8 +15,11 @@ const heroSlice = createSlice({
     hideHero(state) {
       state.isVisible = false
     },
+    showHero(state) {
+      state.isVisible = true
+    },
   },
 })
 
-export const { hideHero } = heroSlice.actions
+export const { hideHero, showHero } = heroSlice.actions
 export default heroSlice.reducer
